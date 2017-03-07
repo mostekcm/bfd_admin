@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Field } from 'redux-form';
 
 import {
   InputText,
@@ -14,8 +15,8 @@ import {
 
 export default class OrderFormTable extends Component {
   static propTypes = {
-    fields: React.PropTypes.object.isRequired,
-    cases: React.PropTypes.array.isRequired,
+    lineItems: React.PropTypes.array.isRequired,
+    fields: React.PropTypes.array.isRequired,
     loading: React.PropTypes.bool.isRequired
   }
 
@@ -24,8 +25,7 @@ export default class OrderFormTable extends Component {
   }
 
   render() {
-    const { fields } = this.props;
-    let rowIndex = 0;
+    const { fields, lineItems } = this.props;
     return (
       <Table>
         <TableHeader>
@@ -39,20 +39,22 @@ export default class OrderFormTable extends Component {
           <TableColumn width="9%">Tester</TableColumn>
         </TableHeader>
         <TableBody>
-           {fields.lineItems.map((field, index) => {
+           {fields.map((fieldName, index) => {
+             if (!lineItems) return <div></div>;
+             const field = lineItems[index];
              //fields.quantity[index].maxlength = 5;
              return <TableRow key={ index }>
-               <TableTextCell>{field.sku.product.name.value}, {field.sku.size.value} {field.description.value}</TableTextCell>
-               <TableTextCell>${field.cpu.value}</TableTextCell>
-               <TableTextCell>{field.size.value}</TableTextCell>
-               <TableTextCell>${field.size.value * field.cpu.value}</TableTextCell>
-               <TableTextCell>{field.sku.variety.value}</TableTextCell>
+               <TableTextCell>{field.sku.product.name}, {field.sku.size} {field.description}</TableTextCell>
+               <TableTextCell>${field.cpu}</TableTextCell>
+               <TableTextCell>{field.size}</TableTextCell>
+               <TableTextCell>${field.size * field.cpu}</TableTextCell>
+               <TableTextCell>{field.sku.variety}</TableTextCell>
                <TableTextCell>
-                 <InputText field={field.quantity} fieldName={field.quantity.name} label="" ref={field.quantity.name} />
+                 <Field component={InputText} name={`${fieldName}.quantity`} type='text' props={{fieldName: 'quantity', label: '' }} />
                </TableTextCell>
-               <TableTextCell>{field.quantity && field.quantity.value ? field.quantity.value * field.size.value * field.cpu.value : ''}</TableTextCell>
+               <TableTextCell>{field.quantity && field.quantity ? field.quantity * field.size * field.cpu : ''}</TableTextCell>
                <TableTextCell>
-                 <InputText field={field.testers} fieldName={field.testers.name} label="" ref={field.testers.name} />
+                 <Field component={InputText} name={`${fieldName}.testers`} type='text' props={{fieldName: 'testers', label: '' }} />
                </TableTextCell>
              </TableRow>;
              }

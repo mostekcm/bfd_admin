@@ -14,8 +14,8 @@ const initialState = {
   user: null
 };
 
-export const auth = createReducer(fromJS(initialState), {
-  [constants.LOGIN_PENDING]: (state) =>
+export default createReducer(fromJS(initialState), {
+  [constants.LOGIN_PENDING]: state =>
     state.merge({
       ...initialState,
       isAuthenticating: true
@@ -34,7 +34,7 @@ export const auth = createReducer(fromJS(initialState), {
       decodedToken: action.payload.decodedToken,
       issuer: url.parse(action.payload.decodedToken.iss).hostname
     }),
-  [constants.LOGOUT_SUCCESS]: (state) =>
+  [constants.LOGOUT_SUCCESS]: state =>
     state.merge({
       user: null,
       token: null,

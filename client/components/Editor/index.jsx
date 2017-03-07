@@ -14,7 +14,8 @@ import './editor.css';
 export default class Editor extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
-    options: PropTypes.object.isRequired,
+    // TODO: Make this explicit
+    options: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func
   }
 
@@ -39,14 +40,16 @@ export default class Editor extends Component {
           eqeqeq: true,
           laxcomma: true,
           '-W025': true,
-          predef: [ 'module' ]
+          predef: ['module']
         }
       }
-    }
+    },
+    onChange: undefined
   }
 
   constructor() {
     super();
+    this.editor = null;
     this.state = {
       value: null
     };
@@ -59,16 +62,14 @@ export default class Editor extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.value && !this.state.value) {
-      const { editor } = this.refs;
-      if (editor) {
-        editor.getCodeMirror().setValue(nextProps.value);
+      if (this.editor) {
+        this.editor.getCodeMirror().setValue(nextProps.value);
       }
     }
   }
 
   componentDidUpdate() {
-    const { editor } = this.refs;
-    editor.getCodeMirror().refresh();
+    this.editor.getCodeMirror().refresh();
   }
 
   onChange = (code) => {
@@ -85,11 +86,11 @@ export default class Editor extends Component {
     const { value, options } = this.props;
     return (
       <CodeMirror
-        ref="editor"
+        ref={value => this.editor = value }
         value={this.state.value || value || ''}
         onChange={this.onChange}
         options={options}
       />
-  );
+    );
   }
 }

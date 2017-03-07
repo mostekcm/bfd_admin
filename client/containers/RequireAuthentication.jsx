@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 export default function RequireAuthentication(InnerComponent) {
   class RequireAuthenticationContainer extends React.Component {
     static propTypes = {
-      push: PropTypes.func.isRequired,
       auth: PropTypes.object.isRequired,
-      location: PropTypes.object.isRequired
+      location: PropTypes.object.isRequired,
+      router: PropTypes.object.isRequired
     }
 
     componentWillMount() {
@@ -21,9 +20,9 @@ export default function RequireAuthentication(InnerComponent) {
     requireAuthentication() {
       if (!this.props.auth.isAuthenticated && !this.props.auth.isAuthenticating) {
         if (!this.props.location) {
-          this.props.push('/login');
+          this.props.router.push('/login');
         } else {
-          this.props.push(`/login?returnUrl=${this.props.location.pathname}`);
+          this.props.router.push(`/login?returnUrl=${this.props.location.pathname}`);
         }
       }
     }
@@ -37,5 +36,5 @@ export default function RequireAuthentication(InnerComponent) {
     }
   }
 
-  return connect((state) => ({ auth: state.auth.toJS() }), { push })(RequireAuthenticationContainer);
+  return connect((state) => ({ auth: state.auth.toJS() }), { })(RequireAuthenticationContainer);
 }

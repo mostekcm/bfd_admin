@@ -10,18 +10,18 @@ const initialState = {
   validationErrors: { }
 };
 
-export const orderCreate = createReducer(fromJS(initialState), {
-  [constants.REQUEST_CREATE_ORDER]: (state, action) =>
+export default createReducer(fromJS(initialState), {
+  [constants.REQUEST_CREATE_ORDER]: state =>
     state.merge({
       ...initialState,
       record: {
       }
     }),
-  [constants.CANCEL_CREATE_ORDER]: (state) =>
+  [constants.CANCEL_CREATE_ORDER]: state =>
     state.merge({
       ...initialState
     }),
-  [constants.CREATE_ORDER_PENDING]: (state) =>
+  [constants.CREATE_ORDER_PENDING]: state =>
     state.merge({
       loading: true
     }),
@@ -33,7 +33,7 @@ export const orderCreate = createReducer(fromJS(initialState), {
       error: `An error occurred while creating the order: ${errorMessage}`
     });
   },
-  [constants.CREATE_ORDER_FULFILLED]: (state) =>
+  [constants.CREATE_ORDER_FULFILLED]: state =>
     state.merge({
       ...initialState
     })

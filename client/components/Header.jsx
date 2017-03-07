@@ -6,7 +6,6 @@ import './Header.css';
 export default class Header extends Component {
   static propTypes = {
     user: React.PropTypes.object,
-    getDictValue: React.PropTypes.func,
     accessLevel: React.PropTypes.object,
     issuer: React.PropTypes.string,
     onLogout: React.PropTypes.func.isRequired
@@ -48,7 +47,7 @@ export default class Header extends Component {
         <nav role="navigation" className="navbar navbar-default">
           <div className="container">
             <div id="header" className="navbar-header" style={{ width: '800px' }}>
-              <a className="navbar-brand" href="#">{this.props.getDictValue('title', window.config.TITLE)}</a>
+              <a className="navbar-brand" href="#">{window.config.TITLE}</a>
             </div>
             <div id="navbar-collapse" className="collapse navbar-collapse">
               <ul className="nav navbar-nav navbar-right">

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { push } from 'react-router-redux';
+import { routeActions } from 'redux-simple-router';
 
 import * as constants from '../constants';
 import { show, parseHash } from '../utils/lock';
@@ -43,16 +43,15 @@ export function loadCredentials() {
       });
       parseHash(window.location.hash)
         .then((tokens) => {
-          'use strict';
           if (!tokens) {
             /* Must be a bad authorization */
             dispatch({
               type: constants.LOGIN_FAILED,
               payload: {
-                error: "Unauthorized"
+                error: 'Unauthorized'
               }
             });
-            dispatch(push('/login'));
+            dispatch(routeActions.push('/login'));
             return;
           }
           const idToken = tokens.idToken;
@@ -62,10 +61,10 @@ export function loadCredentials() {
             dispatch({
               type: constants.LOGIN_FAILED,
               payload: {
-                error: "Expired Token"
+                error: 'Expired Token'
               }
             });
-            dispatch(push('/login'));
+            dispatch(routeActions.push('/login'));
             return;
           }
 
@@ -74,10 +73,10 @@ export function loadCredentials() {
             dispatch({
               type: constants.LOGIN_FAILED,
               payload: {
-                error: "Expired Token"
+                error: 'Expired Token'
               }
             });
-            dispatch(push('/login'));
+            dispatch(routeActions.push('/login'));
             return;
           }
 

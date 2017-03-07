@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { push } from 'react-router-redux';
+import { routeActions } from 'redux-simple-router';
 
 import * as constants from '../constants';
 
@@ -14,7 +14,7 @@ export function fetchOrders(search = '', reset = false, page = 0) {
     dispatch({
       type: constants.FETCH_ORDERS,
       payload: {
-        promise: axios.get(baseUrl+'/api/orders', {
+        promise: axios.get(`${baseUrl}/api/orders`, {
           params: {
             search,
             page
@@ -47,7 +47,7 @@ export function createOrder(order, onSuccess) {
         }
       },
       payload: {
-        promise: axios.post(baseUrl+'/api/orders/', order, {
+        promise: axios.post(`${baseUrl}/api/orders/`, order, {
           responseType: 'json'
         })
       }
@@ -61,7 +61,7 @@ export function createOrder(order, onSuccess) {
 export function requestCreateOrder() {
   return (dispatch) => {
     dispatch({
-      type: constants.REQUEST_CREATE_ORDER,
+      type: constants.REQUEST_CREATE_ORDER
     });
   };
 }
@@ -86,7 +86,7 @@ export function fetchOrderDetail(orderId, onSuccess) {
       onSuccess
     },
     payload: {
-      promise: axios.get(baseUrl+`/api/orders/${orderId}`, {
+      promise: axios.get(`${baseUrl}/api/orders/${orderId}`, {
         responseType: 'json'
       })
     }
@@ -119,7 +119,7 @@ export function updateOrder(orderId, data, onSuccess) {
         }
       },
       payload: {
-        promise: axios.put(baseOrder+`/api/orders/${orderId}`, data, {
+        promise: axios.put(`${baseUrl}/api/orders/${orderId}`, data, {
           responseType: 'json'
         })
       }
@@ -155,12 +155,12 @@ export function deleteOrder() {
     dispatch({
       type: constants.DELETE_ORDER,
       payload: {
-        promise: axios.delete(baseOrder+`/api/orders/${orderId}`)
+        promise: axios.delete(`${baseUrl}/api/orders/${orderId}`)
       },
       meta: {
         orderId,
         onSuccess: () => {
-          dispatch(push('/orders'));
+          dispatch(routeActions.push('/orders'));
         }
       }
     });

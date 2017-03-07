@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import { login } from '../actions/auth';
 import { LoadingPanel } from '../components/Dashboard';
@@ -8,14 +7,14 @@ import { LoadingPanel } from '../components/Dashboard';
 class LoginContainer extends Component {
   static propTypes = {
     login: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   }
 
   componentWillMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.push('/orders');
+      this.props.router.push('/orders');
     } else if (!this.props.auth.isAuthenticating) {
       this.props.login(this.props.location.query.returnUrl);
     }
@@ -42,4 +41,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { login, push })(LoginContainer);
+export default connect(mapStateToProps, { login })(LoginContainer);

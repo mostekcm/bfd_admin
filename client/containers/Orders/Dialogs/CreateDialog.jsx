@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import connectContainer from 'redux-static';
+import { formValueSelector } from 'redux-form';
 
 import { orderActions } from '../../../actions';
 import { OrderForm } from '../../../components/Orders';
@@ -9,6 +10,12 @@ import { Error, Confirm } from '../../../components/Dashboard';
 import './CreateDialog.css';
 
 export default connectContainer(class extends Component {
+  constructor() {
+    super();
+
+    this.form = undefined;
+  }
+
   static stateToProps = (state) => ({
     orderCreate: state.orderCreate,
     cases: state.cases
@@ -22,7 +29,6 @@ export default connectContainer(class extends Component {
     cases: PropTypes.object.isRequired,
     orderCreate: PropTypes.object.isRequired,
     createOrder: PropTypes.func.isRequired,
-    getDictValue: PropTypes.func.isRequired,
     cancelCreateOrder: PropTypes.func.isRequired
   }
 
@@ -31,11 +37,33 @@ export default connectContainer(class extends Component {
   }
 
   onSubmit = (order) => {
-    this.props.createOrder(order);
+    console.log("Carlos, creating an order: ", order);
+    const simpleOrder = { lineItems: [] };
+    order.lineItems.forEach((item) => {
+      if (item.quantity && item.quantity > 0)
+        simpleOrder.lineItems.push({
+          sku: {
+            product: { name: item.sku.product.name },
+            variety: item.sku.variety,
+            size: item.sku.size
+          },
+          size: item.size,
+          cpu: item.cpu,
+          quantity: item.quantity,
+          testers: item.testers
+        })
+    });
+    console.log("Carlos, simpleOrder: ", simpleOrder);
+    this.props.createOrder(simpleOrder);
   }
 
   onConfirm = () => {
-    this.refs.form.submit();
+    console.log('Carlos, before submit');
+    if (this.form) {
+      this.form.submit()
+        .then(() => console.log("Carlos, submitted successfully"))
+        .catch(e => console.error("Carlos, error: ", e.message));
+    }
   }
 
   render() {
@@ -57,16 +85,24 @@ export default connectContainer(class extends Component {
       });
     });
 
-    connect(
-      state => ({
-        initialValues: initialValues,
-      }),
+    const selector = formValueSelector('order'); // <-- same as form name
+
+    const ConnectedOrderForm = connect(
+      state => {
+        const lineItems = selector(state, 'lineItems');
+        return {
+          initialValues: initialValues,
+          lineItems
+        }
+      }, null, null, { withRef: true }
     )(OrderForm);
 
     return (
-      <Confirm title="Create Order" show={record !== null} loading={loading} onCancel={this.props.cancelCreateOrder} onConfirm={this.onConfirm} dialogClassName={'order-form'}>
-        <Error message={error} />
-        <OrderForm ref="form" cases={cases.records} initialValues={initialValues} onSubmit={this.onSubmit} getDictValue={this.props.getDictValue} loading={loading} />
+      <Confirm title="Create Order" show={record !== null} loading={loading} onCancel={this.props.cancelCreateOrder}
+               onConfirm={this.onConfirm} dialogClassName={'order-form'}>
+        <Error message={error}/>
+        <ConnectedOrderForm ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
+                            cases={cases.records} onSubmit={this.onSubmit} loading={loading}/>
       </Confirm>
     );
   }

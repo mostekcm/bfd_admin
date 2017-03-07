@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { caseActions, orderActions } from '../../actions';
+import { orderActions } from '../../actions';
 
 
 import * as dialogs from './Dialogs';
@@ -21,8 +21,7 @@ class Orders extends Component {
     appSettings: React.PropTypes.object,
     total: React.PropTypes.number,
     fetchOrders: React.PropTypes.func.isRequired,
-    getDictValue: React.PropTypes.func.isRequired,
-    createOrder: React.PropTypes.func.isRequired,
+    createOrder: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -63,7 +62,7 @@ class Orders extends Component {
             : ''}
           </div>
         </div>
-        <dialogs.CreateDialog getDictValue={this.props.getDictValue} />
+        <dialogs.CreateDialog />
         <OrderOverview
           onReset={this.onReset}
           onSearch={this.onSearch}
@@ -91,4 +90,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...caseActions, ...orderActions })(Orders);
+export default connect(mapStateToProps, { ...orderActions })(Orders);

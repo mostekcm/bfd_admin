@@ -10,7 +10,7 @@ const initialState = {
   record: { }
 };
 
-export const order = createReducer(fromJS(initialState), {
+export default createReducer(fromJS(initialState), {
   [constants.FETCH_ORDER_PENDING]: (state, action) =>
     state.merge({
       error: null,

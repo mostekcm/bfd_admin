@@ -3,9 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import { useRouterHistory } from 'react-router';
-import { createHistory } from 'history';
-import { push, routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
+import { browserHistory } from 'react-router';
+import { routeActions, syncHistory } from 'redux-simple-router';
 
 import { loadCredentials } from './actions/auth';
 import routes from './routes';
@@ -16,12 +15,9 @@ import * as constants from './constants';
 axios.defaults.baseURL = window.config.BASE_URL;
 
 // Make history aware of the base path.
-const history = useRouterHistory(createHistory)({
-  basename: window.config.BASE_PATH || ''
-});
+const reduxRouterMiddleware = syncHistory(browserHistory);
 
-const store = configureStore([ routerMiddleware(history) ], { });
-const reduxHistory = syncHistoryWithStore(history, store);
+const store = configureStore([ reduxRouterMiddleware ], { });
 
 store.subscribe(() => {
   switch (store.getState().lastAction.type) {
@@ -56,12 +52,12 @@ store.dispatch(loadCredentials());
 // Render application.
 ReactDOM.render(
   <Provider store={store}>
-    {routes(reduxHistory)}
+    {routes(browserHistory)}
   </Provider>,
   document.getElementById('app')
 );
 
-store.dispatch(push('/orders'));
+store.dispatch(routeActions.push('/orders'));
 
 // Show the developer tools.
 if (process.env.NODE_ENV !== 'production') {

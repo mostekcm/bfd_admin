@@ -1,13 +1,16 @@
 const path = require('path');
 const nconf = require('nconf');
+const babelRegister = require('babel-core/register');
 
+const server = require('./server');
 const logger = require('./server/lib/logger');
 
 // Initialize babel.
-require('babel-core/register')({
+babelRegister({
   ignore: /node_modules/,
   sourceMaps: !(process.env.NODE_ENV === 'production')
 });
+
 require('babel-polyfill');
 
 // Handle uncaught.
@@ -29,7 +32,7 @@ nconf
   });
 
 // Start the server.
-const app = require('./server')((key) => nconf.get(key), null);
+const app = server(key => nconf.get(key), null);
 const port = nconf.get('PORT');
 app.listen(port, '0.0.0.0', (error) => {
   if (error) {

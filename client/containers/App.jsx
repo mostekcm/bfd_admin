@@ -9,25 +9,13 @@ import Header from '../components/Header';
 class App extends Component {
   static propTypes = {
     user: PropTypes.object,
-    settings: PropTypes.object,
     issuer: PropTypes.string,
     logout: PropTypes.func,
-    fetchCases: PropTypes.func.isRequired,
-    getAppSettings: PropTypes.func.isRequired
+    fetchCases: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.fetchCases();
-    this.props.getAppSettings();
-  }
-
-  getDictValue = (index, defaultValue) => {
-    const appSettings = this.props.settings;
-    let val = '';
-    if (appSettings.get('settings') && appSettings.get('settings').get('dict')) {
-      val = appSettings.get('settings').get('dict').get(index)
-    }
-    return val || defaultValue;
   }
 
   render() {
@@ -36,7 +24,6 @@ class App extends Component {
         <Header
           user={this.props.user}
           issuer={this.props.issuer}
-          getDictValue={this.getDictValue}
           onLogout={this.props.logout}
         />
         <div className="container">
@@ -44,10 +31,7 @@ class App extends Component {
             <section className="content-page current">
               <div className="col-xs-12">
                 <div id="content-area" className="tab-content">
-                  {React.cloneElement(this.props.children, {
-                    appSettings: this.props.settings.toJSON(),
-                    getDictValue: this.getDictValue
-                  })}
+                  {React.cloneElement(this.props.children)}
                 </div>
               </div>
             </section>
@@ -62,7 +46,6 @@ function select(state) {
   return {
     issuer: state.auth.get('issuer'),
     user: state.auth.get('user'),
-    settings: state.settings.get('record')
   };
 }
 

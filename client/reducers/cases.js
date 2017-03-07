@@ -9,8 +9,8 @@ const initialState = {
   records: []
 };
 
-export const cases = createReducer(fromJS(initialState), {
-  [constants.FETCH_CASES_PENDING]: (state) =>
+export default createReducer(fromJS(initialState), {
+  [constants.FETCH_CASES_PENDING]: state =>
     state.merge({
       loading: true,
       error: null

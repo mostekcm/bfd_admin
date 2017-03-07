@@ -1,9 +1,3 @@
-import * as constants from '../../server/constants';
-
-export const user = {
-  app_metadata: { department: 'deptA', roles: constants.USER_ROLE_NAME }
-};
-
 export const defaultLogs = [
   { type: 'def', user_id: 1, log_id: 1 },
   { type: 'def', user_id: 5, log_id: 2 },

@@ -10,7 +10,7 @@ const initialState = {
   total: 0
 };
 
-export const orders = createReducer(fromJS(initialState), {
+export default createReducer(fromJS(initialState), {
   [constants.FETCH_ORDERS_PENDING]: (state, action) =>
     state.merge({
       ...initialState,

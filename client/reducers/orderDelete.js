@@ -11,7 +11,7 @@ const initialState = {
   orderName: null
 };
 
-export const orderDelete = createReducer(fromJS(initialState), {
+export default createReducer(fromJS(initialState), {
   [constants.REQUEST_DELETE_ORDER]: (state, action) =>
     state.merge({
       ...initialState,
@@ -19,11 +19,11 @@ export const orderDelete = createReducer(fromJS(initialState), {
       orderName: action.order.order_name || action.order.email,
       requesting: true
     }),
-  [constants.CANCEL_DELETE_ORDER]: (state) =>
+  [constants.CANCEL_DELETE_ORDER]: state =>
     state.merge({
       ...initialState
     }),
-  [constants.DELETE_ORDER_PENDING]: (state) =>
+  [constants.DELETE_ORDER_PENDING]: state =>
     state.merge({
       loading: true
     }),
@@ -32,7 +32,7 @@ export const orderDelete = createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occurred while deleting the order: ${action.errorMessage}`
     }),
-  [constants.DELETE_ORDER_FULFILLED]: (state) =>
+  [constants.DELETE_ORDER_FULFILLED]: state =>
     state.merge({
       ...initialState
     })
