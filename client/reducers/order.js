@@ -24,13 +24,13 @@ export default createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_ORDER_FULFILLED]: (state, action) => {
     const { data } = action.payload;
-    if (data.order.order_id !== state.get('orderId')) {
+    if (data.id !== state.get('orderId')) {
       return state;
     }
 
     return state.merge({
       loading: false,
-      record: fromJS(data.order)
+      record: fromJS(data)
     });
   }
 });

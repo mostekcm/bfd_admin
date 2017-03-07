@@ -1,17 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { Tabs, Tab } from 'react-bootstrap';
+import formatCurrency from 'format-currency';
 
 import { orderActions } from '../../actions';
 
 import './Order.css';
 
+import { Error, LoadingPanel } from '../../components/Dashboard';
 import * as dialogs from './Dialogs';
-import { OrderActions/*, OrderHeader, OrderProfile, OrderLogs, OrderInfo*/ } from '../../components/Orders';
+import { OrderActions, OrderDetailsTable/*, OrderHeader, OrderProfile, OrderLogs, OrderInfo*/ } from '../../components/Orders';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
-    order: state.order
+    error: state.order.get('error'),
+    loading: state.order.get('loading'),
+    order: state.order,
+    lineItems: state.order.get('record').toJS().lineItems
   });
 
   static actionsToProps = {
@@ -19,6 +24,9 @@ export default connectContainer(class extends Component {
   }
 
   static propTypes = {
+    error: PropTypes.string,
+    loading: PropTypes.bool.isRequired,
+    lineItems: PropTypes.array,
     order: PropTypes.object,
     params: PropTypes.object,
     fetchOrder: React.PropTypes.func.isRequired
@@ -28,8 +36,31 @@ export default connectContainer(class extends Component {
     this.props.fetchOrder(this.props.params.id);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems;
+  }
+
+  getTotalOrderCost(lineItems) {
+    let totalCost = 0;
+    if (lineItems)
+      lineItems.forEach((lineItem) => {
+        totalCost += lineItem.quantity * lineItem.cpu * lineItem.size;
+      });
+    return totalCost;
+  }
+
+
   render() {
-    const { order } = this.props;
+    const { order, loading, error } = this.props;
+
+    const lineItems = this.props.lineItems || [];
+    const totalProductCost = this.getTotalOrderCost(lineItems);
+    const totalHandling = totalProductCost * .03;
+    const totalCost = totalHandling + totalProductCost;
+    // now include the currency symbol
+    let opts = { format: '%s%v', symbol: '$' };
+    console.log(formatCurrency(10000000.15, opts)) // => $10,000,000.15 USD
+
     return (
       <div className="order">
         <div className="row content-header">
@@ -43,6 +74,25 @@ export default connectContainer(class extends Component {
             </div>
           </div>
         </div>
+        <LoadingPanel show={loading}>
+          <div className="row">
+            <div className="col-xs-12 wrapper">
+              <Error message={error} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-12">
+              <OrderDetailsTable lineItems={lineItems} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-12">
+              Total Product Cost: {formatCurrency(totalProductCost, opts)}<br/>
+              Total Handling Cost: {formatCurrency(totalHandling, opts)}<br/>
+              Total Cost: {formatCurrency(totalCost, opts)}<br/>
+            </div>
+          </div>
+        </LoadingPanel>
       </div>
       );
       //   <!-- div className="row">

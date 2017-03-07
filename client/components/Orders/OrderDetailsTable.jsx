@@ -11,43 +11,40 @@ import {
   TableRow
 } from '../Dashboard';
 
-export default class OrdersTable extends Component {
+export default class OrderDetailsTable extends Component {
   static propTypes = {
-    orders: React.PropTypes.array.isRequired,
-    loading: React.PropTypes.bool.isRequired
+    lineItems: React.PropTypes.array.isRequired,
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.orders !== this.props.orders;
-  }
-
-  getTotalOrderCost(order) {
-    let totalCost = 0;
-    order.lineItems.forEach((lineItem) => {
-      totalCost += lineItem.quantity * lineItem.cpu * lineItem.size;
-    });
-    return totalCost;
+    return nextProps.lineItems !== this.props.lineItems;
   }
 
   render() {
-    const { orders } = this.props;
+    const { lineItems } = this.props;
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="25%">ID</TableColumn>
-          <TableColumn width="45%">Customer Name</TableColumn>
-          <TableColumn width="15%">LineItems</TableColumn>
-          <TableColumn width="15%">TotalProductCost</TableColumn>
+          <TableColumn width="25%">Product</TableColumn>
+          <TableColumn width="15%">Unit Size</TableColumn>
+          <TableColumn width="10%">Units per Case</TableColumn>
+          <TableColumn width="10%">Cost per Unit</TableColumn>
+          <TableColumn width="10%">Case Cost</TableColumn>
+          <TableColumn width="10%">Qty Ordered</TableColumn>
+          <TableColumn width="10%">Testers Ordered</TableColumn>
+          <TableColumn width="10%">Sub Total</TableColumn>
         </TableHeader>
         <TableBody>
-          {orders.map((order, index) => {
-            console.log("Carlos, order: ", order);
+          {lineItems.map((lineItem, index) => {
               return <TableRow key={index}>
-                <TableRouteCell
-                  route={`/orders/${order.id}`}>{order.id}</TableRouteCell>
-                <TableTextCell>{'Carlos add customer name'}</TableTextCell>
-                <TableTextCell>{order.lineItems.length}</TableTextCell>
-                <TableTextCell>${this.getTotalOrderCost(order)}</TableTextCell>
+                <TableTextCell>{lineItem.sku.product.name}</TableTextCell>
+                <TableTextCell>{lineItem.sku.size}</TableTextCell>
+                <TableTextCell>{lineItem.size}</TableTextCell>
+                <TableTextCell>${lineItem.cpu}</TableTextCell>
+                <TableTextCell>{lineItem.cpu * lineItem.size}</TableTextCell>
+                <TableTextCell>{lineItem.quantity}</TableTextCell>
+                <TableTextCell>{lineItem.testers}</TableTextCell>
+                <TableTextCell>${lineItem.cpu * lineItem.size * lineItem.quantity}</TableTextCell>
               </TableRow>;
           }
           )}

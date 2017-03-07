@@ -25,7 +25,7 @@ const options = {
 };
 
 new WebpackDevServer(webpack(config), options)
-  .listen(3001, 'localhost',
+  .listen(3001, '0.0.0.0',
     (err) => {
       if (err) {
         logger.error(err);

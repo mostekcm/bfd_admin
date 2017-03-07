@@ -48,6 +48,7 @@
     "exports": "0.0.1",
     "exports-loader": "^0.6.4",
     "express": "^4.15.2",
+    "format-currency": "^1.0.0",
     "history": "^4.5.1",
     "immutable": "^3.8.1",
     "imports": "^1.0.0",
