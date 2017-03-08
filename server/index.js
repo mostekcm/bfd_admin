@@ -21,7 +21,8 @@ module.exports = (cfg) => {
   app.use(bodyParser.urlencoded({ extended: false }));
 
   // Configure routes.
-  app.use('/app', Express.static(path.join(__dirname, '../dist')));
+
+  app.use('/app', Express.static(config('STATIC_DIR')));
 
   // Fallback to rendering HTML.
   app.get('*', htmlRoute());

@@ -1,17 +1,17 @@
 const path = require('path');
 const nconf = require('nconf');
-const babelRegister = require('babel-core/register');
+// const babelRegister = require('babel-core/register');
 
 const server = require('./server');
 const logger = require('./server/lib/logger');
 
 // Initialize babel.
-babelRegister({
-  ignore: /node_modules/,
-  sourceMaps: !(process.env.NODE_ENV === 'production')
-});
-
-require('babel-polyfill');
+// babelRegister({
+//   ignore: /node_modules/,
+//   sourceMaps: !(process.env.NODE_ENV === 'production')
+// });
+//
+// require('babel-polyfill');
 
 // Handle uncaught.
 process.on('uncaughtException', (err) => {

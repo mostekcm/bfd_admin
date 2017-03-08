@@ -4,7 +4,7 @@ import { routeActions } from 'redux-simple-router';
 import * as constants from '../constants';
 
 // TODO: Grab from config from server
-const baseUrl = 'http://localhost:3002';
+const baseUrl = window.config.BASE_API_URL;
 
 /*
  * Search for orders.

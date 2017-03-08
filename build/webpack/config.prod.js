@@ -12,27 +12,30 @@ const config = require('./config.base.js');
 config.profile = false;
 
 // Build output, which includes the hash.
-config.output.hash = true;
 config.output.filename = 'bfd_admin.ui.' + project.version + '.js';
 
 // Development modules.
 config.module.loaders.push({
   test: /\.css$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
+  loader: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: 'css-loader!postcss-loader'
+  })
 });
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([
-  new webpack.optimize.OccurenceOrderPlugin(true),
-  new webpack.optimize.DedupePlugin(),
-
   // Extract CSS to a different file, will require additional configuration.
-  new ExtractTextPlugin('bfd_admin.ui.' + project.version + '.css', {
+  new ExtractTextPlugin({
+    filename: 'bfd_admin.ui.' + project.version + '.css',
     allChunks: true
   }),
 
   // Separate the vender in a different file.
-  new webpack.optimize.CommonsChunkPlugin('vendors', 'bfd_admin.ui.vendors.' + project.version + '.js'),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendors',
+    filename: 'bfd_admin.ui.vendors.' + project.version + '.js'
+  }),
 
   // Compress and uglify the output.
   new webpack.optimize.UglifyJsPlugin({
@@ -57,10 +60,11 @@ config.plugins = config.plugins.concat([
   new StatsWriterPlugin({
     filename: 'manifest.json',
     transform: function transformData(data) {
+      console.log("transform chunks, assets: ", JSON.stringify(data));
       const chunks = {
         app: data.assetsByChunkName.app[0],
         style: data.assetsByChunkName.app[1],
-        vendors: data.assetsByChunkName.vendors[0]
+        vendors: data.assetsByChunkName.vendors
       };
       return JSON.stringify(chunks);
     }

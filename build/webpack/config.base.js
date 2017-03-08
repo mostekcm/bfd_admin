@@ -12,11 +12,9 @@ module.exports = {
     vendors: [
       'axios',
       'bluebird',
-      'classnames',
       'history',
       'immutable',
       'jwt-decode',
-      'lodash',
       'moment',
       'react',
       'react-bootstrap',
@@ -35,7 +33,7 @@ module.exports = {
 
   // Output directory.
   output: {
-    path: path.join(__dirname, '../../dist'),
+    path: path.resolve(__dirname, '../../dist'),
     filename: 'bundle.js',
     publicPath: '/app/'
   },
@@ -46,12 +44,12 @@ module.exports = {
       React: 'react'
     },
     modules: [
-      'node_modules'
+      path.join(__dirname, '../../node_modules/')
     ],
     extensions: [ '.json', '.js', '.jsx' ]
   },
 
-  // Load all modules.
+  // Load all modules
   module: {
     loaders: [
       {
