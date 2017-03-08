@@ -38,11 +38,11 @@ export function createOrder(order, onSuccess) {
       type: constants.CREATE_ORDER,
       meta: {
         order,
-        onSuccess: () => {
+        onSuccess: (payload) => {
           if (onSuccess) {
-            onSuccess();
+            onSuccess(payload);
           } else {
-            dispatch(fetchOrders());
+            dispatch(routeActions.push(`/orders/${payload.data.id}`));
           }
         }
       },

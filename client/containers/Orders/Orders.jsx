@@ -48,7 +48,7 @@ class Orders extends Component {
   }
 
   render() {
-    const { loading, error, orders, total, orderCreateError, orderCreateLoading, cases } = this.props;
+    const { loading, error, orders, total, cases } = this.props;
     return (
       <div className="orders">
         <div className="row content-header">
