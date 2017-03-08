@@ -93,6 +93,7 @@ export default connectContainer(class extends Component {
             </div>
           </div>
         </LoadingPanel>
+        <dialogs.DeleteDialog />
       </div>
       );
       //   <!-- div className="row">

@@ -15,8 +15,7 @@ export default createReducer(fromJS(initialState), {
   [constants.REQUEST_DELETE_ORDER]: (state, action) =>
     state.merge({
       ...initialState,
-      orderId: action.order.order_id,
-      orderName: action.order.order_name || action.order.email,
+      orderId: action.order.id,
       requesting: true
     }),
   [constants.CANCEL_DELETE_ORDER]: state =>
