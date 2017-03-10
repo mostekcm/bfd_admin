@@ -49,7 +49,7 @@ export default class OrderFormLineItems extends Component {
         </TableHeader>
         <TableBody>
            {fields.map((fieldName, index) => {
-             if (!lineItems) return <div></div>;
+             if (lineItems.length === 0) return <div></div>;
              const field = lineItems[index];
              return <TableRow key={ index }>
                <TableTextCell>{field.sku.product.name}, {field.sku.size} {field.description}</TableTextCell>

@@ -45,7 +45,7 @@ export default class OrderFormDisplayItems extends Component {
         </TableHeader>
         <TableBody>
           {fields.map((fieldName, index) => {
-              if (!displayItems) return <div></div>;
+              if (displayItems.length === 0) return <div></div>;
               const display = displayItems[index];
               return <TableRow key={ index }>
                 <TableTextCell>{display.name} for {display.product.name}</TableTextCell>
