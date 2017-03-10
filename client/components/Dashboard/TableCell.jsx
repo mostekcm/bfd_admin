@@ -2,7 +2,7 @@ import { PropTypes, Component } from 'react';
 
 class TableCell extends Component {
   static propTypes = {
-    rowSpan: PropTypes.number.isRequired
+    rowSpan: PropTypes.number
   }
 
   shouldComponentUpdate(nextProps) {

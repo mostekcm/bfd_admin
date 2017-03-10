@@ -58,7 +58,7 @@ export function show(returnUrl) {
         response_type: 'token id_token',
         audience: 'https://bfd_admin.beautyfullday.com/api/v1',
         state: returnUrl,
-        scope: 'openid read:cases read:orders create:orders delete:orders update:orders',
+        scope: 'openid read:cases read:displays read:orders create:orders delete:orders update:orders',
         nonce: nonce()
       }
     }

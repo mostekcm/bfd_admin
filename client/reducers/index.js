@@ -4,6 +4,7 @@ import { routeReducer } from 'redux-simple-router';
 
 import auth from './auth';
 import cases from './cases';
+import displays from './displays';
 import order from './order';
 import orderCreate from './orderCreate';
 import orderDelete from './orderDelete';
@@ -17,6 +18,7 @@ export default combineReducers({
   routing: routeReducer,
   auth,
   cases,
+  displays,
   order,
   orderCreate,
   orderDelete,

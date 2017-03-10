@@ -15,6 +15,7 @@ class Orders extends Component {
     error: React.PropTypes.string,
     orders: React.PropTypes.array,
     cases: React.PropTypes.array,
+    displays: React.PropTypes.array,
     orderCreateError: React.PropTypes.string,
     orderCreateLoading: React.PropTypes.bool,
     validationErrors: React.PropTypes.object,
@@ -44,17 +45,18 @@ class Orders extends Component {
   }
 
   createOrder = () => {
-    this.props.requestCreateOrder(this.props.cases);
+    this.props.requestCreateOrder(this.props.cases, this.props.displays);
   }
 
   render() {
-    const { loading, error, orders, total, cases } = this.props;
+    const { loading, error, orders, total, cases, displays } = this.props;
+
     return (
       <div className="orders">
         <div className="row content-header">
           <div className="col-xs-12 order-table-content">
             <h1>Orders</h1>
-            {(cases.length) ?
+            {(cases.length > 0 && displays.length > 0) ?
               <button className="btn btn-success pull-right new" onClick={this.createOrder}>
                 <i className="icon-budicon-473"></i>
                 New Order
@@ -85,6 +87,7 @@ function mapStateToProps(state) {
     loading: state.orders.get('loading'),
     orders: state.orders.get('records').toJS(),
     cases: state.cases.get('records').toJS(),
+    displays: state.displays.get('records').toJS(),
     total: state.orders.get('total'),
     nextPage: state.orders.get('nextPage')
   };

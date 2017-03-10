@@ -3,6 +3,7 @@ import connectContainer from 'redux-static';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import { Tabs, Tab } from 'react-bootstrap';
+import formatCurrency from 'format-currency';
 
 import { orderActions } from '../../actions';
 
@@ -10,14 +11,16 @@ import './Order.css';
 
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import * as dialogs from './Dialogs';
-import { OrderActions, OrderDetailsTable/*, OrderHeader, OrderProfile, OrderLogs, OrderInfo*/ } from '../../components/Orders';
+import { OrderActions, OrderDetailsTable, OrderDisplayDetailsTable/*, OrderHeader, OrderProfile, OrderLogs,
+ OrderInfo*/ } from '../../components/Orders';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
     error: state.order.get('error'),
     loading: state.order.get('loading'),
     order: state.order,
-    lineItems: state.order.get('record').toJS().lineItems
+    lineItems: state.order.get('record').toJS().lineItems,
+    displayItems: state.order.get('record').toJS().displayItems
   });
 
   static actionsToProps = {
@@ -27,6 +30,7 @@ export default connectContainer(class Order extends Component {
   static propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
+    displayItems: PropTypes.array,
     lineItems: PropTypes.array,
     order: PropTypes.object,
     params: PropTypes.object,
@@ -38,14 +42,21 @@ export default connectContainer(class Order extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems;
+    return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems || nextProps.displayItems !== this.props.displayItems;
   }
 
   render() {
     const { loading, error, record } = this.props.order.toJS();
+    const opts = { format: '%s%v', symbol: '$' };
 
     const order = record;
     const lineItems = this.props.lineItems || [];
+    const displayItems = this.props.displayItems || [];
+
+    let total = 0;
+
+    lineItems.forEach(item => total += item.quantity * item.cpu * item.size);
+    displayItems.forEach(item => total += item.quantity * item.cost);
 
     const paymentInfo = `
 \`\`\`
@@ -106,12 +117,22 @@ EXP DATE: _________________________________________    CVV2: ___________________
           </div>
           <div className="row">
             <div className="col-xs-12 wrapper">
+              TOTAL COST: {formatCurrency(total, opts)}
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-12 wrapper">
               <Error message={error} />
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12">
               <OrderDetailsTable lineItems={lineItems} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-12">
+              <OrderDisplayDetailsTable displayItems={displayItems} />
             </div>
           </div>
           <div className="row">

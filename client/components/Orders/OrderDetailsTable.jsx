@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import formatCurrency from 'format-currency';
 
 import {
   Table,
@@ -10,7 +11,6 @@ import {
   TableColumn,
   TableRow
 } from '../Dashboard';
-import formatCurrency from 'format-currency';
 
 export default class OrderDetailsTable extends Component {
   static propTypes = {
@@ -35,6 +35,8 @@ export default class OrderDetailsTable extends Component {
     let opts = { format: '%s%v', symbol: '$' };
     const totalOrderCost = formatCurrency(this.getTotalOrderCost(lineItems), opts);
 
+    console.log("Carlos line items in table: ", lineItems);
+
     return (
       <Table>
         <TableHeader>
@@ -50,6 +52,7 @@ export default class OrderDetailsTable extends Component {
         </TableHeader>
         <TableBody>
           {lineItems.map((lineItem, index) => {
+            console.log("Carlos, printing line item: ", lineItem);
             const cpu = formatCurrency(lineItem.cpu, opts);
             const costPerCase = formatCurrency(lineItem.cpu * lineItem.size, opts);
             const totalCost = formatCurrency(lineItem.cpu * lineItem.size * lineItem.quantity, opts);

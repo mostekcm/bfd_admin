@@ -18,7 +18,8 @@ export default connectContainer(class extends Component {
 
   static stateToProps = (state) => ({
     orderCreate: state.orderCreate,
-    cases: state.cases
+    cases: state.cases,
+    displays: state.displays
   });
 
   static actionsToProps = {
@@ -27,45 +28,25 @@ export default connectContainer(class extends Component {
 
   static propTypes = {
     cases: PropTypes.object.isRequired,
+    displays: PropTypes.object.isRequired,
     orderCreate: PropTypes.object.isRequired,
     createOrder: PropTypes.func.isRequired,
     cancelCreateOrder: PropTypes.func.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.orderCreate !== this.props.orderCreate || nextProps.cases !== this.props.cases;
+    return nextProps.orderCreate !== this.props.orderCreate || nextProps.cases !== this.props.cases || nextProps.displays !== this.props.displays;
   }
 
   onSubmit = (order) => {
-    console.log("Carlos, creating an order: ", order);
     const simpleOrder = JSON.parse(JSON.stringify(order));
     simpleOrder.lineItems = _.filter(simpleOrder.lineItems, (item) => item.quantity && item.quantity > 0);
-    // order.lineItems.forEach((item) => {
-    //   if (item.quantity && item.quantity > 0)
-    //     simpleOrder.lineItems.push({
-    //       sku: {
-    //         product: { name: item.sku.product.name },
-    //         variety: item.sku.variety,
-    //         size: item.sku.size
-    //       },
-    //       size: item.size,
-    //       cpu: item.cpu,
-    //       quantity: item.quantity,
-    //       testers: item.testers
-    //     })
-    // });
-    // simpleOrder.store = order.store;
-    // simpleOrder.show = order.show;
-    // simpleOrder.notes = order.notes;
-    // simpleOrder.salesRep = order.salesRep;
-    // simpleOrder.date = order.date;
+    simpleOrder.displayItems = _.filter(simpleOrder.displayItems, (item) => item.quantity && item.quantity > 0);
 
-    console.log("Carlos, simpleOrder: ", simpleOrder);
     this.props.createOrder(simpleOrder);
   }
 
   onConfirm = () => {
-    console.log('Carlos, before submit');
     if (this.form) {
       this.form.submit()
         .then(() => console.log("Carlos, submitted successfully"))
@@ -73,22 +54,12 @@ export default connectContainer(class extends Component {
     }
   }
 
-  render() {
-    const { error, loading, record } = this.props.orderCreate.toJS();
-    const cases = this.props.cases.toJS();
-
-    let initialValues = {};
-    if (record) initialValues = JSON.parse(JSON.stringify(record));
-
-    /* Default the show name and sales rep for now */
-    initialValues.show = initialValues.show || { name: "March Expo" };
-    initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
-
+  initializeLineItems(initialValues, cases) {
     let index = 0;
     if (!initialValues.lineItems) initialValues.lineItems = [];
 
     /* Parse through the cases and add to the initial values */
-    if (cases.records && cases.records.length > 0) cases.records.forEach((thisCase) => {
+    if (cases && cases.length > 0) cases.forEach((thisCase) => {
       (thisCase.sku.varieties.length > 0 ? thisCase.sku.varieties : ['']).forEach((variety) => {
         const varietyCase = JSON.parse(JSON.stringify(thisCase));
         varietyCase.sku.variety = variety;
@@ -98,15 +69,44 @@ export default connectContainer(class extends Component {
         ++index;
       });
     });
+  }
+
+  initializeDisplayItems(initialValues, displays) {
+    if (!initialValues.displayItems || initialValues.displayItems.length == 0) {
+      initialValues.displayItems = [];
+
+      /* Parse through the cases and add to the initial values */
+      if (displays && displays.length > 0) displays.forEach((thisDisplay) => {
+        initialValues.displayItems.push(thisDisplay);
+      });
+    }
+  }
+
+  render() {
+    const { error, loading, record } = this.props.orderCreate.toJS();
+    const cases = this.props.cases.toJS().records;
+    const displays = this.props.displays.toJS().records;
+
+    let initialValues = {};
+    if (record) initialValues = JSON.parse(JSON.stringify(record));
+
+    /* Default the show name and sales rep for now */
+    initialValues.show = initialValues.show || { name: "March Expo" };
+    initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
+
+    this.initializeLineItems(initialValues, cases);
+    this.initializeDisplayItems(initialValues, displays);
 
     const selector = formValueSelector('order'); // <-- same as form name
 
     const ConnectedOrderForm = connect(
       state => {
         const lineItems = selector(state, 'lineItems');
+        const displayItems = selector(state, 'displayItems');
         return {
           initialValues: initialValues,
-          lineItems
+          lineItems,
+          displayItems
         }
       }, null, null, { withRef: true }
     )(OrderForm);
@@ -116,7 +116,7 @@ export default connectContainer(class extends Component {
                onConfirm={this.onConfirm} dialogClassName={'order-form'}>
         <Error message={error}/>
         <ConnectedOrderForm ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
-                            cases={cases.records} onSubmit={this.onSubmit} loading={loading}/>
+                            cases={cases} displays={displays} onSubmit={this.onSubmit} loading={loading} />
       </Confirm>
     );
   }

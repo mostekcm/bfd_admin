@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 import { Field, FieldArray } from 'redux-form';
 
-import { OrderFormTable } from './';
+import { OrderFormLineItems, OrderFormDisplayItems } from './';
 
 import createForm from '../../utils/createForm';
 
@@ -13,23 +13,11 @@ import {
 
 export default createForm('order', class OrderForm extends Component {
   static propTypes = {
-    lineItems: PropTypes.array.isRequired,
+    lineItems: PropTypes.array,
+    displayItems: PropTypes.array,
     loading: PropTypes.bool.isRequired,
-    // fields: PropTypes.object.isRequired,
     initialValues: PropTypes.object
   }
-
-  // static formFields = [
-  //   'lineItems[].sku.product.name',
-  //   'lineItems[].sku.size',
-  //   'lineItems[].sku.variety',
-  //   'lineItems[].description',
-  //   'lineItems[].size',
-  //   'lineItems[].cpu',
-  //   'lineItems[].quantity',
-  //   'lineItems[].testers'
-  // ];
-  //
 
   renderSalesRep(validationErrors) {
     const name = 'salesRep.name';
@@ -120,9 +108,17 @@ export default createForm('order', class OrderForm extends Component {
           {this.renderTextField('notes', 'Notes', validationErrors)}
         </div>
         <div className="row">
+          <h3>Products</h3>
           <div className="col-xs-12">
-            <FieldArray name='lineItems' component={OrderFormTable}
+            <FieldArray name='lineItems' component={OrderFormLineItems}
                         props={ { loading: this.props.loading, lineItems: this.props.lineItems } }/>
+          </div>
+        </div>
+        <div className="row">
+          <h3>Displays</h3>
+          <div className="col-xs-12">
+            <FieldArray name='displayItems' component={OrderFormDisplayItems}
+                        props={ { loading: this.props.loading, displayItems: this.props.displayItems } }/>
           </div>
         </div>
       </form>

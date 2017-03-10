@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
+import formatCurrency from 'format-currency';
 
 import {
   InputText,
@@ -13,7 +14,7 @@ import {
   TableRow
 } from '../Dashboard';
 
-export default class OrderFormTable extends Component {
+export default class OrderFormLineItems extends Component {
   static propTypes = {
     lineItems: React.PropTypes.array.isRequired,
     fields: React.PropTypes.array.isRequired,
@@ -26,6 +27,11 @@ export default class OrderFormTable extends Component {
 
   render() {
     const { fields, lineItems } = this.props;
+
+    const opts = { format: '%s%v', symbol: '$' };
+
+    let total = 0;
+    lineItems.forEach(item => total += item.quantity ? item.quantity * item.size * item.cpu : 0);
     return (
       <Table>
         <TableHeader>
@@ -42,51 +48,34 @@ export default class OrderFormTable extends Component {
            {fields.map((fieldName, index) => {
              if (!lineItems) return <div></div>;
              const field = lineItems[index];
-             //fields.quantity[index].maxlength = 5;
              return <TableRow key={ index }>
                <TableTextCell>{field.sku.product.name}, {field.sku.size} {field.description}</TableTextCell>
-               <TableTextCell>${field.cpu}</TableTextCell>
+               <TableTextCell>{formatCurrency(field.cpu, opts)}</TableTextCell>
                <TableTextCell>{field.size}</TableTextCell>
-               <TableTextCell>${field.size * field.cpu}</TableTextCell>
+               <TableTextCell>{formatCurrency(field.size * field.cpu, opts)}</TableTextCell>
                <TableTextCell>{field.sku.variety}</TableTextCell>
                <TableTextCell>
                  <Field component={InputText} name={`${fieldName}.quantity`} type='text' props={{fieldName: 'quantity', label: '' }} />
                </TableTextCell>
-               <TableTextCell>{field.quantity && field.quantity ? field.quantity * field.size * field.cpu : ''}</TableTextCell>
+               <TableTextCell>{field.quantity ? formatCurrency(field.quantity * field.size * field.cpu, opts) : ''}</TableTextCell>
                <TableTextCell>
                  <Field component={InputText} name={`${fieldName}.testers`} type='text' props={{fieldName: 'testers', label: '' }} />
                </TableTextCell>
              </TableRow>;
              }
            )}
+          <TableRow key={ fields.length }>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell> </TableTextCell>
+            <TableTextCell>Total For Line Items</TableTextCell>
+            <TableTextCell>{formatCurrency(total, opts)}</TableTextCell>
+          </TableRow>;
         </TableBody>
       </Table>
     );
-
-
-
-
-
-    //       {cases.forEach((thisCase) => {
-    //         let optionNum = 0;
-    //         console.log('Carlos inside foreach: ', rowIndex);
-    //         return (thisCase.sku.varieties.length > 0 ? thisCase.sku.varieties : [""]).forEach((variety) => {
-    //           console.log('Carlos inside variety ', rowIndex, ', variety: ', variety);
-    //           return ( <TableRow key={ (rowIndex++).toString() }>
-    //             { optionNum++ > 0 || [
-    //             <TableTextCell rowspan={thisCase.sku.varieties.length || 1}>{thisCase.sku.product.name}, {thisCase.sku.size} {thisCase.description}</TableTextCell>,
-    //             <TableTextCell rowspan={thisCase.sku.varieties.length || 1}>${thisCase.cpu}</TableTextCell>,
-    //             <TableTextCell rowspan={thisCase.sku.varieties.length || 1}>{thisCase.size}</TableTextCell>,
-    //             <TableTextCell rowspan={thisCase.sku.varieties.length || 1}>${thisCase.size * thisCase.cpu}</TableTextCell>
-    //             ]}
-    //             <TableTextCell>{variety}</TableTextCell>
-    //             <TableTextCell>Put Qty textinput here</TableTextCell>
-    //             <TableTextCell>Subttl calc</TableTextCell>
-    //             <TableTextCell>testr input</TableTextCell>
-    //           </TableRow>);
-    //       })})}
-    //     </TableBody>
-    //   </Table>
-    // );
   }
 }
