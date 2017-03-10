@@ -13,6 +13,17 @@ export default class OrderActions extends Component {
     loading: false
   };
 
+  constructor() {
+    super();
+
+    this.printOrder.bind(this);
+    this.getPrintAction.bind(this);
+  }
+
+  printOrder() {
+    print();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.order) {
       const { record, loading } = nextProps.order.toJS();
@@ -26,6 +37,12 @@ export default class OrderActions extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.order !== this.props.order;
   }
+
+  getPrintAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.printOrder}>
+      Print Order
+    </MenuItem>
+  )
 
   getEditAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.editOrder}>
@@ -54,6 +71,7 @@ export default class OrderActions extends Component {
 
     return (
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
+        {this.getPrintAction(this.state.loading)}
         {this.getEditAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>

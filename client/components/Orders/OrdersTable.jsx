@@ -34,23 +34,25 @@ export default class OrdersTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="25%">ID</TableColumn>
-          <TableColumn width="45%">Customer Name</TableColumn>
-          <TableColumn width="15%">LineItems</TableColumn>
-          <TableColumn width="15%">TotalProductCost</TableColumn>
+          <TableColumn width="10%">ID</TableColumn>
+          <TableColumn width="15%">Show</TableColumn>
+          <TableColumn width="30%">Store</TableColumn>
+          <TableColumn width="30%">Contact</TableColumn>
+          <TableColumn width="8%">#Items</TableColumn>
+          <TableColumn width="7%">Total</TableColumn>
         </TableHeader>
         <TableBody>
           {orders.map((order, index) => {
-            console.log("Carlos, order: ", order);
-              return <TableRow key={index}>
-                <TableRouteCell
-                  route={`/orders/${order.id}`}>{order.id}</TableRouteCell>
-                <TableTextCell>{'Carlos add customer name'}</TableTextCell>
-                <TableTextCell>{order.lineItems.length}</TableTextCell>
-                <TableTextCell>${this.getTotalOrderCost(order)}</TableTextCell>
-              </TableRow>;
-          }
-          )}
+            return <TableRow key={index}>
+              <TableRouteCell
+                route={`/orders/${order.id}`}>{order.id}</TableRouteCell>
+              <TableTextCell>{order.show.name}</TableTextCell>
+              <TableTextCell>{order.store.name}</TableTextCell>
+              <TableTextCell>{order.store.contact}</TableTextCell>
+              <TableTextCell>{order.lineItems.length}</TableTextCell>
+              <TableTextCell>${this.getTotalOrderCost(order)}</TableTextCell>
+            </TableRow>;
+          })}
         </TableBody>
       </Table>
     );
