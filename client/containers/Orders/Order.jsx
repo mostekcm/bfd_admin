@@ -88,8 +88,6 @@ export default connectContainer(class extends Component {
           <div className="row">
             <div className="col-xs-12">
               Total Product Cost: {formatCurrency(totalProductCost, opts)}<br/>
-              Total Handling Cost: {formatCurrency(totalHandling, opts)}<br/>
-              Total Cost: {formatCurrency(totalCost, opts)}<br/>
             </div>
           </div>
         </LoadingPanel>

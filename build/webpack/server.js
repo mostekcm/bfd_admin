@@ -33,6 +33,6 @@ new WebpackDevServer(webpack(config), options)
         logger.info('Webpack proxy listening on: http://localhost:3001');
 
         // Start the actual webserver.
-        require('../../index');
+        require('../../index.dev');
       }
     });

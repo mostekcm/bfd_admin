@@ -2,6 +2,7 @@ import Confirm from './Confirm';
 import Error from './Error';
 import Json from './Json';
 import MultiSelect from './MultiSelect';
+import ComboField from './ComboField';
 import InputText from './InputText';
 import InputCombo from './InputCombo';
 import LoadingPanel from './LoadingPanel';
@@ -24,6 +25,7 @@ export {
   Error,
   Json,
   MultiSelect,
+  ComboField,
   InputText,
   InputCombo,
   LoadingPanel,
