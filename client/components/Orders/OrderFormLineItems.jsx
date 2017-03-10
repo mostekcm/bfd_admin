@@ -22,16 +22,19 @@ export default class OrderFormLineItems extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.fields !== this.props.fields;
+    return nextProps.fields !== this.props.fields || nextProps.lineItems !== this.props.lineItems;
   }
 
   render() {
-    const { fields, lineItems } = this.props;
+    const { fields } = this.props;
 
     const opts = { format: '%s%v', symbol: '$' };
 
+    const lineItems = this.props.lineItems || [];
+
     let total = 0;
     lineItems.forEach(item => total += item.quantity ? item.quantity * item.size * item.cpu : 0);
+
     return (
       <Table>
         <TableHeader>

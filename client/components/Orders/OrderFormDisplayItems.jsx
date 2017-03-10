@@ -20,16 +20,18 @@ export default class OrderFormDisplayItems extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.fields !== this.props.fields;
+    return nextProps.fields !== this.props.fields || nextProps.displayItems !== this.props.displayItems;
   }
 
   render() {
-    const { fields, displayItems } = this.props;
+    const { fields } = this.props;
 
     const opts = { format: '%s%v', symbol: '$' };
 
+    const displayItems = this.props.displayItems || [];
+
     let total = 0;
-    displayItems.forEach(display => { if (display.quantity) total += display.quantity * display.cost });
+    if (displayItems) displayItems.forEach(display => { if (display.quantity) total += display.quantity * display.cost });
 
     return (
       <Table>
