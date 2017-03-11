@@ -25,6 +25,7 @@ export default class OrdersTable extends Component {
     let totalCost = 0;
     order.lineItems.forEach((lineItem) => {
       totalCost += lineItem.quantity * lineItem.cpu * lineItem.size;
+      totalCost += lineItem.tester.quantity ? lineItem.tester.quantity * lineItem.tester.cpu : 0;
     });
     return totalCost;
   }
