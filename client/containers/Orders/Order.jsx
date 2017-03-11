@@ -45,6 +45,13 @@ export default connectContainer(class Order extends Component {
     return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems || nextProps.displayItems !== this.props.displayItems;
   }
 
+  getLineItemCost(item) {
+    let total = 0;
+    total += item.quantity * item.cpu * item.size;
+    total += item.tester.quantity ? item.tester.quantity * item.tester.cpu : 0;
+    return total;
+  }
+
   render() {
     const { loading, error, record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
@@ -55,7 +62,7 @@ export default connectContainer(class Order extends Component {
 
     let total = 0;
 
-    lineItems.forEach(item => total += item.quantity * item.cpu * item.size);
+    lineItems.forEach(item => total += this.getLineItemCost(item) );
     displayItems.forEach(item => total += item.quantity * item.cost);
 
     const paymentInfo = `

@@ -25,6 +25,13 @@ export default class OrderFormLineItems extends Component {
     return nextProps.fields !== this.props.fields || nextProps.lineItems !== this.props.lineItems;
   }
 
+  getLineItemCost(item) {
+    let total = 0;
+    total += item.quantity ? item.quantity * item.size * item.cpu : 0;
+    total += item.tester.quantity ? item.tester.quantity * item.tester.cpu : 0;
+    return total;
+  }
+
   render() {
     const { fields } = this.props;
 
@@ -33,7 +40,7 @@ export default class OrderFormLineItems extends Component {
     const lineItems = this.props.lineItems || [];
 
     let total = 0;
-    lineItems.forEach(item => total += item.quantity ? item.quantity * item.size * item.cpu : 0);
+    lineItems.forEach(item => total += this.getLineItemCost(item));
 
     return (
       <Table>
@@ -62,7 +69,7 @@ export default class OrderFormLineItems extends Component {
                </TableTextCell>
                <TableTextCell>{field.quantity ? formatCurrency(field.quantity * field.size * field.cpu, opts) : ''}</TableTextCell>
                <TableTextCell>
-                 <Field component={InputText} name={`${fieldName}.testers`} type='text' props={{fieldName: 'testers', label: '' }} />
+                 <Field component={InputText} name={`${fieldName}.tester.quantity`} type='text' props={{fieldName: 'tester.quantity', label: '' }} />
                </TableTextCell>
              </TableRow>;
              }

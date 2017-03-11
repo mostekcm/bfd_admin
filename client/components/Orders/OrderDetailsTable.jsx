@@ -24,9 +24,15 @@ export default class OrderDetailsTable extends Component {
   getTotalOrderCost(lineItems) {
     let totalCost = 0;
     lineItems.forEach((lineItem) => {
-      totalCost += lineItem.quantity * lineItem.cpu * lineItem.size;
+      totalCost += this.getRowCost(lineItem);
     });
     return totalCost;
+  }
+
+  getRowCost(lineItem) {
+    const itemCost = lineItem.cpu * lineItem.size * lineItem.quantity;
+    const testerCost = lineItem.tester.quantity > 0 ? lineItem.tester.quantity * lineItem.tester.cpu : 0;
+    return itemCost + testerCost;
   }
 
   render() {
@@ -55,7 +61,7 @@ export default class OrderDetailsTable extends Component {
             console.log("Carlos, printing line item: ", lineItem);
             const cpu = formatCurrency(lineItem.cpu, opts);
             const costPerCase = formatCurrency(lineItem.cpu * lineItem.size, opts);
-            const totalCost = formatCurrency(lineItem.cpu * lineItem.size * lineItem.quantity, opts);
+            const totalCost = formatCurrency(this.getRowCost(lineItem), opts);
 
             return <TableRow key={index}>
               <TableTextCell>{lineItem.sku.product.name}</TableTextCell>
@@ -65,7 +71,7 @@ export default class OrderDetailsTable extends Component {
               <TableTextCell>{lineItem.size}</TableTextCell>
               <TableTextCell>{costPerCase}</TableTextCell>
               <TableTextCell>{lineItem.quantity}</TableTextCell>
-              <TableTextCell>{lineItem.testers}</TableTextCell>
+              <TableTextCell>{lineItem.tester.quantity}</TableTextCell>
               <TableTextCell>{totalCost}</TableTextCell>
             </TableRow>;
           })}
