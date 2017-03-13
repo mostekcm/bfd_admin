@@ -166,3 +166,42 @@ export function deleteOrder() {
     });
   };
 }
+
+/*
+ * Get confirmation to update shipping.
+ */
+export function requestUpdateShipping(order) {
+  return {
+    type: constants.REQUEST_UPDATE_SHIPPING,
+    order
+  };
+}
+
+/*
+ * Cancel the shipping update.
+ */
+export function cancelUpdateShipping() {
+  return {
+    type: constants.CANCEL_UPDATE_SHIPPING
+  };
+}
+
+/*
+ * Change username.
+ */
+export function updateShipping(orderId, data) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.UPDATE_SHIPPING,
+      meta: {
+        orderId,
+        onSuccess: () => {
+          dispatch(routeActions.push(`/orders/${orderId}`));
+        }
+      },
+      payload: {
+        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, { shipping: data }, { responseType: 'json' })
+      }
+    });
+  };
+}

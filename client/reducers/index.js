@@ -9,6 +9,7 @@ import order from './order';
 import orderCreate from './orderCreate';
 import orderDelete from './orderDelete';
 import orders from './orders';
+import updateShipping from './updateShipping';
 
 function lastAction(state = null, action) {
   return action;
@@ -24,5 +25,6 @@ export default combineReducers({
   orderDelete,
   orders,
   lastAction,
+  updateShipping,
   form: formReducer
 });

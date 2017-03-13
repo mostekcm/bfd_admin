@@ -11,8 +11,10 @@ import './Order.css';
 
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import * as dialogs from './Dialogs';
-import { OrderActions, OrderDetailsTable, OrderDisplayDetailsTable/*, OrderHeader, OrderProfile, OrderLogs,
- OrderInfo*/ } from '../../components/Orders';
+import {
+  OrderActions, OrderDetailsTable, OrderDisplayDetailsTable/*, OrderHeader, OrderProfile, OrderLogs,
+ OrderInfo*/
+} from '../../components/Orders';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
@@ -60,10 +62,14 @@ export default connectContainer(class Order extends Component {
     const lineItems = this.props.lineItems || [];
     const displayItems = this.props.displayItems || [];
 
-    let total = 0;
+    let totalProduct = 0;
 
-    lineItems.forEach(item => total += this.getLineItemCost(item) );
-    displayItems.forEach(item => total += item.quantity * item.cost);
+    lineItems.forEach(item => totalProduct += this.getLineItemCost(item));
+    displayItems.forEach(item => totalProduct += item.quantity * item.cost);
+
+    const shippingAndHandling = (order.shipping || order.shipping === 0) ? (parseFloat(order.shipping) + parseFloat(totalProduct * .03)) : 0;
+
+    const total = shippingAndHandling + totalProduct;
 
     const paymentInfo = `
 \`\`\`
@@ -107,6 +113,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
               <OrderActions
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
+                updateShipping={this.props.requestUpdateShipping}
               />
             </div>
           </div>
@@ -124,22 +131,40 @@ EXP DATE: _________________________________________    CVV2: ___________________
           </div>
           <div className="row">
             <div className="col-xs-12 wrapper">
-              TOTAL COST: {formatCurrency(total, opts)}
+              TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}
             </div>
           </div>
+          { shippingAndHandling > 0 ?
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(shippingAndHandling, opts)}
+              </div>
+            </div> : '' }
+          { total != totalProduct ?
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                TOTAL COST: {formatCurrency(total, opts)}
+              </div>
+            </div> : '' }
+          { order.paidDate ?
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                ORDER PAID: {moment(order.date).format()}
+              </div>
+            </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper">
-              <Error message={error} />
+              <Error message={error}/>
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12">
-              <OrderDetailsTable lineItems={lineItems} />
+              <OrderDetailsTable lineItems={lineItems}/>
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12">
-              <OrderDisplayDetailsTable displayItems={displayItems} />
+              <OrderDisplayDetailsTable displayItems={displayItems}/>
             </div>
           </div>
           <div className="row">
@@ -172,71 +197,29 @@ EXP DATE: _________________________________________    CVV2: ___________________
           </div>
           <div className="row">
             <div className="col-xs-12 col-md-6">
-              NOTES: {order.notes}
+              NOTES: {order.notesToCustomer}
             </div>
           </div>
           <div className="row">
             <h2>Payment Information</h2>
             <div className="col-xs-12">
-              <Markdown source={paymentInfo} />
+              <Markdown source={paymentInfo}/>
             </div>
           </div>
           <div className="row">
             <h2>Ordering Information</h2>
             <div className="col-xs-6 col-md-6">
-              <Markdown source={terms1} />
+              <Markdown source={terms1}/>
             </div>
             <div className="col-xs-6 col-md-6">
-              <Markdown source={terms2} />
+              <Markdown source={terms2}/>
             </div>
           </div>
         </LoadingPanel>
         <dialogs.DeleteDialog />
+        <dialogs.UpdateShippingDialog />
       </div>
-      );
-      //   <!-- div className="row">
-      //     <div className="col-xs-12">
-      //       <OrderHeader loading={order.get('loading')} order={order.get('record')} error={order.get('error')} />
-      //     </div>
-      //   </div>
-      //   <div className="row order-tabs">
-      //     <div className="col-xs-12">
-      //       <Tabs defaultActiveKey={1} animation={false} id="order-info-tabs">
-      //         <Tab eventKey={1} title="Order Information">
-      //           <OrderInfo loading={order.get('loading')} order={order.get('record')}
-      //                     memberships={order.get('memberships').toJSON()} error={order.get('error')} />
-      //         </Tab>
-      //         <Tab eventKey={2} title="Devices">
-      //           <OrderDevices loading={devices.get('loading')} devices={devices.get('records')}
-      //                        error={devices.get('error')} />
-      //         </Tab>
-      //         <Tab eventKey={3} title="Logs">
-      //           <LogDialog
-      //             onClose={this.props.clearLog} error={log.get('error')}
-      //             loading={log.get('loading')} log={log.get('record')}
-      //             logId={log.get('logId')}
-      //           />
-      //           <OrderLogs
-      //             onOpen={this.props.fetchLog} loading={logs.get('loading')}
-      //             logs={logs.get('records')} order={order.get('record')}
-      //             error={logs.get('error')}
-      //           />
-      //         </Tab>
-      //         <Tab eventKey={4} title="Profile">
-      //           <OrderProfile loading={order.get('loading')} order={order.get('record')} error={order.get('error')} />
-      //         </Tab>
-      //       </Tabs>
-      //     </div>
-      //   </div>
-      //   <dialogs.DeleteDialog />
-      //   <dialogs.EmailChangeDialog />
-      //   <dialogs.PasswordResetDialog />
-      //   <dialogs.PasswordChangeDialog />
-      //   <dialogs.OrdernameChangeDialog />
-      //   <dialogs.ResendVerificationEmailDialog />
-      //   <dialogs.BlockDialog />
-      //   <dialogs.UnblockDialog />
-      //   <dialogs.RemoveMultiFactorDialog / -->
-      // </div>
+    );
+
   }
 });

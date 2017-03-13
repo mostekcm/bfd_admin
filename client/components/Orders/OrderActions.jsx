@@ -3,6 +3,7 @@ import { MenuItem, DropdownButton } from 'react-bootstrap';
 
 export default class OrderActions extends Component {
   static propTypes = {
+    updateShipping: PropTypes.func.isRequired,
     editOrder: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
@@ -44,6 +45,12 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
+  getUpdateShippingAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updateShipping}>
+      Update Shipping
+    </MenuItem>
+  )
+
   getEditAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.editOrder}>
       Edit Order
@@ -64,6 +71,10 @@ export default class OrderActions extends Component {
     this.props.editOrder(this.state.order);
   }
 
+  updateShipping = () => {
+    this.props.updateShipping(this.state.order);
+  }
+
   render() {
     if (!this.state.order) {
       return null;
@@ -72,6 +83,7 @@ export default class OrderActions extends Component {
     return (
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
         {this.getPrintAction(this.state.loading)}
+        {this.getUpdateShippingAction(this.state.order, this.state.loading)}
         {this.getEditAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>
