@@ -1,3 +1,7 @@
+.order .totals {
+  float: right;
+  text-align: right;
+}
 .order .content-header {
   margin-bottom: 20px;
 }

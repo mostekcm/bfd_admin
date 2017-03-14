@@ -8,33 +8,33 @@ const initialState = {
   loading: false,
   requesting: false,
   orderId: null,
-  nextShipping: null,
-  originalShipping: null
+  nextDiscount: null,
+  originalDiscount: null
 };
 
 export default createReducer(fromJS(initialState), {
-  [constants.REQUEST_UPDATE_SHIPPING]: (state, action) =>
+  [constants.REQUEST_UPDATE_DISCOUNT]: (state, action) =>
     state.merge({
       ...initialState,
       orderId: action.order.id,
-      nextShipping: action.order.shipping,
-      originalShipping: action.order.shipping,
+      nextDiscount: action.order.discount,
+      originalDiscount: action.order.discount,
       requesting: true
     }),
-  [constants.CANCEL_UPDATE_SHIPPING]: (state) =>
+  [constants.CANCEL_UPDATE_DISCOUNT]: (state) =>
     state.merge({
       ...initialState
     }),
-  [constants.UPDATE_SHIPPING_PENDING]: (state) =>
+  [constants.UPDATE_DISCOUNT_PENDING]: (state) =>
     state.merge({
       loading: true
     }),
-  [constants.UPDATE_SHIPPING_REJECTED]: (state, action) =>
+  [constants.UPDATE_DISCOUNT_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
-      error: `An error occurred while changing the shipping: ${action.errorMessage}`
+      error: `An error occurred while changing the discount: ${action.errorMessage}`
     }),
-  [constants.UPDATE_SHIPPING_FULFILLED]: (state) =>
+  [constants.UPDATE_DISCOUNT_FULFILLED]: (state) =>
     state.merge({
       ...initialState
     })

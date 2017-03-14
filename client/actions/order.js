@@ -196,11 +196,50 @@ export function updateShipping(orderId, data) {
       meta: {
         orderId,
         onSuccess: () => {
-          dispatch(routeActions.push(`/orders/${orderId}`));
+          dispatch(fetchOrderDetail(orderId));
         }
       },
       payload: {
         promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, { shipping: data }, { responseType: 'json' })
+      }
+    });
+  };
+}
+
+/*
+ * Get confirmation to update discount.
+ */
+export function requestUpdateDiscount(order) {
+  return {
+    type: constants.REQUEST_UPDATE_DISCOUNT,
+    order
+  };
+}
+
+/*
+ * Cancel the discount update.
+ */
+export function cancelUpdateDiscount() {
+  return {
+    type: constants.CANCEL_UPDATE_DISCOUNT
+  };
+}
+
+/*
+ * Change username.
+ */
+export function updateDiscount(orderId, data) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.UPDATE_DISCOUNT,
+      meta: {
+        orderId,
+        onSuccess: () => {
+          dispatch(fetchOrderDetail(orderId));
+        }
+      },
+      payload: {
+        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, { discount: data }, { responseType: 'json' })
       }
     });
   };

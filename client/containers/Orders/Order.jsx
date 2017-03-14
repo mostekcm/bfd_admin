@@ -69,7 +69,9 @@ export default connectContainer(class Order extends Component {
 
     const shippingAndHandling = (order.shipping || order.shipping === 0) ? (parseFloat(order.shipping) + parseFloat(totalProduct * .03)) : 0;
 
-    const total = shippingAndHandling + totalProduct;
+    const discount = order.discount ? parseFloat(order.discount) : 0;
+
+    const total = shippingAndHandling + totalProduct - discount;
 
     const paymentInfo = `
 \`\`\`
@@ -114,6 +116,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
                 updateShipping={this.props.requestUpdateShipping}
+                updateDiscount={this.props.requestUpdateDiscount}
               />
             </div>
           </div>
@@ -131,29 +134,6 @@ EXP DATE: _________________________________________    CVV2: ___________________
           </div>
           <div className="row">
             <div className="col-xs-12 wrapper">
-              TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}
-            </div>
-          </div>
-          { shippingAndHandling > 0 ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(shippingAndHandling, opts)}
-              </div>
-            </div> : '' }
-          { total != totalProduct ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                TOTAL COST: {formatCurrency(total, opts)}
-              </div>
-            </div> : '' }
-          { order.paidDate ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                ORDER PAID: {moment(order.date).format()}
-              </div>
-            </div> : '' }
-          <div className="row">
-            <div className="col-xs-12 wrapper">
               <Error message={error}/>
             </div>
           </div>
@@ -167,6 +147,35 @@ EXP DATE: _________________________________________    CVV2: ___________________
               <OrderDisplayDetailsTable displayItems={displayItems}/>
             </div>
           </div>
+          <div className="row">
+            <div className="col-xs-12 wrapper totals">
+              TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}
+            </div>
+          </div>
+          { shippingAndHandling > 0 ?
+            <div className="row">
+              <div className="col-xs-12 wrapper totals">
+                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(shippingAndHandling, opts)}
+              </div>
+            </div> : '' }
+          { discount > 0 ?
+            <div className="row">
+              <div className="col-xs-12 wrapper totals">
+                TOTAL DISCOUNT: {formatCurrency(discount, opts)}
+              </div>
+            </div> : '' }
+          { order.paidDate ?
+            <div className="row">
+              <div className="col-xs-12 wrapper totals">
+                ORDER PAID: {moment(order.date).format()}
+              </div>
+            </div> : '' }
+          { total != totalProduct ?
+            <div className="row">
+              <div className="col-xs-12 wrapper totals">
+                AMOUNT OWED: {formatCurrency(total, opts)}
+              </div>
+            </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper">
               STORE NAME: {order.store && order.store.name}
@@ -217,6 +226,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
           </div>
         </LoadingPanel>
         <dialogs.DeleteDialog />
+        <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateShippingDialog />
       </div>
     );
