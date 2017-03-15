@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import moment from 'moment';
 import Markdown from 'react-markdown';
-import { Tabs, Tab } from 'react-bootstrap';
 import formatCurrency from 'format-currency';
 
 import { orderActions } from '../../actions';

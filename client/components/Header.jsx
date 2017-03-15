@@ -32,6 +32,11 @@ export default class Header extends Component {
           </Link>
         </li>
         <li role="presentation">
+          <Link to="/report/show/March Expo">
+            March Expo Report
+          </Link>
+        </li>
+        <li role="presentation">
           <a href="#" role="menuitem" tabIndex="-1" onClick={this.props.onLogout}>
             Logout
           </a>

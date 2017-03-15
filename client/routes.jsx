@@ -9,6 +9,7 @@ export default (history) =>
       <IndexRedirect to="/orders" />
       <Route path="orders" component={containers.Orders} />
       <Route path="orders/:id" component={containers.Order} />
+      <Route path="report/show/:name" component={containers.ShowReport} />
     </Route>
     <Route path="/login" component={containers.Login} />
   </Router>;
