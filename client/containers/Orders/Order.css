@@ -2,6 +2,12 @@
   float: right;
   text-align: right;
 }
+
+.order .address {
+  line-height: 1.25;
+  display: inline;
+}
+
 .order .content-header {
   margin-bottom: 20px;
 }

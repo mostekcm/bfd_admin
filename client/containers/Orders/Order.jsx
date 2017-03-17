@@ -3,6 +3,7 @@ import connectContainer from 'redux-static';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import formatCurrency from 'format-currency';
+import parseAddress from 'parse-address';
 
 import { orderActions } from '../../actions';
 
@@ -53,6 +54,17 @@ export default connectContainer(class Order extends Component {
     return total;
   }
 
+  renderAddress(address) {
+    const parsed = parseAddress.parseLocation(address);
+    console.log("Carlos, parsed address: ", parsed);
+    return (
+      <div className="address">
+        {parsed.number} {parsed.prefix} {parsed.street} {parsed.type} {parsed.suffix}<br />
+        {parsed.city}, {parsed.state} &nbsp;{parsed.zip}
+      </div>
+    );
+  }
+
   render() {
     const { loading, error, record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
@@ -70,7 +82,14 @@ export default connectContainer(class Order extends Component {
 
     const discount = order.discount ? parseFloat(order.discount) : 0;
 
-    const total = shippingAndHandling + totalProduct - discount;
+    let totalPaid = 0;
+
+    if (order.payments) order.payments.forEach(payment => totalPaid += payment.amount);
+
+    let total = shippingAndHandling + totalProduct - discount - totalPaid;
+
+    /* handle amount due of 0 that is off by a fraction of a penny below zero */
+    if (Math.round(total*100) === 0) total = 0;
 
     const paymentInfo = `
 \`\`\`
@@ -123,7 +142,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
         <LoadingPanel show={loading}>
           <div className="row">
             <div className="col-xs-12 wrapper">
-              ORDER DATE: {moment(order.date).format()}
+              ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
             </div>
           </div>
           <div className="row">
@@ -131,6 +150,17 @@ EXP DATE: _________________________________________    CVV2: ___________________
               SHOW: {order.show && order.show.name}
             </div>
           </div>
+          { order.store ?
+          <div className="row">
+            <div className="col-xs-12 wrapper address">
+              {order.store.contact}<br />
+              {order.store.name}<br />
+              {this.renderAddress(order.store.shippingAddress)}<br />
+              { order.store.billingAddress ? 'bill to: ' + this.renderAddress(order.store.billingAddress) + '<br />' : ''}
+              {order.store.phone}<br />
+              {order.store.email}
+            </div>
+          </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper">
               <Error message={error}/>
@@ -141,11 +171,12 @@ EXP DATE: _________________________________________    CVV2: ___________________
               <OrderDetailsTable lineItems={lineItems}/>
             </div>
           </div>
+          { displayItems.length > 0 ?
           <div className="row">
             <div className="col-xs-12">
               <OrderDisplayDetailsTable displayItems={displayItems}/>
             </div>
-          </div>
+          </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper totals">
               TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}
@@ -163,57 +194,33 @@ EXP DATE: _________________________________________    CVV2: ___________________
                 TOTAL DISCOUNT: {formatCurrency(discount, opts)}
               </div>
             </div> : '' }
-          { order.paidDate ?
-            <div className="row">
-              <div className="col-xs-12 wrapper totals">
-                ORDER PAID: {moment(order.date).format()}
+          { order.payments ?
+            order.payments.map((payment, index) =>
+              <div className="row" key={index} >
+                <div className="col-xs-12 wrapper totals">
+                  PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): { formatCurrency(payment.amount, opts) }
+                </div>
               </div>
-            </div> : '' }
+            ) : '' }
           { total != totalProduct ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
                 AMOUNT OWED: {formatCurrency(total, opts)}
               </div>
             </div> : '' }
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              STORE NAME: {order.store && order.store.name}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              STORE SHIPPING ADDRESS: {order.store && order.store.shippingAddress}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              STORE BILLING ADDRESS: {order.store && order.store.billingAddress}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 col-md-6">
-              CONTACT PERSON: {order.store && order.store.contact}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-6 col-md-6">
-              PHONE: {order.store && order.store.phone}
-            </div>
-            <div className="col-xs-6 col-md-6">
-              EMAIL: {order.store && order.store.email}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 col-md-6">
-              NOTES: {order.notesToCustomer}
-            </div>
-          </div>
-          <div className="row">
-            <h2>Payment Information</h2>
-            <div className="col-xs-12">
-              <Markdown source={paymentInfo}/>
-            </div>
-          </div>
+          { order.notesToCustomer ?
+            <div className="row">
+              <div className="col-xs-12 col-md-6">
+                NOTES: {order.notesToCustomer}
+              </div>
+            </div> : '' }
+          { total > 0 ?
+            <div className="row">
+              <h2>Payment Information</h2>
+              <div className="col-xs-12">
+                <Markdown source={paymentInfo}/>
+              </div>
+            </div> : '' }
           <div className="row">
             <h2>Ordering Information</h2>
             <div className="col-xs-6 col-md-6">
