@@ -54,13 +54,17 @@ export default connectContainer(class Order extends Component {
     return total;
   }
 
-  renderAddress(address) {
+  renderAddress(address, header) {
     const parsed = parseAddress.parseLocation(address);
     console.log("Carlos, parsed address: ", parsed);
     return (
       <div className="address">
+        { header ?
+          <div className="address">
+            {header}<br />
+          </div> : '' }
         {parsed.number} {parsed.prefix} {parsed.street} {parsed.type} {parsed.suffix}<br />
-        {parsed.city}, {parsed.state} &nbsp;{parsed.zip}
+        {parsed.city}, {parsed.state} &nbsp;{parsed.zip}<br />
       </div>
     );
   }
@@ -155,8 +159,8 @@ EXP DATE: _________________________________________    CVV2: ___________________
             <div className="col-xs-12 wrapper address">
               {order.store.contact}<br />
               {order.store.name}<br />
-              {this.renderAddress(order.store.shippingAddress)}<br />
-              { order.store.billingAddress ? 'bill to: ' + this.renderAddress(order.store.billingAddress) + '<br />' : ''}
+              {this.renderAddress(order.store.shippingAddress, order.store.billingAddress ? 'ship to: ' : undefined)}
+              { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
               {order.store.phone}<br />
               {order.store.email}
             </div>
