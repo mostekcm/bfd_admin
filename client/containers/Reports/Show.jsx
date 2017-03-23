@@ -5,7 +5,7 @@ import { reportActions } from '../../actions';
 
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import {
-  ReportSkusTable, ReportDisplaysTable
+  ReportSkusTable, ReportDisplaysTable, ReportLabelTotalsTable, ReportLabelsToPrintTable
 } from '../../components/Reports';
 
 export default connectContainer(class ShowReport extends Component {
@@ -54,6 +54,18 @@ export default connectContainer(class ShowReport extends Component {
             <h2>Displays</h2>
             <div className="col-xs-12">
               <ReportDisplaysTable displays={record.displays}/>
+            </div>
+          </div>
+          <div className="row">
+            <h2>Label to Buy</h2>
+            <div className="col-xs-12">
+              <ReportLabelTotalsTable labelTotals={record.labelTotals}/>
+            </div>
+          </div>
+          <div className="row">
+            <h2>Labels to Print</h2>
+            <div className="col-xs-12">
+              <ReportLabelsToPrintTable labelsToPrint={record.labelsToPrint}/>
             </div>
           </div>
         </LoadingPanel>
