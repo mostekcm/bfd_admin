@@ -64,6 +64,7 @@
     "eslint-plugin-react": "^6.10.0",
     "exports": "0.0.1",
     "exports-loader": "^0.6.4",
+    "express-force-ssl": "^0.3.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",
     "format-currency": "^1.0.0",
