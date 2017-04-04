@@ -21,7 +21,7 @@ module.exports = (cfg) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
-  if (config('NODE_ENV') !== 'development') {
+  if (false && config('NODE_ENV') !== 'development') {
     app.set('forceSSLOptions', {
       enable301Redirects: true,
       trustXFPHeader: false,
@@ -29,7 +29,10 @@ module.exports = (cfg) => {
       sslRequiredMessage: 'SSL Required.'
     });
 
-    app.use(forceSSL);
+    app.use(function(req, res, next) {
+      if (!req.connection.encrypted) forceSSL(req, res, next);
+      else next();
+    });
   }
 
   // Configure routes.

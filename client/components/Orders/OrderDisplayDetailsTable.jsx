@@ -34,6 +34,30 @@ export default class OrderDisplayDetailsTable extends Component {
     // now include the currency symbol
     let opts = { format: '%s%v', symbol: '$' };
     const totalOrderCost = formatCurrency(this.getTotalOrderCost(displayItems), opts);
+    const zero = formatCurrency(0, opts);
+
+    const rows = [];
+
+    displayItems && displayItems.map((displayItem) => {
+      const cost = formatCurrency(displayItem.cost, opts);
+      const totalCost = formatCurrency(displayItem.cost * displayItem.quantity, opts);
+      const msrp = formatCurrency(displayItem.offsetMerch.sku.msrp, opts);
+
+      rows.push({
+        display: `${displayItem.name} for ${displayItem.product.name}`,
+        offsetMerch: '',
+        cost: cost,
+        quantity: displayItem.quantity,
+        total: totalCost
+      });
+      rows.push({
+        display: '',
+        offsetMerch: `${displayItem.offsetMerch.sku.product.name}, ${displayItem.offsetMerch.sku.size}`,
+        cost: msrp,
+        quantity: displayItem.offsetMerch.quantity,
+        total: zero
+      });
+    });
 
     return (
       <Table>
@@ -45,16 +69,13 @@ export default class OrderDisplayDetailsTable extends Component {
           <TableColumn width="10%">Sub Total</TableColumn>
         </TableHeader>
         <TableBody>
-          {displayItems.map((displayItem, index) => {
-            const cost = formatCurrency(displayItem.cost, opts);
-            const totalCost = formatCurrency(displayItem.cost * displayItem.quantity, opts);
-
+          {rows.map((row, index) => {
             return <TableRow key={index}>
-              <TableTextCell>{displayItem.name} for {displayItem.product.name}</TableTextCell>
-              <TableTextCell>{displayItem.offsetMerch.sku.quantity} x {displayItem.offsetMerch.sku.product.name}, {displayItem.offsetMerch.sku.size}</TableTextCell>
-              <TableTextCell>{cost}</TableTextCell>
-              <TableTextCell>{displayItem.quantity}</TableTextCell>
-              <TableTextCell>{totalCost}</TableTextCell>
+              <TableTextCell>{row.display}</TableTextCell>
+              <TableTextCell>{row.offsetMerch}</TableTextCell>
+              <TableTextCell>{row.cost}</TableTextCell>
+              <TableTextCell>{row.quantity}</TableTextCell>
+              <TableTextCell>{row.total}</TableTextCell>
             </TableRow>;
           })}
           <TableRow key={displayItems.length}>

@@ -12,7 +12,7 @@ import './Order.css';
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import * as dialogs from './Dialogs';
 import {
-  OrderActions, OrderDetailsTable, OrderDisplayDetailsTable/*, OrderHeader, OrderProfile, OrderLogs,
+  OrderActions, OrderDetailsTable, OrderDisplayDetailsTable, OrderTestersTable/*, OrderHeader, OrderProfile, OrderLogs,
  OrderInfo*/
 } from '../../components/Orders';
 
@@ -47,11 +47,12 @@ export default connectContainer(class Order extends Component {
     return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems || nextProps.displayItems !== this.props.displayItems;
   }
 
+  getTesterCost(item) {
+    return item.tester.quantity ? item.tester.quantity * item.tester.cpu : 0;
+  }
+
   getLineItemCost(item) {
-    let total = 0;
-    total += item.quantity * item.cpu * item.size;
-    total += item.tester.quantity ? item.tester.quantity * item.tester.cpu : 0;
-    return total;
+    return item.quantity * item.cpu * item.size;
   }
 
   renderAddress(address, header) {
@@ -78,9 +79,15 @@ export default connectContainer(class Order extends Component {
     const displayItems = this.props.displayItems || [];
 
     let totalProduct = 0;
+    let testerCost = 0;
 
     lineItems.forEach(item => totalProduct += this.getLineItemCost(item));
     displayItems.forEach(item => totalProduct += item.quantity * item.cost);
+    lineItems.forEach(item => testerCost += this.getTesterCost(item));
+
+    console.log("Carlos, tester cost: ", testerCost);
+
+    totalProduct += testerCost;
 
     const shippingAndHandling = (order.shipping || order.shipping === 0) ? (parseFloat(order.shipping) + parseFloat(totalProduct * .03)) : 0;
 
@@ -171,16 +178,25 @@ EXP DATE: _________________________________________    CVV2: ___________________
             </div>
           </div>
           <div className="row">
+            <h3>Products</h3>
             <div className="col-xs-12">
               <OrderDetailsTable lineItems={lineItems}/>
             </div>
           </div>
           { displayItems.length > 0 ?
-          <div className="row">
-            <div className="col-xs-12">
-              <OrderDisplayDetailsTable displayItems={displayItems}/>
-            </div>
-          </div> : '' }
+            <div className="row">
+              <h3>Displays</h3>
+              <div className="col-xs-12">
+                <OrderDisplayDetailsTable displayItems={displayItems}/>
+              </div>
+            </div> : '' }
+          { testerCost > 0 ?
+            <div className="row">
+              <h3>Testers</h3>
+              <div className="col-xs-12">
+                <OrderTestersTable lineItems={lineItems}/>
+              </div>
+            </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper totals">
               TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}

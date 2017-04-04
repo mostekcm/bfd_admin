@@ -33,6 +33,7 @@
     "body-parser": "^1.17.1",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
+    "express-force-ssl": "^0.3.2",
     "morgan": "^1.8.1",
     "nconf": "^0.8.4",
     "winston": "^2.3.1"
@@ -64,7 +65,6 @@
     "eslint-plugin-react": "^6.10.0",
     "exports": "0.0.1",
     "exports-loader": "^0.6.4",
-    "express-force-ssl": "^0.3.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",
     "format-currency": "^1.0.0",
