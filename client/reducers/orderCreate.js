@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export default createReducer(fromJS(initialState), {
-  [constants.REQUEST_CREATE_ORDER]: state =>
+  [constants.REQUEST_CREATE_ORDER]: (state, action) =>
     state.merge({
       ...initialState
     })
@@ -23,9 +23,10 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState
     }),
-  [constants.CREATE_ORDER_PENDING]: state =>
+  [constants.CREATE_ORDER_PENDING]: (state, action) =>
     state.merge({
-      loading: true
+      loading: true,
+      record: action.meta.order
     }),
   [constants.CREATE_ORDER_REJECTED]: (state, action) => {
     const errorMessage = action.error ? action.errorMessage : null;

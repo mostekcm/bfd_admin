@@ -37,6 +37,7 @@ export function createOrder(order, onSuccess) {
     dispatch({
       type: constants.CREATE_ORDER,
       meta: {
+        order: order,
         order,
         onSuccess: (payload) => {
           if (onSuccess) {

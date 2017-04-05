@@ -41,20 +41,23 @@ export default class OrderDisplayDetailsTable extends Component {
     displayItems && displayItems.map((displayItem) => {
       const cost = formatCurrency(displayItem.cost, opts);
       const totalCost = formatCurrency(displayItem.cost * displayItem.quantity, opts);
-      const msrp = formatCurrency(displayItem.offsetMerch.sku.msrp, opts);
+      const offsetQuantity = parseFloat(displayItem.offsetMerch.quantity) * parseFloat(displayItem.quantity);
+      const totalRetail = formatCurrency(parseFloat(displayItem.offsetMerch.sku.msrp) * offsetQuantity, opts);
 
       rows.push({
         display: `${displayItem.name} for ${displayItem.product.name}`,
         offsetMerch: '',
         cost: cost,
         quantity: displayItem.quantity,
+        totalRetail: '',
         total: totalCost
       });
       rows.push({
         display: '',
         offsetMerch: `${displayItem.offsetMerch.sku.product.name}, ${displayItem.offsetMerch.sku.size}`,
-        cost: msrp,
-        quantity: displayItem.offsetMerch.quantity,
+        cost: '',
+        quantity: offsetQuantity,
+        totalRetail: totalRetail,
         total: zero
       });
     });
@@ -64,21 +67,24 @@ export default class OrderDisplayDetailsTable extends Component {
         <TableHeader>
           <TableColumn width="30%">Display</TableColumn>
           <TableColumn width="30%">Offset Merch</TableColumn>
+          <TableColumn width="10%">Quantity</TableColumn>
           <TableColumn width="10%">Cost</TableColumn>
-          <TableColumn width="10%">Qty Ordered</TableColumn>
-          <TableColumn width="10%">Sub Total</TableColumn>
+          <TableColumn width="10%">Total Retail</TableColumn>
+          <TableColumn width="10%">Total Cost</TableColumn>
         </TableHeader>
         <TableBody>
           {rows.map((row, index) => {
             return <TableRow key={index}>
               <TableTextCell>{row.display}</TableTextCell>
               <TableTextCell>{row.offsetMerch}</TableTextCell>
-              <TableTextCell>{row.cost}</TableTextCell>
               <TableTextCell>{row.quantity}</TableTextCell>
+              <TableTextCell>{row.cost}</TableTextCell>
+              <TableTextCell>{row.totalRetail}</TableTextCell>
               <TableTextCell>{row.total}</TableTextCell>
             </TableRow>;
           })}
           <TableRow key={displayItems.length}>
+            <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>

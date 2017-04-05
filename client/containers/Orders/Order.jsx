@@ -57,7 +57,7 @@ export default connectContainer(class Order extends Component {
 
   renderAddress(address, header) {
     const parsed = parseAddress.parseLocation(address);
-    console.log("Carlos, parsed address: ", parsed);
+    console.log("Carlos, parsed address: ", parsed, ", orig: ", address);
     return (
       <div className="address">
         { header ?
