@@ -45,21 +45,23 @@ export default class OrderDisplayDetailsTable extends Component {
       const totalRetail = formatCurrency(parseFloat(displayItem.offsetMerch.sku.msrp) * offsetQuantity, opts);
 
       rows.push({
-        display: `${displayItem.name} for ${displayItem.product.name}`,
+        display: displayItem.product.name.length > 0 ? `${displayItem.name} for ${displayItem.product.name}` : displayItem.name,
         offsetMerch: '',
         cost: cost,
         quantity: displayItem.quantity,
         totalRetail: '',
         total: totalCost
       });
-      rows.push({
-        display: '',
-        offsetMerch: `${displayItem.offsetMerch.sku.product.name}, ${displayItem.offsetMerch.sku.size}`,
-        cost: '',
-        quantity: offsetQuantity,
-        totalRetail: totalRetail,
-        total: zero
-      });
+      console.log(rows[rows.length - 1]);
+      if (displayItem.offsetMerch.sku.product.name.length > 0)
+        rows.push({
+          display: '',
+          offsetMerch: `${displayItem.offsetMerch.sku.product.name}, ${displayItem.offsetMerch.sku.size}`,
+          cost: '',
+          quantity: offsetQuantity,
+          totalRetail: totalRetail,
+          total: zero
+        });
     });
 
     return (
