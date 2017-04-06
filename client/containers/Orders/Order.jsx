@@ -4,6 +4,8 @@ import moment from 'moment';
 import Markdown from 'react-markdown';
 import formatCurrency from 'format-currency';
 import parseAddress from 'parse-address';
+//import smap from 'snailmailaddressparser';
+import addressit from 'addressit';
 
 import { orderActions } from '../../actions';
 
@@ -56,16 +58,34 @@ export default connectContainer(class Order extends Component {
   }
 
   renderAddress(address, header) {
-    const parsed = parseAddress.parseLocation(address);
-    console.log("Carlos, parsed address: ", parsed, ", orig: ", address);
+    let parts = address.split(',');
+    let postalCode = undefined;
+    let state = undefined;
+    let city = undefined;
+    if (parts.length >= 2) {
+      const lastLine = parts.pop().trim();
+      city = parts.pop().trim();
+      const stateZipParts = lastLine.split(' ');
+      state = stateZipParts.shift();
+      postalCode = stateZipParts.join('');
+    }
+
     return (
       <div className="address">
         { header ?
           <div className="address">
             {header}<br />
           </div> : '' }
-        {parsed.number} {parsed.prefix} {parsed.street} {parsed.type} {parsed.suffix}<br />
-        {parsed.city}, {parsed.state} &nbsp;{parsed.zip}<br />
+        {
+          state ? <div className="address">
+            { parts.map(part => {
+                console.log("part: ", part);
+                return <div className="address">{part}<br /></div>;
+              })
+            }
+            {city}, {state} &nbsp;{postalCode}<br />
+          </div> : <div className="address">{address}<br /></div>
+        }<br />
       </div>
     );
   }
@@ -84,8 +104,6 @@ export default connectContainer(class Order extends Component {
     lineItems.forEach(item => totalProduct += this.getLineItemCost(item));
     displayItems.forEach(item => totalProduct += item.quantity * item.cost);
     lineItems.forEach(item => testerCost += this.getTesterCost(item));
-
-    console.log("Carlos, tester cost: ", testerCost);
 
     totalProduct += testerCost;
 
@@ -116,23 +134,21 @@ EXP DATE: _________________________________________    CVV2: ___________________
 
     const terms1 = `
 1. *Minimum of $100 applies only to opening orders*
-1. *First order prepaid or payment by Credit Card (CC)*
-1. *For balances over 60 days past due any and/or all of the following actions may be taken:*
-   1. *A Finance Charge of 1.5% per month will be assessed*
-   1. *A credit card on file may be charged*
-   1. *Future orders will require payment by credit card*
+1. *All orders prepaid or payment by Credit Card (CC)*
 1. *A $25.00 charge on returned checks.*
-`;
-
-    const terms2 = `
-5. *Shipping charges will be added to all orders.*
-6. *Shipping charges will be added to all orders.*
+1. *Shipping charges will be added to all orders.*
 1. *Beauty Full Day LLC does not ship COD*
 1. *Please notify us of special ship dates or events.*
 1. *Prices are subject to change without notice*
-1. *No merchandise may be returned without prior approval.*
+`;
+
+    const terms2 = `
+8. *No merchandise may be returned without prior approval.*
 1. *A 15% restocking fee will be charged on any item approved for return.*
-1. *Tester pricing available on request*
+1. *Tester pricing:*
+   1. *1 oz special tester size, offered when available, at $1/tester*
+   1. *Otherwise full-size testers available at 1/2 wholesale cost*
+   1. *limit 1 tester per product ordered per 6 cases ordered*
 `;
 
     return (
@@ -164,9 +180,9 @@ EXP DATE: _________________________________________    CVV2: ___________________
           { order.store ?
           <div className="row">
             <div className="col-xs-12 wrapper address">
-              {order.store.contact}<br />
               {order.store.name}<br />
-              {this.renderAddress(order.store.shippingAddress, order.store.billingAddress ? 'ship to: ' : undefined)}
+              Attn: {order.store.contact}<br />
+              {this.renderAddress(order.store.shippingAddress)}
               { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
               {order.store.phone}<br />
               {order.store.email}

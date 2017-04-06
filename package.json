@@ -39,6 +39,7 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "addressit": "^1.4.0",
     "auth0-js": "^8.3.0",
     "autoprefixer": "^6.7.6",
     "babel": "^6.23.0",
@@ -105,6 +106,7 @@
     "redux-static": "^1.0.0",
     "redux-thunk": "^2.2.0",
     "request-promise": "^4.1.1",
+    "snailmailaddressparser": "^0.1.27",
     "style-loader": "^0.13.2",
     "url-loader": "^0.5.8",
     "webpack": "^2.2.1",
