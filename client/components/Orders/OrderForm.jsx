@@ -49,6 +49,10 @@ export default createForm('order', class OrderForm extends Component {
         value: 'January Expo'
       },
       {
+        text: 'House Account',
+        value: 'House Account'
+      },
+      {
         text: 'March Expo',
         value: 'March Expo'
       }

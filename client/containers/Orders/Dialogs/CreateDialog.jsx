@@ -91,7 +91,7 @@ export default connectContainer(class extends Component {
     if (record) initialValues = JSON.parse(JSON.stringify(record));
 
     /* Default the show name and sales rep for now */
-    initialValues.show = initialValues.show || { name: "March Expo" };
+    initialValues.show = initialValues.show || { name: "House Account" };
     initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
 
     this.initializeLineItems(initialValues, cases);
