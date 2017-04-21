@@ -18,7 +18,7 @@ export default connectContainer(class ShowReport extends Component {
   }
 
   static propTypes = {
-    showReport: PropTypes.object,
+    showReport: PropTypes.array,
     params: PropTypes.object,
     fetchShowReport: React.PropTypes.func.isRequired
   }

@@ -3,4 +3,5 @@ export Login from './Login';
 export Order from './Orders/Order';
 export Orders from './Orders/Orders';
 export ShowReport from './Reports/Show';
+export CommissionDueReport from './Reports/CommissionDue';
 export RequireAuthentication from './RequireAuthentication';

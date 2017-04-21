@@ -9,6 +9,7 @@ import order from './order';
 import orderCreate from './orderCreate';
 import orderDelete from './orderDelete';
 import orders from './orders';
+import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
 import updateDiscount from './updateDiscount';
 import updateShipping from './updateShipping';
@@ -28,6 +29,7 @@ export default combineReducers({
   orderDelete,
   orders,
   showReport,
+  commissionDueReport,
   updateDiscount,
   updateShipping,
   form: formReducer

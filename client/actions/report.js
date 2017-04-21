@@ -7,7 +7,7 @@ import * as constants from '../constants';
 const baseUrl = window.config.BASE_API_URL;
 
 /*
- * Search for orders.
+ * Get Show Report.
  */
 export function fetchShowReport(showName) {
   return (dispatch) => {
@@ -20,6 +20,22 @@ export function fetchShowReport(showName) {
       },
       meta: {
         showName: showName
+      }
+    });
+  };
+}
+
+/*
+ * Get Commission Due Report.
+ */
+export function fetchCommissionDueReport() {
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_COMMISSION_DUE_REPORT,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/reports/commission/due`, {
+          responseType: 'json'
+        })
       }
     });
   };
