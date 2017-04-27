@@ -26,6 +26,25 @@ export function fetchShowReport(showName) {
 }
 
 /*
+ * Get Month Report.
+ */
+export function fetchMonthReport(month) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_MONTH_REPORT,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/reports/month/${month}`, {
+          responseType: 'json'
+        })
+      },
+      meta: {
+        month: month
+      }
+    });
+  };
+}
+
+/*
  * Get Commission Due Report.
  */
 export function fetchCommissionDueReport() {
