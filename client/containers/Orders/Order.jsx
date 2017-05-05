@@ -172,6 +172,13 @@ EXP DATE: _________________________________________    CVV2: ___________________
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
             </div>
           </div>
+          { order.dueDate ?
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}
+              </div>
+            </div> : <div></div>
+          }
           { order.targetShipDate && !order.shippedDate ?
             <div className="row">
               <div className="col-xs-12 wrapper">
