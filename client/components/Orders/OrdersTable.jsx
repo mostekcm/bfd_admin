@@ -36,9 +36,10 @@ export default class OrdersTable extends Component {
       <Table>
         <TableHeader>
           <TableColumn width="10%">ID</TableColumn>
+          <TableColumn width="10%">Target Ship Date</TableColumn>
           <TableColumn width="15%">Show</TableColumn>
-          <TableColumn width="30%">Store</TableColumn>
-          <TableColumn width="30%">Contact</TableColumn>
+          <TableColumn width="25%">Store</TableColumn>
+          <TableColumn width="25%">Contact</TableColumn>
           <TableColumn width="8%">#Items</TableColumn>
           <TableColumn width="7%">Total</TableColumn>
         </TableHeader>
@@ -47,6 +48,7 @@ export default class OrdersTable extends Component {
             return <TableRow key={index}>
               <TableRouteCell
                 route={`/orders/${order.id}`}>{order.id}</TableRouteCell>
+              <TableTextCell>{order.targetShipDate ? moment.unix(order.targetShipDate).format('YYYY-MM-DD') : '??'}</TableTextCell>
               <TableTextCell>{order.show.name}</TableTextCell>
               <TableTextCell>{order.store.name}</TableTextCell>
               <TableTextCell>{order.store.contact}</TableTextCell>

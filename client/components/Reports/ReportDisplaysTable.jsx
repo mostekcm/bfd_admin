@@ -24,22 +24,25 @@ export default class ReportDisplaysTable extends Component {
     const displayItems = [];
 
     if (displays) {
-      Object.keys(displays).forEach(productName =>
+      Object.keys(displays).forEach(name =>
         displayItems.push({
-          productName: productName,
-          quantity: displays[productName].quantity,
+          productName: displays[name].product.name,
+          name: name,
+          quantity: displays[name].quantity,
         }));
     }
 
     return (
       <Table>
         <TableHeader>
+          <TableColumn width="35%">Name</TableColumn>
           <TableColumn width="35%">Product</TableColumn>
           <TableColumn width="10%">Quantity</TableColumn>
         </TableHeader>
         <TableBody>
           {displayItems.map((item, index) => {
             return <TableRow key={index}>
+              <TableTextCell>{item.name}</TableTextCell>
               <TableTextCell>{item.productName}</TableTextCell>
               <TableTextCell>{item.quantity}</TableTextCell>
             </TableRow>;
