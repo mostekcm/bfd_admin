@@ -43,20 +43,22 @@ export default class OrderDetailsTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="26%">Product</TableColumn>
+          <TableColumn width="24%">Product</TableColumn>
           <TableColumn width="20%">Variety</TableColumn>
-          <TableColumn width="9%">Unit Size</TableColumn>
-          <TableColumn width="9%">Cost per Unit</TableColumn>
-          <TableColumn width="9%">Units per Case</TableColumn>
-          <TableColumn width="9%">Case Cost</TableColumn>
-          <TableColumn width="9%">Quantity</TableColumn>
-          <TableColumn width="9%">Sub Total</TableColumn>
+          <TableColumn width="8%">Unit Size</TableColumn>
+          <TableColumn width="8%">Cost per Unit</TableColumn>
+          <TableColumn width="8%">Units per Case</TableColumn>
+          <TableColumn width="8%">Case Cost</TableColumn>
+          <TableColumn width="8%">Quantity</TableColumn>
+          <TableColumn width="8%"># Units</TableColumn>
+          <TableColumn width="8%">Sub Total</TableColumn>
         </TableHeader>
         <TableBody>
           {lineItems.map((lineItem, index) => {
             const cpu = formatCurrency(lineItem.cpu, opts);
             const costPerCase = formatCurrency(lineItem.cpu * lineItem.size, opts);
             const totalCost = formatCurrency(this.getRowCost(lineItem), opts);
+            const numUnits = Math.round(parseFloat(lineItem.quantity) * parseInt(lineItem.size, 10));
 
             return <TableRow key={index}>
               <TableTextCell>{lineItem.sku.product.name}</TableTextCell>
@@ -66,6 +68,7 @@ export default class OrderDetailsTable extends Component {
               <TableTextCell>{lineItem.size}</TableTextCell>
               <TableTextCell>{costPerCase}</TableTextCell>
               <TableTextCell>{lineItem.quantity}</TableTextCell>
+              <TableTextCell>{numUnits}</TableTextCell>
               <TableTextCell>{totalCost}</TableTextCell>
             </TableRow>;
           })}

@@ -5,7 +5,7 @@ import { reportActions } from '../../actions';
 
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import {
-  ReportSkusTable, ReportDisplaysTable, ReportLabelTotalsTable, ReportLabelsToPrintTable
+  ReportSkusTable, ReportDisplaysTable, ReportLabelTotalsTable, ReportLabelsToPrintTable, ReportOrdersTable
 } from '../../components/Reports';
 
 export default connectContainer(class MonthReport extends Component {
@@ -45,6 +45,12 @@ export default connectContainer(class MonthReport extends Component {
           <div className="row">
             <div className="col-xs-12 wrapper">
               <Error message={error}/>
+            </div>
+          </div>
+          <div className="row">
+            <h2>Orders</h2>
+            <div className="col-xs-12">
+              <ReportOrdersTable orders={record.orders}/>
             </div>
           </div>
           <div className="row">
