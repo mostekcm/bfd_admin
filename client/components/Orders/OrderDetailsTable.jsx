@@ -49,7 +49,7 @@ export default class OrderDetailsTable extends Component {
           <TableColumn width="8%">Cost per Unit</TableColumn>
           <TableColumn width="8%">Units per Case</TableColumn>
           <TableColumn width="8%">Case Cost</TableColumn>
-          <TableColumn width="8%">Quantity</TableColumn>
+          <TableColumn width="8%"># Cases</TableColumn>
           <TableColumn width="8%"># Units</TableColumn>
           <TableColumn width="8%">Sub Total</TableColumn>
         </TableHeader>
