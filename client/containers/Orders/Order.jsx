@@ -146,7 +146,7 @@ TAX ID: ___________________________________________
         </div>
         <LoadingPanel show={loading}>
           <div className="row">
-            <div className="col-xs-12 col-md-9 wrapper">
+            <div className="col-xs-6 col-md-6 wrapper">
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
               { order.dueDate ? <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : '' }
               { order.targetShipDate && !order.shippedDate ? <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : '' }
@@ -161,7 +161,7 @@ TAX ID: ___________________________________________
                 {order.store.email}
               </div> : <div></div> }
             </div>
-            <div className="col-xs-12 col-md-3 wrapper">
+            <div className="col-xs-6 col-md-6 wrapper">
               Beauty Full Day LLC<br />
               12084 Waconia Cir NE<br />
               Blaine, MN  55449<br /><br />
