@@ -1,7 +1,10 @@
 import { PropTypes, Component } from 'react';
 
+import './TableCell.css';
+
 class TableCell extends Component {
   static propTypes = {
+    className: PropTypes.string,
     rowSpan: PropTypes.number
   }
 
@@ -11,7 +14,8 @@ class TableCell extends Component {
 
   render() {
     const rowSpan = this.props.rowSpan || 1;
-    return <td className="truncate" rowSpan={rowSpan}>
+    const className = 'truncate' + ' ' + this.props.className;
+    return <td className={className} rowSpan={rowSpan}>
         { this.props.children }
       </td>;
   }

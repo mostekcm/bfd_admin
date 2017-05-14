@@ -1,0 +1,11 @@
+td.greenStatus {
+  background-color: lawngreen;
+}
+
+td.redStatus {
+  background-color: orangered;
+}
+
+td.amberStatus {
+  background-color: orange;
+}

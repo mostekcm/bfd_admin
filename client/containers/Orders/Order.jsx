@@ -3,9 +3,6 @@ import connectContainer from 'redux-static';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import formatCurrency from 'format-currency';
-import parseAddress from 'parse-address';
-//import smap from 'snailmailaddressparser';
-import addressit from 'addressit';
 
 import { orderActions } from '../../actions';
 
@@ -79,9 +76,9 @@ export default connectContainer(class Order extends Component {
         {
           state ? <div className="address">
             { parts.map(part => {
-                console.log("part: ", part);
-                return <div className="address">{part}<br /></div>;
-              })
+              console.log("part: ", part);
+              return <div className="address">{part}<br /></div>;
+            })
             }
             {city}, {state} &nbsp;{postalCode}<br />
           </div> : <div className="address">{address}<br /></div>
@@ -95,30 +92,9 @@ export default connectContainer(class Order extends Component {
     const opts = { format: '%s%v', symbol: '$' };
 
     const order = record;
+    order.totals = order.totals || {};
     const lineItems = this.props.lineItems || [];
     const displayItems = this.props.displayItems || [];
-
-    let totalProduct = 0;
-    let testerCost = 0;
-
-    lineItems.forEach(item => totalProduct += this.getLineItemCost(item));
-    displayItems.forEach(item => totalProduct += item.quantity * item.cost);
-    lineItems.forEach(item => testerCost += this.getTesterCost(item));
-
-    totalProduct += testerCost;
-
-    const shippingAndHandling = (order.shipping || order.shipping === 0) ? (parseFloat(order.shipping) + parseFloat(totalProduct * .03)) : 0;
-
-    const discount = order.discount ? parseFloat(order.discount) : 0;
-
-    let totalPaid = 0;
-
-    if (order.payments) order.payments.forEach(payment => totalPaid += payment.amount);
-
-    let total = shippingAndHandling + totalProduct - discount - totalPaid;
-
-    /* handle amount due of 0 that is off by a fraction of a penny below zero */
-    if (Math.round(total*100) === 0) total = 0;
 
     const paymentInfo = `
 \`\`\`
@@ -129,6 +105,8 @@ NAME ON CREDIT CARD: ___________________________________________________________
 CREDIT CARD #: _______________________________________________________________________
 
 EXP DATE: _________________________________________    CVV2: _________________________
+
+TAX ID: ___________________________________________
 \`\`\`
 `;
 
@@ -168,47 +146,29 @@ EXP DATE: _________________________________________    CVV2: ___________________
         </div>
         <LoadingPanel show={loading}>
           <div className="row">
-            <div className="col-xs-12 wrapper">
+            <div className="col-xs-12 col-md-9 wrapper">
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
+              { order.dueDate ? <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : '' }
+              { order.targetShipDate && !order.shippedDate ? <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : '' }
+              { order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : '' }
+              { order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : '' }
+              { order.store ? <div className="address"><br/>
+                {order.store.name}<br />
+                Attn: {order.store.contact}<br />
+                {this.renderAddress(order.store.shippingAddress)}
+                { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
+                {order.store.phone}<br />
+                {order.store.email}
+              </div> : <div></div> }
+            </div>
+            <div className="col-xs-12 col-md-3 wrapper">
+              Beauty Full Day LLC<br />
+              12084 Waconia Cir NE<br />
+              Blaine, MN  55449<br /><br />
+              (612) 247-6537<br />
+              orders@beautyfullday.com<br />
             </div>
           </div>
-          { order.dueDate ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}
-              </div>
-            </div> : <div></div>
-          }
-          { order.targetShipDate && !order.shippedDate ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}
-              </div>
-            </div> : <div></div>
-          }
-          { order.shippedDate ?
-            <div className="row">
-              <div className="col-xs-12 wrapper">
-                SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}
-              </div>
-            </div> : <div></div>
-          }
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              SHOW: {order.show && order.show.name}
-            </div>
-          </div>
-          { order.store ?
-          <div className="row">
-            <div className="col-xs-12 wrapper address">
-              {order.store.name}<br />
-              Attn: {order.store.contact}<br />
-              {this.renderAddress(order.store.shippingAddress)}
-              { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
-              {order.store.phone}<br />
-              {order.store.email}
-            </div>
-          </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper">
               <Error message={error}/>
@@ -227,7 +187,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
                 <OrderDisplayDetailsTable displayItems={displayItems}/>
               </div>
             </div> : '' }
-          { testerCost > 0 ?
+          { order.totals.tester > 0 ?
             <div className="row">
               <h3>Testers</h3>
               <div className="col-xs-12">
@@ -236,33 +196,33 @@ EXP DATE: _________________________________________    CVV2: ___________________
             </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper totals">
-              TOTAL PRODUCT COST: {formatCurrency(totalProduct, opts)}
+              TOTAL PRODUCT COST: {formatCurrency(order.totals.product, opts)}
             </div>
           </div>
-          { shippingAndHandling > 0 ?
+          { order.totals.shippingAndHandling > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(shippingAndHandling, opts)}
+                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(order.totals.shippingAndHandling, opts)}
               </div>
             </div> : '' }
-          { discount > 0 ?
+          { order.totals.discount > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                TOTAL DISCOUNT: {formatCurrency(discount, opts)}
+                TOTAL DISCOUNT: {formatCurrency(order.totals.discount, opts)}
               </div>
             </div> : '' }
-          { order.payments ?
+          { order.totals.totalPaid > 0 ?
             order.payments.map((payment, index) =>
-              <div className="row" key={index} >
+              <div className="row" key={index}>
                 <div className="col-xs-12 wrapper totals">
                   PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): { formatCurrency(payment.amount, opts) }
                 </div>
               </div>
             ) : '' }
-          { total != totalProduct ?
+          { order.totals.shippingAndHandling > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                AMOUNT OWED: {formatCurrency(total, opts)}
+                AMOUNT OWED: {formatCurrency(order.totals.owed, opts)}
               </div>
             </div> : '' }
           { order.notesToCustomer ?
@@ -271,7 +231,7 @@ EXP DATE: _________________________________________    CVV2: ___________________
                 NOTES: {order.notesToCustomer}
               </div>
             </div> : '' }
-          { total > 0 ?
+          { order.totals.owed > 0 ?
             <div className="row">
               <h2>Payment Information</h2>
               <div className="col-xs-12">
