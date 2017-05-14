@@ -94,7 +94,6 @@ export default class OrdersTable extends Component {
               <TableTextCell className={order.shippedStatus}>{order.shippedDate ? moment.unix(order.shippedDate).format('YYYY-MM-DD') : (order.targetShipDate ? moment.unix(order.targetShipDate).format('?YYYY-MM-DD?') : '??')}</TableTextCell>
               <TableTextCell className={order.paidStatus}>{order.dueDateDisplay}</TableTextCell>
               <TableTextCell>{order.store.name}</TableTextCell>
-              <TableTextCell>{order.lineItems.length}</TableTextCell>
               <TableTextCell>{formatCurrency(order.totals.total, opts)}</TableTextCell>
               <TableTextCell>{formatCurrency(order.totals.owed, opts)}</TableTextCell>
             </TableRow>;
