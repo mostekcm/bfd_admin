@@ -140,6 +140,7 @@ TAX ID: ___________________________________________
                 deleteOrder={this.props.requestDeleteOrder}
                 updateShipping={this.props.requestUpdateShipping}
                 updateDiscount={this.props.requestUpdateDiscount}
+                updateLineItems={this.props.requestUpdateLineItems}
               />
             </div>
           </div>
@@ -249,8 +250,9 @@ TAX ID: ___________________________________________
           </div>
         </LoadingPanel>
         <dialogs.DeleteDialog />
-        <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateShippingDialog />
+        <dialogs.UpdateDiscountDialog />
+        <dialogs.UpdateLineItemsDialog />
       </div>
     );
 

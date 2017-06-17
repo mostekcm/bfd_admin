@@ -8,3 +8,5 @@ export OrderOverview from './OrderOverview';
 export OrderTestersTable from './OrderTestersTable';
 export OrdersTable from './OrdersTable';
 export SearchBar from './SearchBar';
+export UpdateLineItemForm from './UpdateLineItemForm';
+

@@ -34,8 +34,6 @@ export default connectContainer(class ShowReport extends Component {
   render() {
     const { loading, error, record } = this.props.showReport.toJS();
 
-    console.log("Carlos, show report record: ", record);
-
     return (
       <div className="order">
         <LoadingPanel show={loading}>

@@ -63,7 +63,6 @@ export default () => {
       }));
     }
 
-    console.log("Carlos: ", config('MANIFEST_FILE'));
     // Render locally.
     return fs.readFile(config('MANIFEST_FILE'), 'utf8', (err, manifest) => {
       const locals = {

@@ -7,6 +7,8 @@ import { orderActions } from '../../../actions';
 import { OrderForm } from '../../../components/Orders';
 import { Error, Confirm } from '../../../components/Dashboard';
 
+import { initializeLineItems, initializeDisplayItems } from '../../../utils/initializeOrder';
+
 import './CreateDialog.css';
 
 export default connectContainer(class extends Component {
@@ -49,36 +51,7 @@ export default connectContainer(class extends Component {
   onConfirm = () => {
     if (this.form) {
       this.form.submit()
-        .then(() => console.log("Carlos, submitted successfully"))
-        .catch(e => console.error("Carlos, error: ", e.message));
-    }
-  }
-
-  initializeLineItems(initialValues, cases) {
-    let index = 0;
-    if (!initialValues.lineItems) initialValues.lineItems = [];
-
-    /* Parse through the cases and add to the initial values */
-    if (cases && cases.length > 0) cases.forEach((thisCase) => {
-      (thisCase.sku.varieties.length > 0 ? thisCase.sku.varieties : ['']).forEach((variety) => {
-        const varietyCase = JSON.parse(JSON.stringify(thisCase));
-        varietyCase.sku.variety = variety;
-        if (!initialValues.lineItems[index]) {
-          initialValues.lineItems[index] = varietyCase;
-        }
-        ++index;
-      });
-    });
-  }
-
-  initializeDisplayItems(initialValues, displays) {
-    if (!initialValues.displayItems || initialValues.displayItems.length == 0) {
-      initialValues.displayItems = [];
-
-      /* Parse through the cases and add to the initial values */
-      if (displays && displays.length > 0) displays.forEach((thisDisplay) => {
-        initialValues.displayItems.push(thisDisplay);
-      });
+        .catch(e => console.error("error submitting order: ", e.message));
     }
   }
 
@@ -94,8 +67,8 @@ export default connectContainer(class extends Component {
     initialValues.show = initialValues.show || { name: "House Account" };
     initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
 
-    this.initializeLineItems(initialValues, cases);
-    this.initializeDisplayItems(initialValues, displays);
+    initializeLineItems(initialValues, cases);
+    initializeDisplayItems(initialValues, displays);
 
     const selector = formValueSelector('order'); // <-- same as form name
 

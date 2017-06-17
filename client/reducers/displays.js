@@ -20,10 +20,20 @@ export default createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occurred while loading the displays: ${action.errorMessage}`
     }),
-  [constants.FETCH_DISPLAYS_FULFILLED]: (state, action) =>
-    state.merge({
+  [constants.FETCH_DISPLAYS_FULFILLED]: (state, action) => {
+    const result = action.payload.data;
+
+    if (result.error) {
+      return state.merge({
+        loading: false,
+        error: `A (${result.error}) error occurred while loading the displays: ${result.message}`
+      });
+    }
+
+    return state.merge({
       loading: false,
       error: null,
       records: fromJS(action.payload.data)
-    })
+    });
+  }
 });

@@ -35,7 +35,7 @@ export default connectContainer(class extends Component {
 
   render() {
     const { cancelUpdateDiscount } = this.props;
-    const { orderId, originalDiscount, nextDiscount, error, requesting, loading } = this.props.updateDiscountState.toJS();
+    const { orderId, originalDiscount, error, requesting, loading } = this.props.updateDiscountState.toJS();
 
     return (
       <Confirm title="Update Discount" show={requesting===true} loading={loading} onCancel={cancelUpdateDiscount} onConfirm={this.onConfirm}>

@@ -13,6 +13,7 @@ import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
 import monthReport from './monthReport';
 import updateDiscount from './updateDiscount';
+import updateLineItems from './updateLineItems';
 import updateShipping from './updateShipping';
 
 function lastAction(state = null, action) {
@@ -33,6 +34,7 @@ export default combineReducers({
   monthReport,
   commissionDueReport,
   updateDiscount,
+  updateLineItems,
   updateShipping,
   form: formReducer
 });

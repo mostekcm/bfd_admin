@@ -5,7 +5,7 @@ export default class OrderActions extends Component {
   static propTypes = {
     updateDiscount: PropTypes.func.isRequired,
     updateShipping: PropTypes.func.isRequired,
-    editOrder: PropTypes.func.isRequired,
+    updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
   }
@@ -58,9 +58,9 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
-  getEditAction = (order, loading) => (
-    <MenuItem disabled={loading || false} onClick={this.editOrder}>
-      Edit Order
+  getUpdateLineItemsAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updateLineItems}>
+      Update Line Items
     </MenuItem>
   )
 
@@ -74,8 +74,8 @@ export default class OrderActions extends Component {
     this.props.deleteOrder(this.state.order);
   }
 
-  editOrder = () => {
-    this.props.editOrder(this.state.order);
+  updateLineItems = () => {
+    this.props.updateLineItems(this.state.order);
   }
 
   updateDiscount = () => {
@@ -96,7 +96,7 @@ export default class OrderActions extends Component {
         {this.getPrintAction(this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateShippingAction(this.state.order, this.state.loading)}
-        {this.getEditAction(this.state.order, this.state.loading)}
+        {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>
     );

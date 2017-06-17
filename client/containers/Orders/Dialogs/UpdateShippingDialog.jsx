@@ -35,13 +35,7 @@ export default connectContainer(class extends Component {
 
   render() {
     const { cancelUpdateShipping } = this.props;
-    const { orderId, originalShipping, nextShipping, error, requesting, loading } = this.props.updateShippingState.toJS();
-
-    // if (!requesting) {
-    //   return null;
-    // }
-
-    console.log("Carlos, requestion: ", requesting);
+    const { orderId, originalShipping, error, requesting, loading } = this.props.updateShippingState.toJS();
 
     return (
       <Confirm title="Update Shipping" show={requesting===true} loading={loading} onCancel={cancelUpdateShipping} onConfirm={this.onConfirm}>

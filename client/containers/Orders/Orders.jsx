@@ -13,6 +13,8 @@ class Orders extends Component {
   static propTypes = {
     loading: React.PropTypes.bool.isRequired,
     error: React.PropTypes.string,
+    errorCases: React.PropTypes.string,
+    errorDisplays: React.PropTypes.string,
     orders: React.PropTypes.array,
     cases: React.PropTypes.array,
     displays: React.PropTypes.array,
@@ -49,7 +51,7 @@ class Orders extends Component {
   }
 
   render() {
-    const { loading, error, orders, total, cases, displays } = this.props;
+    const { loading, error, orders, total, cases, displays, errorCases, errorDisplays } = this.props;
 
     return (
       <div className="orders">
@@ -69,6 +71,8 @@ class Orders extends Component {
           onReset={this.onReset}
           onSearch={this.onSearch}
           error={error}
+          errorCases={errorCases}
+          errorDisplays={errorDisplays}
           orders={orders}
           total={total}
           loading={loading}
@@ -81,10 +85,12 @@ class Orders extends Component {
 function mapStateToProps(state) {
   return {
     error: state.orders.get('error'),
+    errorCases: state.cases.get('error'),
+    errorDisplays: state.displays.get('error'),
     orderCreateError: state.orderCreate.get('error'),
     orderCreateLoading: state.orderCreate.get('loading'),
     validationErrors: state.orderCreate.get('validationErrors'),
-    loading: state.orders.get('loading'),
+    loading: state.orders.get('loading') && state.cases.get('loading') && state.displays.get('loading'),
     orders: state.orders.get('records').toJS(),
     cases: state.cases.get('records').toJS(),
     displays: state.displays.get('records').toJS(),

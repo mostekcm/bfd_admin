@@ -34,8 +34,6 @@ export default connectContainer(class CommissionDueReport extends Component {
   render() {
     const { loading, error, records } = this.props.commissionDueReport.toJS();
 
-    console.log("Carlos, commissionDueReport record: ", records);
-
     const commissionReports = records || [];
 
     const opts = { format: '%s%v', symbol: '$' };
