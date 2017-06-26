@@ -14,7 +14,8 @@ import showReport from './showReport';
 import monthReport from './monthReport';
 import updateDiscount from './updateDiscount';
 import updateLineItems from './updateLineItems';
-import updateShipping from './updateShipping';
+import updateShipping from '../orders/Dialogs/UpdateShipping/reducer';
+import updateShippedDate from '../orders/Dialogs/UpdateShippedDate/reducer';
 
 function lastAction(state = null, action) {
   return action;
@@ -36,5 +37,6 @@ export default combineReducers({
   updateDiscount,
   updateLineItems,
   updateShipping,
+  updateShippedDate,
   form: formReducer
 });

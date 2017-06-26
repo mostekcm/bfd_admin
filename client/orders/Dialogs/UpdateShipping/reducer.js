@@ -1,15 +1,15 @@
 import { fromJS } from 'immutable';
 
-import * as constants from '../constants';
-import createReducer from '../utils/createReducer';
+import * as constants from './constants';
+import createReducer from '../../../utils/createReducer';
 
 const initialState = {
   error: null,
   loading: false,
   requesting: false,
   orderId: null,
-  nextShipping: null,
-  originalShipping: null
+  nextValue: null,
+  originalValue: null
 };
 
 export default createReducer(fromJS(initialState), {
@@ -17,8 +17,8 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState,
       orderId: action.order.id,
-      nextShipping: action.order.shipping,
-      originalShipping: action.order.shipping,
+      nextValue: action.order.shipping,
+      originalValue: action.order.shipping,
       requesting: true
     }),
   [constants.CANCEL_UPDATE_SHIPPING]: (state) =>

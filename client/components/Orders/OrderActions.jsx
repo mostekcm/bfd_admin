@@ -5,6 +5,7 @@ export default class OrderActions extends Component {
   static propTypes = {
     updateDiscount: PropTypes.func.isRequired,
     updateShipping: PropTypes.func.isRequired,
+    updateShippedDate: PropTypes.func.isRequired,
     updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
@@ -58,6 +59,12 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
+  getUpdateShippedDateAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updateShippedDate}>
+      Update Shipped Date
+    </MenuItem>
+  )
+
   getUpdateLineItemsAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateLineItems}>
       Update Line Items
@@ -86,6 +93,10 @@ export default class OrderActions extends Component {
     this.props.updateShipping(this.state.order);
   }
 
+  updateShippedDate = () => {
+    this.props.updateShippedDate(this.state.order);
+  }
+
   render() {
     if (!this.state.order) {
       return null;
@@ -96,6 +107,7 @@ export default class OrderActions extends Component {
         {this.getPrintAction(this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateShippingAction(this.state.order, this.state.loading)}
+        {this.getUpdateShippedDateAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>

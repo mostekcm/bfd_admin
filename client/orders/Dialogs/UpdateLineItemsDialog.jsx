@@ -3,10 +3,10 @@ import connectContainer from 'redux-static';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 
-import { orderActions } from '../../../actions';
-import { Error, Confirm } from '../../../components/Dashboard';
-import { UpdateLineItemForm } from '../../../components/Orders';
-import { initializeLineItems } from '../../../utils/initializeOrder';
+import { orderActions } from '../../actions';
+import { Error, Confirm } from '../../components/Dashboard';
+import { UpdateLineItemForm } from '../../components/Orders';
+import { initializeLineItems } from '../../utils/initializeOrder';
 
 import './UpdateLineItemsDialog.css';
 

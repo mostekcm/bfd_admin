@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import connectContainer from 'redux-static';
 import { formValueSelector } from 'redux-form';
 
-import { orderActions } from '../../../actions';
-import { OrderForm } from '../../../components/Orders';
-import { Error, Confirm } from '../../../components/Dashboard';
+import { orderActions } from '../../actions';
+import { OrderForm } from '../../components/Orders';
+import { Error, Confirm } from '../../components/Dashboard';
 
-import { initializeLineItems, initializeDisplayItems } from '../../../utils/initializeOrder';
+import { initializeLineItems, initializeDisplayItems } from '../../utils/initializeOrder';
 
 import './CreateDialog.css';
 

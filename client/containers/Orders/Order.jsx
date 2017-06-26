@@ -6,10 +6,16 @@ import formatCurrency from 'format-currency';
 
 import { orderActions } from '../../actions';
 
+/* Dialogs */
+import { requestUpdateShipping } from '../../orders/Dialogs/UpdateShipping/actions';
+import UpdateShippingDialog from '../../orders/Dialogs/UpdateShipping/Dialog';
+import { requestUpdateShippedDate } from '../../orders/Dialogs/UpdateShippedDate/actions';
+import UpdateShippedDateDialog from '../../orders/Dialogs/UpdateShippedDate/Dialog';
+
 import './Order.css';
 
 import { Error, LoadingPanel } from '../../components/Dashboard';
-import * as dialogs from './Dialogs';
+import * as dialogs from '../../orders/Dialogs';
 import {
   OrderActions, OrderDetailsTable, OrderDisplayDetailsTable, OrderTestersTable/*, OrderHeader, OrderProfile, OrderLogs,
  OrderInfo*/
@@ -25,7 +31,9 @@ export default connectContainer(class Order extends Component {
   });
 
   static actionsToProps = {
-    ...orderActions
+    ...orderActions,
+    requestUpdateShipping,
+    requestUpdateShippedDate
   }
 
   static propTypes = {
@@ -139,6 +147,7 @@ TAX ID: ___________________________________________
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
                 updateShipping={this.props.requestUpdateShipping}
+                updateShippedDate={this.props.requestUpdateShippedDate}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
               />
@@ -250,7 +259,8 @@ TAX ID: ___________________________________________
           </div>
         </LoadingPanel>
         <dialogs.DeleteDialog />
-        <dialogs.UpdateShippingDialog />
+        <UpdateShippingDialog />
+        <UpdateShippedDateDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />
       </div>

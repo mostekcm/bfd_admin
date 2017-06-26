@@ -41,52 +41,51 @@ export default class OrderDisplayDetailsTable extends Component {
     displayItems && displayItems.map((displayItem) => {
       const cost = formatCurrency(displayItem.cost, opts);
       const totalCost = formatCurrency(displayItem.cost * displayItem.quantity, opts);
-      const offsetQuantity = parseFloat(displayItem.offsetMerch.quantity) * parseFloat(displayItem.quantity);
-      const totalRetail = formatCurrency(parseFloat(displayItem.offsetMerch.sku.msrp) * offsetQuantity, opts);
 
       rows.push({
         display: displayItem.product.name.length > 0 ? `${displayItem.name} for ${displayItem.product.name}` : displayItem.name,
-        offsetMerch: '',
         cost: cost,
         quantity: displayItem.quantity,
-        totalRetail: '',
         total: totalCost
       });
       console.log(rows[rows.length - 1]);
-      if (displayItem.offsetMerch.sku.product.name.length > 0)
-        rows.push({
-          display: '',
-          offsetMerch: `${displayItem.offsetMerch.sku.product.name}, ${displayItem.offsetMerch.sku.size}`,
-          cost: '',
-          quantity: offsetQuantity,
-          totalRetail: totalRetail,
-          total: zero
-        });
+      displayItem.offsetMerch.forEach((offsetMerch) => {
+        const offsetQuantity = parseFloat(offsetMerch.quantity) * parseFloat(displayItem.quantity);
+        const totalRetail = formatCurrency(parseFloat(offsetMerch.sku.msrp) * offsetQuantity, opts);
+        if (offsetMerch.sku.product.name.length > 0) {
+          rows.push({
+            display: '',
+            offsetMerch: `${offsetMerch.sku.product.name}, ${offsetMerch.sku.size}`,
+            offsetMerchValue: `Total Retail Value: ${totalRetail}`,
+            cost: '',
+            quantity: offsetQuantity,
+            total: ''
+          });
+        }
+      });
     });
 
     return (
+
       <Table>
         <TableHeader>
           <TableColumn width="30%">Display</TableColumn>
-          <TableColumn width="30%">Offset Merch</TableColumn>
+          <TableColumn width="40%">Offset Merch</TableColumn>
           <TableColumn width="10%">Quantity</TableColumn>
           <TableColumn width="10%">Cost</TableColumn>
-          <TableColumn width="10%">Total Retail</TableColumn>
           <TableColumn width="10%">Total Cost</TableColumn>
         </TableHeader>
         <TableBody>
           {rows.map((row, index) => {
             return <TableRow key={index}>
               <TableTextCell>{row.display}</TableTextCell>
-              <TableTextCell>{row.offsetMerch}</TableTextCell>
+              <TableTextCell>{row.offsetMerch ? <span>{row.offsetMerch}<br />{row.offsetMerchValue}</span> : ''}</TableTextCell>
               <TableTextCell>{row.quantity}</TableTextCell>
               <TableTextCell>{row.cost}</TableTextCell>
-              <TableTextCell>{row.totalRetail}</TableTextCell>
               <TableTextCell>{row.total}</TableTextCell>
             </TableRow>;
           })}
           <TableRow key={displayItems.length}>
-            <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
@@ -95,6 +94,7 @@ export default class OrderDisplayDetailsTable extends Component {
           </TableRow>
         </TableBody>
       </Table>
-    );
+    )
+      ;
   }
 }

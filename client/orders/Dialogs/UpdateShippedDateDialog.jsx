@@ -6,7 +6,7 @@ import { Error, Confirm } from '../../../components/Dashboard';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
-    updateShippingState: state.updateShipping
+    updateShippedDateState: state.updateShippedDate
   });
 
   static actionsToProps = {
@@ -15,27 +15,27 @@ export default connectContainer(class extends Component {
 
   static propTypes = {
     cancelUpdateShipping: PropTypes.func.isRequired,
-    updateShipping: PropTypes.func.isRequired,
-    updateShippingState: PropTypes.object.isRequired
+    updateShippedDate: PropTypes.func.isRequired,
+    updateShippedDateState: PropTypes.object.isRequired
   }
 
   constructor() {
     super();
     this.orderId = undefined;
-    this.nextShipping = undefined;
+    this.nextShippedDate = undefined;
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.updateShippingState !== this.props.updateShippingState;
+    return nextProps.updateShippedDateState !== this.props.updateShippedDateState;
   }
 
   onConfirm = () => {
-    this.props.updateShipping(this.orderId.value, this.nextShipping.value);
+    this.props.updateShippedDate(this.orderId.value, this.nextShippedDate.value);
   }
 
   render() {
     const { cancelUpdateShipping } = this.props;
-    const { orderId, originalShipping, error, requesting, loading } = this.props.updateShippingState.toJS();
+    const { orderId, originalShipping, error, requesting, loading } = this.props.updateShippedDateState.toJS();
 
     return (
       <Confirm title="Update Shipping" show={requesting===true} loading={loading} onCancel={cancelUpdateShipping} onConfirm={this.onConfirm}>
@@ -48,7 +48,7 @@ export default connectContainer(class extends Component {
             <div className="form-group">
               <label className="col-xs-2 control-label">Shipping</label>
               <div className="col-xs-9">
-                <input ref={ nextShipping => this.nextShipping = nextShipping } type="text" className="form-control" defaultValue={originalShipping} />
+                <input ref={ nextShippedDate => this.nextShippedDate = nextShippedDate } type="text" className="form-control" defaultValue={originalShipping} />
               </div>
             </div>
             <input ref={ orderId => this.orderId = orderId } type="hidden" readOnly="readonly" className="form-control" value={orderId} />

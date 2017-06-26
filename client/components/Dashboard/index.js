@@ -3,6 +3,7 @@ import Error from './Error';
 import Json from './Json';
 import MultiSelect from './MultiSelect';
 import ComboField from './ComboField';
+import InputDate from './InputDate';
 import InputText from './InputText';
 import InputCombo from './InputCombo';
 import LoadingPanel from './LoadingPanel';
@@ -26,6 +27,7 @@ export {
   Json,
   MultiSelect,
   ComboField,
+  InputDate,
   InputText,
   InputCombo,
   LoadingPanel,

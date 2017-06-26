@@ -63,9 +63,6 @@ export default class OrdersTable extends Component {
 
           if (paidDiff >= redBarrier) order.paidStatus = 'redStatus';
           else if (paidDiff >= amberBarrier) order.paidStatus = 'amberStatus';
-          console.log("carlos: paiddiff: ",paidDiff);
-          console.log("carlos: red: ",redBarrier);
-          console.log("carlos: amber: ",amberBarrier);
           order.dueDateDisplay = moment.unix(dueDate).format('YYYY-MM-DD');
         }
       }

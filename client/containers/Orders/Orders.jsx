@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { orderActions } from '../../actions';
 
 
-import * as dialogs from './Dialogs';
+import * as dialogs from '../../orders/Dialogs';
 import { OrderOverview } from '../../components/Orders';
 
 import './Orders.css';
