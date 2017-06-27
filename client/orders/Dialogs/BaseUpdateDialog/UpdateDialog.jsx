@@ -3,7 +3,7 @@ import connectContainer from 'redux-static';
 
 import { Error, Confirm } from '../../../components/Dashboard';
 
-const createUpdateDialog = (infoName, stateName, cancelUpdateFunc, updateFunc, InputComponent) => connectContainer(class extends Component {
+const createUpdateDialog = (infoName, stateName, cancelUpdateFunc, updateFunc, getValueFunc, InputComponent) => connectContainer(class extends Component {
     static stateToProps = (state) => ({
       updateState: state[stateName]
     });
@@ -30,26 +30,27 @@ const createUpdateDialog = (infoName, stateName, cancelUpdateFunc, updateFunc, I
     }
 
     onConfirm = () => {
-      this.props.update(this.orderId.value, this.nextValue.value);
+      this.props.update(this.orderId.value, getValueFunc(this.nextValue));
     }
 
     render() {
       const { cancelUpdate } = this.props;
       const { orderId, originalValue, error, requesting, loading } = this.props.updateState.toJS();
 
-      const className = `${infoName}-confirm-form`;
+      const className = `form-horizontal col-xs-12 ${infoName}-confirm-form`;
 
       return (
-        <Confirm className={className} title={ `Update Order ${infoName}` } show={requesting===true} loading={loading} onCancel={cancelUpdate} onConfirm={this.onConfirm}>
+        <Confirm title={ `Update Order ${infoName}` } show={requesting===true} loading={loading} onCancel={cancelUpdate} onConfirm={this.onConfirm}>
           <Error message={error} />
           <p>
             Change the { infoName } for <strong>{orderId}</strong>?
           </p>
           <div className="row">
-            <form className="form-horizontal col-xs-12" style={{ marginTop: '40px' }}>
+            <form className={className} style={{ marginTop: '40px' }}>
               <div className="form-group">
                 <div className="col-xs-9">
-                  <InputComponent input={ { ref: (nextValue => this.nextValue = nextValue), defaultValue: originalValue } } fieldName={infoName} label={infoName} />
+                  <InputComponent input={ { ref: (nextValue => { console.log('Carlos: nextValue,', nextValue); return this.nextValue = nextValue }),
+                    defaultValue: originalValue } } fieldName={infoName} label={infoName} />
                 </div>
               </div>
               <input ref={ orderId => this.orderId = orderId } type="hidden" readOnly="readonly" className="form-control" value={orderId} />

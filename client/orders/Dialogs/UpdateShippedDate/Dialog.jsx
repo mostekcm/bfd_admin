@@ -4,4 +4,6 @@ import { InputDate } from '../../../components/Dashboard';
 
 import './Dialog.css';
 
-export default createUpdateDialog('ShippedDate', 'updateShippedDate', cancelUpdateShippedDate, updateShippedDate, InputDate);
+export default createUpdateDialog('ShippedDate', 'updateShippedDate', cancelUpdateShippedDate, updateShippedDate,
+  value => value.state.selectedDate.unix(),
+  InputDate);

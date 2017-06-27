@@ -7,6 +7,7 @@ import '../../../node_modules/react-datetime/css/react-datetime.css';
 class InputDate extends Component {
   onChange = (event) => {
     const { field } = this.props;
+    if (!field) return;
     field.onChange(event);
 
     if (this.props.onChange) {
@@ -15,7 +16,7 @@ class InputDate extends Component {
   }
 
   render() {
-    const { label, field, fieldName, options, validationErrors } = this.props;
+    const { label, fieldName, validationErrors } = this.props;
     const classes = classNames({
       'form-group': true,
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
@@ -24,7 +25,7 @@ class InputDate extends Component {
     return (
       <div className={classes}>
         <label>{label}</label>
-        <DateTime {...this.props} onChange={this.onChange} />
+        <DateTime {...this.props.input} defaultValue={this.props.input.defaultValue && moment.unix(this.props.input.defaultValue).format('MM/DD/YYYY hh:mm A')} onChange={this.onChange} />
           {validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{validationErrors[fieldName][0]}</div>}
       </div>
     );

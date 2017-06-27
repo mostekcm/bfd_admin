@@ -1,4 +1,4 @@
-ShippedDate-confirm-form .modal-content {
+.ShippedDate-confirm-form {
     display: block;
-    height: 600px !important;
+    height: 400px !important;
 }
