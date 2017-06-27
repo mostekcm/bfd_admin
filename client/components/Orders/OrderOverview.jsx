@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 
 import { SearchBar, OrdersTable } from './';
 import { Error, LoadingPanel, TableTotals } from '../Dashboard';
+import formatCurrency from 'format-currency';
 
 export default class OrderOverview extends React.Component {
   static propTypes = {
@@ -24,6 +25,14 @@ export default class OrderOverview extends React.Component {
 
   render() {
     const { loading, error, orders, total, errorCases, errorDisplays} = this.props;
+    const opts = { format: '%s%v', symbol: '$' };
+
+    let totalAccountsReceivable = 0;
+
+    orders.forEach(order => totalAccountsReceivable += order.totals.owed);
+
+    const totalDue = formatCurrency(totalAccountsReceivable, opts);
+
     return (
       <div>
         <LoadingPanel show={loading}>
@@ -50,7 +59,7 @@ export default class OrderOverview extends React.Component {
           </div>
           <div className="row">
             <div className="col-xs-12">
-              <TableTotals currentCount={orders.length} totalCount={total} />
+              Total Accounts Receivable: {totalDue}
             </div>
           </div>
         </LoadingPanel>
