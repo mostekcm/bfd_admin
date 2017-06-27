@@ -30,6 +30,10 @@ export default createForm('order', class OrderForm extends Component {
       {
         text: 'Jes Mostek',
         value: 'Jes Mostek'
+      },
+      {
+        text: 'Eric Wiltgen',
+        value: 'Eric Wiltgen'
       }
     ];
 
@@ -45,16 +49,36 @@ export default createForm('order', class OrderForm extends Component {
   renderShow(validationErrors) {
     const showOptions = [
       {
-        text: 'January Expo',
-        value: 'January Expo'
-      },
-      {
         text: 'House Account',
         value: 'House Account'
       },
       {
+        text: 'On the Road',
+        value: 'On the Road'
+      },
+      {
+        text: 'January Expo',
+        value: 'January Expo'
+      },
+      {
         text: 'March Expo',
         value: 'March Expo'
+      },
+      {
+        text: 'April Expo',
+        value: 'April Expo'
+      },
+      {
+        text: 'June Expo',
+        value: 'June Expo'
+      },
+      {
+        text: 'August Expo',
+        value: 'August Expo'
+      },
+      {
+        text: 'October Expo',
+        value: 'October Expo'
       }
     ];
 
