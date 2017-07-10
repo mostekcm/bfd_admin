@@ -9,8 +9,8 @@ import { orderActions } from '../../actions';
 /* Dialogs */
 import { requestUpdateShipping } from '../../orders/Dialogs/UpdateShipping/actions';
 import UpdateShippingDialog from '../../orders/Dialogs/UpdateShipping/Dialog';
-import { requestUpdateShippedDate } from '../../orders/Dialogs/UpdateShippedDate/actions';
-import UpdateShippedDateDialog from '../../orders/Dialogs/UpdateShippedDate/Dialog';
+import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingInfo/actions';
+import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
 
 import './Order.css';
 
@@ -33,7 +33,7 @@ export default connectContainer(class Order extends Component {
   static actionsToProps = {
     ...orderActions,
     requestUpdateShipping,
-    requestUpdateShippedDate
+    requestUpdateShippingInfo
   }
 
   static propTypes = {
@@ -147,7 +147,7 @@ TAX ID: ___________________________________________
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
                 updateShipping={this.props.requestUpdateShipping}
-                updateShippedDate={this.props.requestUpdateShippedDate}
+                updateShippingInfo={this.props.requestUpdateShippingInfo}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
               />
@@ -260,7 +260,7 @@ TAX ID: ___________________________________________
         </LoadingPanel>
         <dialogs.DeleteDialog />
         <UpdateShippingDialog />
-        <UpdateShippedDateDialog />
+        <UpdateShippingInfoDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />
       </div>

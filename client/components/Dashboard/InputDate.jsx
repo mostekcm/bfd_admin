@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { Component } from 'react';
 import DateTime from 'react-datetime';
 import classNames from 'classnames';
@@ -22,10 +23,12 @@ class InputDate extends Component {
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
     });
 
+    const defaultValueDateTime = this.props.input.defaultValue || moment().format('X');
+
     return (
       <div className={classes}>
         <label>{label}</label>
-        <DateTime {...this.props.input} defaultValue={this.props.input.defaultValue && moment.unix(this.props.input.defaultValue).format('MM/DD/YYYY hh:mm A')} onChange={this.onChange} />
+        <DateTime {...this.props.input} defaultValue={moment.unix(defaultValueDateTime).format('MM/DD/YYYY hh:mm A')} onChange={this.onChange} />
           {validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{validationErrors[fieldName][0]}</div>}
       </div>
     );

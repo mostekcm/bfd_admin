@@ -49,7 +49,7 @@ const createUpdateDialog = (infoName, stateName, cancelUpdateFunc, updateFunc, g
             <form className={className} style={{ marginTop: '40px' }}>
               <div className="form-group">
                 <div className="col-xs-9">
-                  <InputComponent input={ { ref: (nextValue => { console.log('Carlos: nextValue,', nextValue); return this.nextValue = nextValue }),
+                  <InputComponent input={ { ref: (nextValue => { return this.nextValue = nextValue }),
                     defaultValue: originalValue } } fieldName={infoName} label={infoName} />
                 </div>
               </div>

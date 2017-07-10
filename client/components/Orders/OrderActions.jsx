@@ -59,9 +59,9 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
-  getUpdateShippedDateAction = (order, loading) => (
-    <MenuItem disabled={loading || false} onClick={this.updateShippedDate}>
-      Update Shipped Date
+  getUpdateShippingInfoAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updateShippingInfo}>
+      Update Shipping Info
     </MenuItem>
   )
 
@@ -93,8 +93,8 @@ export default class OrderActions extends Component {
     this.props.updateShipping(this.state.order);
   }
 
-  updateShippedDate = () => {
-    this.props.updateShippedDate(this.state.order);
+  updateShippingInfo = () => {
+    this.props.updateShippingInfo(this.state.order);
   }
 
   render() {
@@ -107,7 +107,7 @@ export default class OrderActions extends Component {
         {this.getPrintAction(this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateShippingAction(this.state.order, this.state.loading)}
-        {this.getUpdateShippedDateAction(this.state.order, this.state.loading)}
+        {this.getUpdateShippingInfoAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>

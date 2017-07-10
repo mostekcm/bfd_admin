@@ -9,9 +9,9 @@ const baseUrl = window.config.BASE_API_URL;
 /*
  * Get confirmation to update shipping.
  */
-export function requestUpdateShippedDate(order) {
+export function requestUpdateShippingInfo(order) {
   return {
-    type: constants.REQUEST_UPDATE_SHIPPED_DATE,
+    type: constants.REQUEST_UPDATE_SHIPPING_INFO,
     order
   };
 }
@@ -19,19 +19,19 @@ export function requestUpdateShippedDate(order) {
 /*
  * Cancel the shipping update.
  */
-export function cancelUpdateShippedDate() {
+export function cancelUpdateShippingInfo() {
   return {
-    type: constants.CANCEL_UPDATE_SHIPPED_DATE
+    type: constants.CANCEL_UPDATE_SHIPPING_INFO
   };
 }
 
 /*
  * Change username.
  */
-export function updateShippedDate(orderId, data) {
+export function updateShippingInfo(orderId, data) {
   return (dispatch) => {
     dispatch({
-      type: constants.UPDATE_SHIPPED_DATE,
+      type: constants.UPDATE_SHIPPING_INFO,
       meta: {
         orderId,
         onSuccess: () => {
@@ -39,7 +39,7 @@ export function updateShippedDate(orderId, data) {
         }
       },
       payload: {
-        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, { shippedDate: data }, { responseType: 'json' })
+        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, data, { responseType: 'json' })
       }
     });
   };
