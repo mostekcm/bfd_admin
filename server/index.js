@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import { middlewares } from 'auth0-extension-express-tools';
 
 import htmlRoute from './routes/html';
+import silentCallbackRoute from './routes/silentCallback';
 import config from './lib/config';
 import logger from './lib/logger';
 
@@ -38,6 +39,8 @@ module.exports = (cfg) => {
   // Configure routes.
 
   app.use('/app', Express.static(config('STATIC_DIR')));
+
+  app.use('/silent-callback', silentCallbackRoute());
 
   // Fallback to rendering HTML.
   app.get('*', htmlRoute());

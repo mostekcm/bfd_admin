@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { routeReducer } from 'redux-simple-router';
 
-import auth from './auth';
+import auth from '../auth/reducers';
 import cases from './cases';
 import displays from './displays';
 import order from './order';

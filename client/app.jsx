@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { routeActions, syncHistory } from 'redux-simple-router';
 
-import { loadCredentials } from './actions/auth';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import * as constants from './constants';
@@ -47,7 +46,6 @@ store.subscribe(() => {
       break;
   }
 });
-store.dispatch(loadCredentials());
 
 // Render application.
 ReactDOM.render(
@@ -56,8 +54,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 );
-
-store.dispatch(routeActions.push('/orders'));
 
 // Show the developer tools.
 if (process.env.NODE_ENV !== 'production') {

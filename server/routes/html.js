@@ -48,7 +48,8 @@ export default () => {
       BASE_URL: urlHelpers.getBaseUrl(req),
       BASE_PATH: urlHelpers.getBasePath(req),
       TITLE: config('TITLE'),
-      BASE_API_URL: config('BASE_API_URL')
+      BASE_API_URL: config('BASE_API_URL'),
+      BFD_AUDIENCE: config('BFD_AUDIENCE')
     };
 
     // Render from CDN.

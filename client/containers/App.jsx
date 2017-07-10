@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { logout } from '../actions/auth';
-import { authActions, caseActions, displayActions } from '../actions';
+import { logout } from '../auth/actions';
+import { caseActions, displayActions } from '../actions';
 
 import Header from '../components/Header';
 
@@ -51,4 +51,4 @@ function select(state) {
   };
 }
 
-export default connect(select, { logout, ...authActions, ...caseActions, ...displayActions })(App);
+export default connect(select, { logout, ...caseActions, ...displayActions })(App);
