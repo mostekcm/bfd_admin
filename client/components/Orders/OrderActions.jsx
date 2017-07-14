@@ -4,8 +4,8 @@ import { MenuItem, DropdownButton } from 'react-bootstrap';
 export default class OrderActions extends Component {
   static propTypes = {
     updateDiscount: PropTypes.func.isRequired,
-    updateShipping: PropTypes.func.isRequired,
-    updateShippedDate: PropTypes.func.isRequired,
+    updatePayments: PropTypes.func.isRequired,
+    updateShippingInfo: PropTypes.func.isRequired,
     updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
@@ -53,9 +53,9 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
-  getUpdateShippingAction = (order, loading) => (
-    <MenuItem disabled={loading || false} onClick={this.updateShipping}>
-      Update Shipping
+  getUpdatePaymentAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updatePayments}>
+      Update Payments
     </MenuItem>
   )
 
@@ -89,8 +89,8 @@ export default class OrderActions extends Component {
     this.props.updateDiscount(this.state.order);
   }
 
-  updateShipping = () => {
-    this.props.updateShipping(this.state.order);
+  updatePayments = () => {
+    this.props.updatePayments(this.state.order);
   }
 
   updateShippingInfo = () => {
@@ -106,7 +106,7 @@ export default class OrderActions extends Component {
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
         {this.getPrintAction(this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
-        {this.getUpdateShippingAction(this.state.order, this.state.loading)}
+        {this.getUpdatePaymentAction(this.state.order, this.state.loading)}
         {this.getUpdateShippingInfoAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}

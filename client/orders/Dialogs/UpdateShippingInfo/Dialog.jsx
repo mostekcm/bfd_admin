@@ -42,8 +42,6 @@ export default connectContainer(class UpdateShippingInfoDialog extends Component
       shipping: this.nextShippingCost.value
     };
 
-    console.log("Carlos, data: ", data);
-
     this.props.update(this.orderId.value, data);
   }
 

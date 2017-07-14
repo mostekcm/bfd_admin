@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import formatCurrency from 'format-currency';
+import _ from 'lodash';
 
 import {
   Table,
@@ -69,7 +70,7 @@ export default class OrdersTable extends Component {
     });
 
     const me = this;
-    const tableRowOrders = _.sortByAll(orders, [
+    const tableRowOrders = _.sortBy(orders, [
       o => me.convertStatusToSortOrder(o.shippedStatus),
       o => me.convertStatusToSortOrder(o.paidStatus),
       'date']);

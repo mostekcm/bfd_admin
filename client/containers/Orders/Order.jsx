@@ -7,8 +7,8 @@ import formatCurrency from 'format-currency';
 import { orderActions } from '../../actions';
 
 /* Dialogs */
-import { requestUpdateShipping } from '../../orders/Dialogs/UpdateShipping/actions';
-import UpdateShippingDialog from '../../orders/Dialogs/UpdateShipping/Dialog';
+import { requestUpdatePayments } from '../../orders/Dialogs/UpdatePaymentInfo/actions';
+import UpdatePaymentsDialog from '../../orders/Dialogs/UpdatePaymentInfo/Dialog';
 import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingInfo/actions';
 import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
 
@@ -32,7 +32,7 @@ export default connectContainer(class Order extends Component {
 
   static actionsToProps = {
     ...orderActions,
-    requestUpdateShipping,
+    requestUpdatePayments,
     requestUpdateShippingInfo
   }
 
@@ -146,7 +146,7 @@ TAX ID: ___________________________________________
               <OrderActions
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
-                updateShipping={this.props.requestUpdateShipping}
+                updatePayments={this.props.requestUpdatePayments}
                 updateShippingInfo={this.props.requestUpdateShippingInfo}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
@@ -259,7 +259,7 @@ TAX ID: ___________________________________________
           </div>
         </LoadingPanel>
         <dialogs.DeleteDialog />
-        <UpdateShippingDialog />
+        <UpdatePaymentsDialog />
         <UpdateShippingInfoDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />
