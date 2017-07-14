@@ -31,7 +31,7 @@ export default class UpdatePaymentFields extends Component {
 
   getRemainingCost(totalCost, payments) {
     let remaining = totalCost;
-    payments.forEach(payment => remaining -= (payment.amount || 0));
+    if (payments) payments.forEach(payment => remaining -= (payment.amount || 0));
     return remaining;
   }
 
