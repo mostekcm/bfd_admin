@@ -4,7 +4,7 @@ import './TableCell.css';
 
 class TableCell extends Component {
   static propTypes = {
-    skipTruncate: PropTypes.boolean,
+    skipTruncate: PropTypes.bool,
     className: PropTypes.string,
     rowSpan: PropTypes.number
   }

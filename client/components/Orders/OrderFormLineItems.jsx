@@ -17,7 +17,7 @@ import {
 export default class OrderFormLineItems extends Component {
   static propTypes = {
     lineItems: React.PropTypes.array.isRequired,
-    fields: React.PropTypes.array.isRequired,
+    fields: React.PropTypes.object.isRequired,
     loading: React.PropTypes.bool.isRequired
   }
 
@@ -56,7 +56,7 @@ export default class OrderFormLineItems extends Component {
         </TableHeader>
         <TableBody>
            {fields.map((fieldName, index) => {
-             if (lineItems.length === 0) return <div></div>;
+             if (lineItems.length === 0) return null;
              const field = lineItems[index];
              return <TableRow key={ index }>
                <TableTextCell>{field.sku.product.name}, {field.sku.size} {field.description}</TableTextCell>
@@ -83,7 +83,7 @@ export default class OrderFormLineItems extends Component {
             <TableTextCell> </TableTextCell>
             <TableTextCell>Total For Line Items</TableTextCell>
             <TableTextCell>{formatCurrency(total, opts)}</TableTextCell>
-          </TableRow>;
+          </TableRow>
         </TableBody>
       </Table>
     );

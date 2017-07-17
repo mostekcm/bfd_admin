@@ -13,10 +13,17 @@ import {
 
 export default createForm('order', class OrderForm extends Component {
   static propTypes = {
+    stores: PropTypes.array,
     lineItems: PropTypes.array,
     displayItems: PropTypes.array,
     loading: PropTypes.bool.isRequired,
+    existingStore: PropTypes.string,
     initialValues: PropTypes.object
+  };
+
+  constructor() {
+    super();
+    this.renderStoreFields.bind(this);
   }
 
   renderSalesRep(validationErrors) {
@@ -91,6 +98,17 @@ export default createForm('order', class OrderForm extends Component {
     );
   }
 
+  renderStoresField(stores, validationErrors) {
+    const storeOptions = _.map(stores, store => ({text: store.name, value: JSON.stringify(store)}));
+    return (
+      <div className="col-xs-12">
+        <div className="custom-field">
+          <ComboField options={storeOptions} name='existingStore' label='Existing Store' validationErrors={validationErrors} />
+        </div>
+      </div>
+    );
+  }
+
   renderTextField(name, label, validationErrors) {
     const props = {
       fieldName: name,
@@ -107,8 +125,27 @@ export default createForm('order', class OrderForm extends Component {
     );
   }
 
+  renderStoreFields(existingStore, validationErrors) {
+    if (existingStore) {
+      return null;
+    }
+
+    return (
+      <div className="row">
+        {this.renderTextField('store.name', 'Store Name', validationErrors)}
+        {this.renderTextField('store.shippingAddress', 'Store Shipping Address', validationErrors)}
+        {this.renderTextField('store.billingAddress', 'Store Billing Address', validationErrors)}
+        {this.renderTextField('store.contact', 'Store Contact', validationErrors)}
+        {this.renderTextField('store.phone', 'Store Phone', validationErrors)}
+        {this.renderTextField('store.email', 'Store Email', validationErrors)}
+      </div>);
+  }
+
   render() {
     const validationErrors = {};
+
+    const lineItems = this.props.lineItems || [];
+    const displayItems = this.props.displayItems || [];
 
     return (
       <form className="create-order form-horizontal" style={{ marginTop: '30px' }}>
@@ -119,19 +156,9 @@ export default createForm('order', class OrderForm extends Component {
           {this.renderSalesRep(validationErrors)}
         </div>
         <div className="row">
-          {this.renderTextField('store.name', 'Store Name', validationErrors)}
+          {this.renderStoresField(this.props.stores, validationErrors)}
         </div>
-        <div className="row">
-          {this.renderTextField('store.shippingAddress', 'Store Shipping Address', validationErrors)}
-        </div>
-        <div className="row">
-          {this.renderTextField('store.billingAddress', 'Store Billing Address', validationErrors)}
-        </div>
-        <div className="row">
-          {this.renderTextField('store.contact', 'Store Contact', validationErrors)}
-          {this.renderTextField('store.phone', 'Store Phone', validationErrors)}
-          {this.renderTextField('store.email', 'Store Email', validationErrors)}
-        </div>
+        {this.renderStoreFields(this.props.existingStore, validationErrors)}
         <div className="row">
           {this.renderTextField('notesToCustomer', 'Notes to Store', validationErrors)}
         </div>
@@ -142,14 +169,14 @@ export default createForm('order', class OrderForm extends Component {
           <h3>Products</h3>
           <div className="col-xs-12">
             <FieldArray name='lineItems' component={OrderFormLineItems}
-                        props={ { loading: this.props.loading, lineItems: this.props.lineItems } }/>
+                        props={ { loading: this.props.loading, lineItems: lineItems } }/>
           </div>
         </div>
         <div className="row">
           <h3>Displays</h3>
           <div className="col-xs-12">
             <FieldArray name='displayItems' component={OrderFormDisplayItems}
-                        props={ { loading: this.props.loading, displayItems: this.props.displayItems } }/>
+                        props={ { loading: this.props.loading, displayItems: displayItems } }/>
           </div>
         </div>
       </form>

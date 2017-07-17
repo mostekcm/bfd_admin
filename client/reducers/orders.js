@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { fromJS } from 'immutable';
 
 import * as constants from '../constants';
@@ -6,6 +7,7 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
+  stores: [],
   records: [],
   total: 0
 };
@@ -24,13 +26,16 @@ export default createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_ORDERS_FULFILLED]: (state, action) => {
     const { data } = action.payload;
+    const stores = _(data).map(order => order.store).uniqBy(store => store.name).sortBy(store => store.name).value();
+    console.log("Carlos, stores: ", stores);
     return state.merge({
       loading: false,
       // total: data.total,
       // nextPage: action.meta.page + 1,
       records: state.get('records').concat(fromJS(data.map(order => ({
         ...order
-      }))))
+      })))),
+      stores: state.get('stores').concat(fromJS(stores))
     });
   }
 });

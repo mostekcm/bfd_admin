@@ -21,7 +21,8 @@ export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
     orderCreate: state.orderCreate,
     cases: state.cases,
-    displays: state.displays
+    displays: state.displays,
+    stores: state.orders.get('stores').toJS()
   });
 
   static actionsToProps = {
@@ -44,6 +45,10 @@ export default connectContainer(class extends Component {
     const simpleOrder = JSON.parse(JSON.stringify(order));
     simpleOrder.lineItems = _.filter(simpleOrder.lineItems, (item) => item.quantity && item.quantity > 0);
     simpleOrder.displayItems = _.filter(simpleOrder.displayItems, (item) => item.quantity && item.quantity > 0);
+    if (simpleOrder.existingStore) {
+      simpleOrder.store = JSON.parse(simpleOrder.existingStore);
+      delete simpleOrder.existingStore;
+    }
 
     this.props.createOrder(simpleOrder);
   }
@@ -59,6 +64,7 @@ export default connectContainer(class extends Component {
     const { error, loading, record } = this.props.orderCreate.toJS();
     const cases = this.props.cases.toJS().records;
     const displays = this.props.displays.toJS().records;
+    const stores = this.props.stores;
 
     let initialValues = {};
     if (record) initialValues = JSON.parse(JSON.stringify(record));
@@ -66,6 +72,10 @@ export default connectContainer(class extends Component {
     /* Default the show name and sales rep for now */
     initialValues.show = initialValues.show || { name: "House Account" };
     initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
+    if (initialValues.store) {
+      initialValues.existingStore = JSON.stringify(initialValues.store);
+      initialValues.store = undefined;
+    }
 
     initializeLineItems(initialValues, cases);
     initializeDisplayItems(initialValues, displays);
@@ -76,10 +86,12 @@ export default connectContainer(class extends Component {
       state => {
         const lineItems = selector(state, 'lineItems');
         const displayItems = selector(state, 'displayItems');
+        const existingStore = selector(state, 'existingStore');
         return {
           initialValues: initialValues,
           lineItems,
-          displayItems
+          displayItems,
+          existingStore
         }
       }, null, null, { withRef: true }
     )(OrderForm);
@@ -88,8 +100,13 @@ export default connectContainer(class extends Component {
       <Confirm title="Create Order" show={record !== null} loading={loading} onCancel={this.props.cancelCreateOrder}
                onConfirm={this.onConfirm} dialogClassName={'order-form'}>
         <Error message={error}/>
-        <ConnectedOrderForm ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
-                            cases={cases} displays={displays} onSubmit={this.onSubmit} loading={loading} />
+        <ConnectedOrderForm
+          ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
+          stores={stores}
+          cases={cases}
+          displays={displays}
+          onSubmit={this.onSubmit}
+          loading={loading} />
       </Confirm>
     );
   }
