@@ -39,6 +39,14 @@ export default connectContainer(class CommissionDueReport extends Component {
 
     const opts = { format: '%s%v', symbol: '$' };
 
+    let overallTotalBase = 0;
+    let overallTotalCommissionDue = 0;
+
+    commissionReports.forEach((commissionInfo) => {
+      overallTotalBase += commissionInfo.totalCommissionBase;
+      overallTotalCommissionDue += commissionInfo.totalCommissionDue;
+    })
+
     return (
       <div className="order">
         <LoadingPanel show={loading}>
@@ -71,6 +79,15 @@ export default connectContainer(class CommissionDueReport extends Component {
               );
             })
           }
+          <div className="row">
+            <div className="col-xs-12">
+              <h3>Overall Totals</h3>
+            </div>
+            <div className="col-xs-12">
+              Overall Total Commission Base: { formatCurrency(overallTotalBase, opts) }<br />
+              Overall Total Owed: { formatCurrency(overallTotalCommissionDue, opts)}
+            </div>
+          </div>
         </LoadingPanel>
       </div>
     );
