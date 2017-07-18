@@ -64,6 +64,10 @@ export default createForm('order', class OrderForm extends Component {
         value: 'On the Road'
       },
       {
+        text: 'Mpls Mart Reorder',
+        value: 'Reorder'
+      },
+      {
         text: 'January Expo',
         value: 'January Expo'
       },

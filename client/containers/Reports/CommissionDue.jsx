@@ -19,16 +19,17 @@ export default connectContainer(class CommissionDueReport extends Component {
   }
 
   static propTypes = {
+    params: PropTypes.object,
     commissionDueReport: PropTypes.object,
     fetchCommissionDueReport: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.fetchCommissionDueReport();
+    this.props.fetchCommissionDueReport(this.props.params.name);
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.commissionDueReport !== this.props.commissionDueReport;
+    return nextProps.commissionDueReport !== this.props.commissionDueReport || nextProps.params.name !== this.props.params.name;
   }
 
   render() {

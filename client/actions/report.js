@@ -47,12 +47,12 @@ export function fetchMonthReport(month) {
 /*
  * Get Commission Due Report.
  */
-export function fetchCommissionDueReport() {
+export function fetchCommissionDueReport(name) {
   return (dispatch) => {
     dispatch({
       type: constants.FETCH_COMMISSION_DUE_REPORT,
       payload: {
-        promise: axios.get(`${baseUrl}/api/reports/commission/due`, {
+        promise: axios.get(`${baseUrl}/api/reports/commission/due/${name}`, {
           responseType: 'json'
         })
       }

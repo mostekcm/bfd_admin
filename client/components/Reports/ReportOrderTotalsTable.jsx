@@ -28,10 +28,11 @@ export default class ReportOrderTotalsTable extends Component {
         <TableHeader>
           <TableColumn width="10%">Date</TableColumn>
           <TableColumn width="10%">Paid Date</TableColumn>
-          <TableColumn width="14%">Show</TableColumn>
-          <TableColumn width="23%">Store</TableColumn>
-          <TableColumn width="23%">Store Contact</TableColumn>
+          <TableColumn width="12%">Show</TableColumn>
+          <TableColumn width="20%">Store</TableColumn>
+          <TableColumn width="20%">Store Contact</TableColumn>
           <TableColumn width="10%">Commission Base</TableColumn>
+          <TableColumn width="10%">Commission Multiplier</TableColumn>
           <TableColumn width="10%">Commission Due</TableColumn>
         </TableHeader>
         <TableBody>
@@ -43,6 +44,7 @@ export default class ReportOrderTotalsTable extends Component {
               <TableTextCell>{order.store.name}</TableTextCell>
               <TableTextCell>{order.store.contact}</TableTextCell>
               <TableTextCell>{formatCurrency(order.totals.commissionBase, opts)}</TableTextCell>
+              <TableTextCell>{order.totals.commissionMultiplier}</TableTextCell>
               <TableTextCell>{formatCurrency(order.totals.commissionDue, opts)}</TableTextCell>
             </TableRow>;
           })}
