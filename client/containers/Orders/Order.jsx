@@ -157,6 +157,7 @@ TAX ID: ___________________________________________
         <LoadingPanel show={loading}>
           <div className="row">
             <div className="col-xs-6 col-md-6 wrapper">
+              <div className="inline">INVOICE NUMBER: {order.invoiceNumber}</div>
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
               { order.dueDate ? <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : '' }
               { order.targetShipDate && !order.shippedDate ? <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : '' }
