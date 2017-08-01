@@ -78,7 +78,7 @@ export default class OrdersTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="10%">ID</TableColumn>
+          <TableColumn width="10%">Invoice #</TableColumn>
           <TableColumn width="10%">Order Date</TableColumn>
           <TableColumn width="10%">Ship(ped) Date</TableColumn>
           <TableColumn width="10%">Payment Due Date</TableColumn>
@@ -90,7 +90,7 @@ export default class OrdersTable extends Component {
           { tableRowOrders.map((order, index) => {
             return <TableRow key={index}>
               <TableRouteCell
-                route={`/orders/${order.id}`}>{order.id}</TableRouteCell>
+                route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
               <TableTextCell>{moment.unix(order.date).format('YYYY-MM-DD')}</TableTextCell>
               <TableTextCell className={order.shippedStatus}>{order.shippedDate ? moment.unix(order.shippedDate).format('YYYY-MM-DD') : (order.targetShipDate ? moment.unix(order.targetShipDate).format('?YYYY-MM-DD?') : '??')}</TableTextCell>
               <TableTextCell className={order.paidStatus}>{order.dueDateDisplay}</TableTextCell>
