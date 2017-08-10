@@ -9,6 +9,8 @@ import { orderActions } from '../../actions';
 /* Dialogs */
 import { requestUpdatePayments } from '../../orders/Dialogs/UpdatePaymentInfo/actions';
 import UpdatePaymentsDialog from '../../orders/Dialogs/UpdatePaymentInfo/Dialog';
+import { requestPayCommission } from '../../orders/Dialogs/PayCommission/actions';
+import PayCommissionDialog from '../../orders/Dialogs/PayCommission/Dialog';
 import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingInfo/actions';
 import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
 
@@ -33,6 +35,7 @@ export default connectContainer(class Order extends Component {
   static actionsToProps = {
     ...orderActions,
     requestUpdatePayments,
+    requestPayCommission,
     requestUpdateShippingInfo
   }
 
@@ -60,6 +63,18 @@ export default connectContainer(class Order extends Component {
 
   getLineItemCost(item) {
     return item.quantity * item.cpu * item.size;
+  }
+
+  renderShippingWeight(weight) {
+    const weightWithPackingMaterials = parseFloat(weight) * 1.15;
+    const weightInPoundsFloat = weightWithPackingMaterials / 16.0;
+    let weightInPounds = Math.floor(weightInPoundsFloat);
+    let remainingOunces = Math.ceil((weightInPoundsFloat - weightInPounds)*16);
+    if (remainingOunces === 16) {
+      weightInPounds += 1;
+      remainingOunces = 0;
+    }
+    return `${weightInPounds} lbs ${remainingOunces} oz`;
   }
 
   renderAddress(address, header) {
@@ -147,6 +162,7 @@ TAX ID: ___________________________________________
                 order={this.props.order}
                 deleteOrder={this.props.requestDeleteOrder}
                 updatePayments={this.props.requestUpdatePayments}
+                payCommission={this.props.requestPayCommission}
                 updateShippingInfo={this.props.requestUpdateShippingInfo}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
@@ -236,6 +252,11 @@ TAX ID: ___________________________________________
                 AMOUNT OWED: {formatCurrency(order.totals.owed, opts)}
               </div>
             </div> : '' }
+          <div className="row">
+            <div className="col-xs-12 wrapper totals">
+              ESTIMATED SHIPPING WEIGHT: {this.renderShippingWeight(order.totals.weight)}
+            </div>
+          </div>
           { order.notesToCustomer ?
             <div className="row">
               <div className="col-xs-12 col-md-6">
@@ -261,6 +282,7 @@ TAX ID: ___________________________________________
         </LoadingPanel>
         <dialogs.DeleteDialog />
         <UpdatePaymentsDialog />
+        <PayCommissionDialog />
         <UpdateShippingInfoDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />

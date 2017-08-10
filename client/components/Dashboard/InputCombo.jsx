@@ -4,7 +4,7 @@ import classNames from 'classnames';
 class InputCombo extends Component {
   onChange = (event) => {
     const { field } = this.props;
-    field.onChange(event);
+    if (field) field.onChange(event);
 
     if (this.props.onChange) {
       this.props.onChange(event);
@@ -12,7 +12,7 @@ class InputCombo extends Component {
   }
 
   render() {
-    const { label, field, fieldName, options, validationErrors } = this.props;
+    const { label, fieldName, options, validationErrors } = this.props;
     const classes = classNames({
       'form-group': true,
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
@@ -21,7 +21,7 @@ class InputCombo extends Component {
     return (
       <div className={classes}>
         <label>{label}</label>
-        <select className="form-control" {...this.props} {...field} onChange={this.onChange}>
+        <select className="form-control" {...this.props.input} onChange={this.onChange}>
           {options.length > 1 && <option value=""></option>}
           {options.map((option, index) => {
             return <option key={index} value={option.value}>{option.text}</option>;

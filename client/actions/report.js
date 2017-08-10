@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { routeActions } from 'redux-simple-router';
 
 import * as constants from '../constants';
+import { getPaidCommissionData } from '../orders/utils';
 
 // TODO: Grab from config from server
 const baseUrl = window.config.BASE_API_URL;
@@ -55,6 +55,44 @@ export function fetchCommissionDueReport(name) {
         promise: axios.get(`${baseUrl}/api/reports/commission/due/${name}`, {
           responseType: 'json'
         })
+      }
+    });
+  };
+}
+
+/*
+ * Mark orders as paid
+ */
+export function payCommissions(payee, commissionReports) {
+  return (dispatch) => {
+    const orderData = [];
+    const paidDate = moment().format('X');
+    commissionReports.forEach(report => {
+      report.orders.forEach(order => {
+
+        const data = getPaidCommissionData(order.commissions, order.commissionInfo, payee, paidDate, order.id);
+
+        orderData.push({ orderId: order.id, data });
+      });
+    });
+
+    dispatch({
+      type: constants.PAY_COMMISSIONS,
+      meta: {
+        payee,
+        paidDate,
+        commissionReports,
+        onSuccess: () => {
+          if (onSuccess) {
+            onSuccess();
+          }
+          dispatch(fetchCommissionDueReport(payee));
+        }
+      },
+      payload: {
+        promise: Promise.mapSeries(orderData, info => axios.patch(`${baseUrl}/api/orders/${info.orderId}`, info.data, {
+          responseType: 'json'
+        }))
       }
     });
   };

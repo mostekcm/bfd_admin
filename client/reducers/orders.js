@@ -27,7 +27,6 @@ export default createReducer(fromJS(initialState), {
   [constants.FETCH_ORDERS_FULFILLED]: (state, action) => {
     const { data } = action.payload;
     const stores = _(data).map(order => order.store).uniqBy(store => store.name).sortBy(store => store.name).value();
-    console.log("Carlos, stores: ", stores);
     return state.merge({
       loading: false,
       // total: data.total,

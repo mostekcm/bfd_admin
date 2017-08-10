@@ -14,7 +14,7 @@ class ComboField extends Component {
     return (
       <div className={classes}>
         <label>{label}</label>
-        <Field name = {name} component="select" className="form-control" {...this.props.props} onChange={this.onChange}>
+        <Field name = {name} component="select" className="form-control" {...this.props.props}>
           {options.length > 1 && <option value=""></option>}
           {options.map((option, index) => {
             return <option key={index} value={option.value}>{option.text}</option>;

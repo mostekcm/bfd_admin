@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import formatCurrency from 'format-currency';
+import { Button } from 'react-bootstrap';
 
 import { reportActions } from '../../actions';
 
@@ -12,6 +13,7 @@ import {
 export default connectContainer(class CommissionDueReport extends Component {
   static stateToProps = (state) => ({
     commissionDueReport: state.commissionDueReport,
+    payCommissionsState: state.payCommissions
   });
 
   static actionsToProps = {
@@ -24,6 +26,12 @@ export default connectContainer(class CommissionDueReport extends Component {
     fetchCommissionDueReport: React.PropTypes.func.isRequired
   }
 
+  constructor(props) {
+    super(props);
+
+    this.payCommissions = this.payCommissions.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchCommissionDueReport(this.props.params.name);
   }
@@ -32,23 +40,36 @@ export default connectContainer(class CommissionDueReport extends Component {
     return nextProps.commissionDueReport !== this.props.commissionDueReport || nextProps.params.name !== this.props.params.name;
   }
 
-  render() {
-    const { loading, error, records } = this.props.commissionDueReport.toJS();
+  payCommissions() {
+    this.props.payCommissions(this.props.params.name, this.commissionReports);
+  }
 
-    const commissionReports = records || [];
+  render() {
+    const { error, records } = this.props.commissionDueReport.toJS();
+    const loading = this.props.commissionDueReport.toJS().loading || this.props.payCommissionsState.toJS().loading;
+
+    this.commissionReports = records || [];
 
     const opts = { format: '%s%v', symbol: '$' };
 
     let overallTotalBase = 0;
     let overallTotalCommissionDue = 0;
 
-    commissionReports.forEach((commissionInfo) => {
+    this.commissionReports.forEach((commissionInfo) => {
       overallTotalBase += commissionInfo.totalCommissionBase;
       overallTotalCommissionDue += commissionInfo.totalCommissionDue;
     })
 
     return (
       <div className="order">
+        <div className="row content-header">
+          <div className="col-xs-12">
+            <h2 className="pull-left">Commission Report for {this.props.params.name}</h2>
+            <div className="pull-right">
+              <Button bsStyle="success" title="Pay Commissions" id="pay-commissions-button" onClick={this.payCommissions}>Pay Commissions</Button>
+            </div>
+          </div>
+        </div>
         <LoadingPanel show={loading}>
           <div className="row">
             <div className="col-xs-12 wrapper">
@@ -56,7 +77,7 @@ export default connectContainer(class CommissionDueReport extends Component {
             </div>
           </div>
           {
-            commissionReports.map((commissionInfo, index) => {
+            this.commissionReports.map((commissionInfo, index) => {
               return (
                 <div className="row" index={index}>
                   <div className="col-xs-12">

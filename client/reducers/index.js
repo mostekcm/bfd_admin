@@ -17,6 +17,8 @@ import updateLineItems from './updateLineItems';
 import updateShipping from '../orders/Dialogs/UpdateShipping/reducer';
 import updateShippingInfo from '../orders/Dialogs/UpdateShippingInfo/reducer';
 import updatePayments from '../orders/Dialogs/UpdatePaymentInfo/reducer';
+import payCommission from '../orders/Dialogs/PayCommission/reducer';
+import payCommissions from './payCommissions';
 
 function lastAction(state = null, action) {
   return action;
@@ -38,6 +40,8 @@ export default combineReducers({
   updateDiscount,
   updateLineItems,
   updatePayments,
+  payCommission,
+  payCommissions,
   updateShipping,
   updateShippingInfo,
   form: formReducer

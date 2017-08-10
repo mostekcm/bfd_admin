@@ -5,6 +5,7 @@ export default class OrderActions extends Component {
   static propTypes = {
     updateDiscount: PropTypes.func.isRequired,
     updatePayments: PropTypes.func.isRequired,
+    payCommission: PropTypes.func.isRequired,
     updateShippingInfo: PropTypes.func.isRequired,
     updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
@@ -59,6 +60,12 @@ export default class OrderActions extends Component {
     </MenuItem>
   )
 
+  getPayCommissionAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.payCommission}>
+      Pay Commission
+    </MenuItem>
+  )
+
   getUpdateShippingInfoAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateShippingInfo}>
       Update Shipping Info
@@ -93,6 +100,10 @@ export default class OrderActions extends Component {
     this.props.updatePayments(this.state.order);
   }
 
+  payCommission = () => {
+    this.props.payCommission(this.state.order);
+  }
+
   updateShippingInfo = () => {
     this.props.updateShippingInfo(this.state.order);
   }
@@ -106,9 +117,10 @@ export default class OrderActions extends Component {
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
         {this.getPrintAction(this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
-        {this.getUpdatePaymentAction(this.state.order, this.state.loading)}
-        {this.getUpdateShippingInfoAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
+        {this.getUpdateShippingInfoAction(this.state.order, this.state.loading)}
+        {this.getUpdatePaymentAction(this.state.order, this.state.loading)}
+        {this.getPayCommissionAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
       </DropdownButton>
     );

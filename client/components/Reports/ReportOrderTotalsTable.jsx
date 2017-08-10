@@ -43,9 +43,9 @@ export default class ReportOrderTotalsTable extends Component {
               <TableTextCell>{order.show.name}</TableTextCell>
               <TableTextCell>{order.store.name}</TableTextCell>
               <TableTextCell>{order.store.contact}</TableTextCell>
-              <TableTextCell>{formatCurrency(order.totals.commissionBase, opts)}</TableTextCell>
-              <TableTextCell>{order.totals.commissionMultiplier}</TableTextCell>
-              <TableTextCell>{formatCurrency(order.totals.commissionDue, opts)}</TableTextCell>
+              <TableTextCell>{formatCurrency(order.commissionBase, opts)}</TableTextCell>
+              <TableTextCell>{order.commission.multiplier}</TableTextCell>
+              <TableTextCell>{formatCurrency(order.commission.due, opts)}</TableTextCell>
             </TableRow>;
           })}
         </TableBody>

@@ -90,7 +90,7 @@ function mapStateToProps(state) {
     orderCreateError: state.orderCreate.get('error'),
     orderCreateLoading: state.orderCreate.get('loading'),
     validationErrors: state.orderCreate.get('validationErrors'),
-    loading: state.orders.get('loading') && state.cases.get('loading') && state.displays.get('loading'),
+    loading: state.orders.get('loading') || state.cases.get('loading') || state.displays.get('loading'),
     orders: state.orders.get('records').toJS(),
     cases: state.cases.get('records').toJS(),
     displays: state.displays.get('records').toJS(),
