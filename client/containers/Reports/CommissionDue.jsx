@@ -37,6 +37,7 @@ export default connectContainer(class CommissionDueReport extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    if (nextProps.params.name !== this.props.params.name) this.props.fetchCommissionDueReport(nextProps.params.name);
     return nextProps.commissionDueReport !== this.props.commissionDueReport || nextProps.params.name !== this.props.params.name;
   }
 
@@ -79,7 +80,7 @@ export default connectContainer(class CommissionDueReport extends Component {
           {
             this.commissionReports.map((commissionInfo, index) => {
               return (
-                <div className="row" index={index}>
+                <div className="row" key={index}>
                   <div className="col-xs-12">
                     <h2>{ commissionInfo.salesRep.name }</h2>
                   </div>

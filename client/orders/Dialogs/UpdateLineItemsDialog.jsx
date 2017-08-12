@@ -43,8 +43,11 @@ export default connectContainer(class extends Component {
 
   onConfirm = () => {
     if (this.form) {
-      this.form.submit()
-        .catch(e => console.error("error line items update: ", e.message));
+      try {
+        this.form.submit();
+      } catch(err) {
+        console.error("error line items update submit: ", e.message);
+      }
     }
 
   }

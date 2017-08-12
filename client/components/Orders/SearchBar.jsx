@@ -5,7 +5,8 @@ export default class SearchBar extends Component {
   static propTypes = {
     enabled: PropTypes.bool.isRequired,
     onReset: PropTypes.func.isRequired,
-    onSearch: PropTypes.func.isRequired
+    onSearch: PropTypes.func.isRequired,
+    query: PropTypes.string.isRequired
   }
 
   onKeyPress = (e) => {
@@ -29,6 +30,7 @@ export default class SearchBar extends Component {
               <input
                 className="user-input" type="text" ref="search" placeholder="Search for users using the Lucene syntax"
                 spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
+                defaultValue={this.props.query}
               />
             </span>
             <span className="controls pull-right">
@@ -41,7 +43,7 @@ export default class SearchBar extends Component {
         <div className="col-xs-12">
           <div className="help-block">
             To perform your search, press <span className="keyboard-button">enter</span>.
-            You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
+            You can also search for specific fields, eg: <strong>invoiceNumber:"BFD0001394"</strong>.
           </div>
         </div>
       </div>

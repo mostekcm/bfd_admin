@@ -70,6 +70,7 @@ class Orders extends Component {
         <OrderOverview
           onReset={this.onReset}
           onSearch={this.onSearch}
+          query={this.props.query}
           error={error}
           errorCases={errorCases}
           errorDisplays={errorDisplays}
@@ -92,6 +93,7 @@ function mapStateToProps(state) {
     validationErrors: state.orderCreate.get('validationErrors'),
     loading: state.orders.get('loading') || state.cases.get('loading') || state.displays.get('loading'),
     orders: state.orders.get('records').toJS(),
+    query: state.orders.get('query'),
     cases: state.cases.get('records').toJS(),
     displays: state.displays.get('records').toJS(),
     total: state.orders.get('total'),

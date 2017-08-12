@@ -7,6 +7,7 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
+  query: '',
   stores: [],
   records: [],
   total: 0
@@ -17,6 +18,7 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState,
       loading: true,
+      query: action.meta.search,
       records: action.meta.page === 0 ? [] : state.get('records')
     }),
   [constants.FETCH_ORDERS_REJECTED]: (state, action) =>

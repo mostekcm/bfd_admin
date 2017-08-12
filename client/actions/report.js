@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Promise from 'bluebird';
 
 import * as constants from '../constants';
 import { getPaidCommissionData } from '../orders/utils';
@@ -63,7 +64,7 @@ export function fetchCommissionDueReport(name) {
 /*
  * Mark orders as paid
  */
-export function payCommissions(payee, commissionReports) {
+export function payCommissions(payee, commissionReports, onSuccess) {
   return (dispatch) => {
     const orderData = [];
     const paidDate = moment().format('X');

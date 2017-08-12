@@ -23,6 +23,7 @@ export function fetchOrders(search = '', reset = false, page = 0) {
         })
       },
       meta: {
+        search,
         page
       }
     });
