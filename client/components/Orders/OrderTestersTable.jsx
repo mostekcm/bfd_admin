@@ -51,7 +51,7 @@ export default class OrderDetailsTable extends Component {
         </TableHeader>
         <TableBody>
           {lineItems.map((lineItem, index) => {
-            if (lineItem.tester.quantity <= 0) return '';
+            if (!lineItem.tester.quantity || lineItem.tester.quantity <= 0) return '';
 
             const cpu = formatCurrency(lineItem.tester.cpu, opts);
             const totalCost = formatCurrency(this.getRowCost(lineItem), opts);
