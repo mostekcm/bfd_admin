@@ -17,7 +17,7 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState,
       orderId: action.order.id,
-      payments: action.order.payments,
+      payments: action.order.payments || [],
       totalCost: action.order.totals.total,
       requesting: true
     }),
