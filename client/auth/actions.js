@@ -6,17 +6,6 @@ import { routeActions } from 'redux-simple-router';
 import * as constants from './constants';
 import { redirect, parseHash, a0Logout } from './utils';
 
-function isExpired(decodedToken) {
-  if (typeof decodedToken.exp === 'undefined') {
-    return true;
-  }
-
-  const d = new Date(0);
-  d.setUTCSeconds(decodedToken.exp);
-
-  return !(d.valueOf() > (new Date().valueOf() + (1000)));
-}
-
 const refreshTokens = (dispatch, getState, location) => {
   if (getState().auth.get('isRefreshing')) {
     return Promise.reject(new Error('Need to handle multi-request for refresh'));
@@ -58,16 +47,6 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
 
       const idToken = tokens.idToken;
       const accessToken = tokens.accessToken;
-      const decodedToken = jwtDecode(idToken);
-      if (isExpired(decodedToken)) {
-        dispatch({
-          type: constants.LOGIN_FAILED,
-          payload: {
-            error: 'Expired Token'
-          }
-        });
-        return dispatch(routeActions.push('/login'));
-      }
 
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -109,11 +88,14 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
       const expiresIn = tokens.expiresIn > 70 ? tokens.expiresIn - 60 : 10;
       const expiresAt = now + expiresIn;
 
+      const user = JSON.parse(localStorage.getItem('profile'));
+      user.iss = user.iss || 'https://unknown.com';
+
       if (refreshing) {
-        return dispatchSuccess(dispatch, idToken, accessToken, decodedToken, expiresAt, tokens.returnTo);
+        return dispatchSuccess(dispatch, idToken, accessToken, user, expiresAt, tokens.returnTo);
       }
 
-      dispatchSuccess(dispatch, idToken, accessToken, decodedToken, expiresAt, tokens.returnTo);
+      dispatchSuccess(dispatch, idToken, accessToken, user, expiresAt, tokens.returnTo);
 
       return dispatch(routeActions.push(tokens.returnTo));
     })

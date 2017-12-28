@@ -3,7 +3,7 @@ import connectContainer from 'redux-static';
 
 import { cancelUpdateShippingInfo, updateShippingInfo } from './actions';
 
-import { Error, Confirm, InputDate, InputText } from '../../../components/Dashboard';
+import { Error, Confirm, InputDateTime, InputText } from '../../../components/Dashboard';
 
 import './Dialog.css';
 
@@ -61,11 +61,11 @@ export default connectContainer(class UpdateShippingInfoDialog extends Component
           <form className={className} style={{ marginTop: '40px' }}>
             <div className="form-group">
               <div className="col-xs-12 col-md-12">
-                <InputDate input={ { ref: (nextValue => { return this.nextShippedDate = nextValue }),
+                <InputDateTime input={ { ref: (nextValue => { return this.nextShippedDate = nextValue }),
                   defaultValue: originalShippedDate } } fieldName='shippedDate' label='Shipped Date' />
               </div>
               <div className="col-xs-12 col-md-12">
-                <InputDate input={ { ref: (nextValue => { return this.nextDueDate = nextValue }),
+                <InputDateTime input={ { ref: (nextValue => { return this.nextDueDate = nextValue }),
                   defaultValue: originalDueDate } } fieldName='dueDate' label='Due Date' />
               </div>
               <div className="col-xs-12 col-md-12">

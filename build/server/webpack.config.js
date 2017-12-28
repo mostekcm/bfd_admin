@@ -58,7 +58,7 @@ module.exports = externalModules.then((externals) => {
     entry: path.join(__dirname, '../../index'),
     target: 'node',
     output: {
-      path: './dist',
+      path: path.resolve(__dirname, '../../dist'),
       filename: 'bfd_admin.server.' + project.version + '.js',
       library: 'commonjs2'
     },

@@ -43,10 +43,15 @@ export const getBaseUrl = (location) => {
 
 const processAuthResult = (authResult) => {
   const webAuth = getAuth0();
-  const getUserInfo = Promise.promisify(webAuth.client.userInfo, { context: webAuth.client });
+  const getUserInfo = (tokens) => {
+    if (tokens.idTokenPayload) return Promise.resolve(tokens.idTokenPayload);
+
+    return Promise.promisify(webAuth.client.userInfo, { context: webAuth.client })(tokens.accessToken);
+  };
 
   return new Promise((resolve, reject) => {
     /* Validate state */
+    if (!authResult) return reject(new Error('Got a null authResult'));
     const state = authResult.state;
     const returnTo = checkNonce(state);
     if (!returnTo) {
@@ -58,10 +63,10 @@ const processAuthResult = (authResult) => {
     /* TODO: Validate ID token */
     return resolve({ accessToken: authResult.accessToken, idToken: authResult.idToken, returnTo, expiresIn: authResult.expiresIn });
   })
-    .then(tokens => getUserInfo(tokens.accessToken)
+    .then(tokens => getUserInfo(tokens)
       .then((user) => {
         // Now you have the user's information
-        localStorage.setItem('profile', user);
+        localStorage.setItem('profile', JSON.stringify(user));
         return tokens;
       }));
 };
@@ -102,18 +107,19 @@ export const redirect = (location, state, prompt) => {
     responseType: 'token id_token',
     audience: window.config.BFD_AUDIENCE,
     state: nonce,
-    scope: 'openid profile email read:reports read:displays update:orders delete:orders create:orders read:orders' +
-    ' read:cases',
+    scope: 'openid profile picture name nickname email read:reports read:displays update:orders delete:orders' +
+    ' create:orders read:orders' +
+    ' read:cases sync:crm',
     nonce
   };
 
   if (prompt) {
     // options.usePostMessage = true;
-    options.redirectUri = `${window.config.BASE_URL}/silent-callback`;
+    options.redirectUri = `${window.config.BASE_URL}`;
 
-    const renewAuth = Promise.promisify(webAuth.renewAuth, { context: webAuth });
+    const checkSession = Promise.promisify(webAuth.checkSession, { context: webAuth });
 
-    return renewAuth(options)
+    return checkSession(options)
       .then(authResult => processAuthResult(authResult));
   }
 

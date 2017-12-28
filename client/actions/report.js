@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import * as constants from '../constants';
 import { getPaidCommissionData } from '../orders/utils';
 
-// TODO: Grab from config from server
+// Grab from config from server
 const baseUrl = window.config.BASE_API_URL;
 
 /*
@@ -60,6 +60,36 @@ export function fetchCommissionDueReport(name) {
     });
   };
 }
+
+/*
+ * Get Shipments Report
+ */
+export function fetchShipmentsByDate(startDate, endDate) {
+  if (!startDate) startDate = moment().format('Y-m-d');
+  const startDateQueryString = `startDate=${startDate}`;
+  const endDateQueryString = endDate ? `&endDate=${endDate}` : '';
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_SHIPMENTS_REPORT,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/reports/shipments?startDate=${startDateQueryString}${endDateQueryString}`, {
+          responseType: 'json'
+        })
+      }
+    });
+  };
+}
+
+/*
+ * Cancel downloading CSV.
+ */
+export function requestShipmentsForm() {
+  return {
+    type: constants.REQUEST_SHIPMENTS_FORM
+  };
+}
+
+
 
 /*
  * Mark orders as paid

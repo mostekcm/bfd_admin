@@ -58,7 +58,7 @@ export default connectContainer(class extends Component {
       try {
         this.form.submit();
       } catch(err) {
-        console.error("error submitting order: ", e.message);
+        console.error("error submitting order: ", err.message);
       }
     }
   }

@@ -1,9 +1,9 @@
 {
   "name": "bfd_admin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "engines": {
-    "node": "7.6.0"
+    "node": "8.9.1"
   },
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "test:pre": "npm run test:clean && npm run lint:js",
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "build": "npm run client:build && npm run server:build",
-    "deploy": "npm run client:build && npm run server:build && cd dist && git commit -am 'auto deploy' && git push heroku master",
+    "deploy": "npm run client:build && npm run server:build && cd dist && git add . && git commit -am 'auto deploy' && git push heroku master",
     "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack ."
   },
   "keywords": [
@@ -87,10 +87,12 @@
     "postcss-reporter": "^3.0.0",
     "postcss-simple-vars": "^3.0.0",
     "promise-loader": "^1.0.0",
+    "prop-types": "^15.6.0",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-bootstrap": "^0.30.7",
     "react-codemirror": "^0.3.0",
+    "react-csv": "^1.0.8",
     "react-datetime": "^2.8.10",
     "react-dom": "^15.4.2",
     "react-infinite-calendar": "^2.1.5",

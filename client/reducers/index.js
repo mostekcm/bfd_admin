@@ -12,6 +12,7 @@ import orders from './orders';
 import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
 import monthReport from './monthReport';
+import shipmentsReport from './shipmentsReport';
 import updateDiscount from './updateDiscount';
 import updateLineItems from './updateLineItems';
 import updateShipping from '../orders/Dialogs/UpdateShipping/reducer';
@@ -36,6 +37,7 @@ export default combineReducers({
   orders,
   showReport,
   monthReport,
+  shipmentsReport,
   commissionDueReport,
   updateDiscount,
   updateLineItems,

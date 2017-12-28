@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import { cancelPayCommission, payCommission } from './actions';
 
-import { Error, Confirm, InputDate, InputCombo } from '../../../components/Dashboard';
+import { Error, Confirm, InputDateTime, InputCombo } from '../../../components/Dashboard';
 
 import { getPaidCommissionData } from '../../utils';
 
@@ -91,7 +91,7 @@ export default connectContainer(class PayCommission extends Component {
                 {this.renderCommissionPayees(commissions, validationErrors)}
               </div>
               <div className="col-xs-12 col-md-12">
-                <InputDate input={ { ref: (nextValue => { return this.paidDate = nextValue }),
+                <InputDateTime input={ { ref: (nextValue => { return this.paidDate = nextValue }),
                   defaultValue: now } } fieldName='paidDate' label='Paid Date' />
               </div>
             </div>

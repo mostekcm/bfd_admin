@@ -21,7 +21,8 @@ const options = {
   },
 
   stats: { colors: true },
-  headers: { 'Access-Control-Allow-Origin': '*' }
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  disableHostCheck: true,   // That solved it
 };
 
 new WebpackDevServer(webpack(config), options)

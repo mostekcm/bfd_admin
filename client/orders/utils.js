@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 export const getPaidCommissionData = (commissions, commissionInfo, payee, paidDate, orderId) => {
   const commissionInfoForPayee = _(commissionInfo).filter(info => info.payee === payee).value();
+  commissions = commissions || [];
 
   if (commissionInfoForPayee.length === 1) {
     let found = false;
