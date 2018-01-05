@@ -89,6 +89,34 @@ export function requestShipmentsForm() {
   };
 }
 
+/*
+ * Get Payments Report
+ */
+export function fetchPaymentsByDate(startDate, endDate) {
+  if (!startDate) startDate = moment().format('Y-m-d');
+  const startDateQueryString = `startDate=${startDate}`;
+  const endDateQueryString = endDate ? `&endDate=${endDate}` : '';
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_PAYMENTS_REPORT,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/reports/payments?startDate=${startDateQueryString}${endDateQueryString}`, {
+          responseType: 'json'
+        })
+      }
+    });
+  };
+}
+
+/*
+ * Cancel downloading CSV.
+ */
+export function requestPaymentsForm() {
+  return {
+    type: constants.REQUEST_PAYMENTS_FORM
+  };
+}
+
 
 
 /*

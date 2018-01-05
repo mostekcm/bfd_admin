@@ -91,8 +91,6 @@ export const redirect = (location, state, prompt) => {
     throw new Error('Unable to create webAuth.');
   }
 
-
-  // TODO, should we be validating the state nonce here?
   let returnTo = (location && location.query && location.query.returnUrl) || '/';
   if (state) {
     returnTo = checkNonce(state);
@@ -114,7 +112,6 @@ export const redirect = (location, state, prompt) => {
   };
 
   if (prompt) {
-    // options.usePostMessage = true;
     options.redirectUri = `${window.config.BASE_URL}`;
 
     const checkSession = Promise.promisify(webAuth.checkSession, { context: webAuth });

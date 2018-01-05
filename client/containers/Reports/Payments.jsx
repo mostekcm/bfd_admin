@@ -3,12 +3,12 @@ import connectContainer from 'redux-static';
 
 import { reportActions } from '../../actions';
 
-import DownloadCsvDialog from './Dialogs/DownloadShipmentsCsvDialog';
-import ShipmentForm from '../../components/Reports/ShipmentForm';
+import DownloadCsvDialog from './Dialogs/DownloadPaymentsCsvDialog';
+import PaymentForm from '../../components/Reports/PaymentForm';
 
-export default connectContainer(class Shipments extends Component {
+export default connectContainer(class Payments extends Component {
   static stateToProps = (state) => ({
-    shipmentsReport: state.shipmentsReport,
+    paymentsReport: state.paymentsReport,
   });
 
   static actionsToProps = {
@@ -16,8 +16,8 @@ export default connectContainer(class Shipments extends Component {
   };
 
   static propTypes = {
-    shipmentsReport: PropTypes.array,
-    fetchShipmentsByDate: React.PropTypes.func.isRequired
+    paymentsReport: PropTypes.array,
+    fetchPaymentsByDate: React.PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -26,15 +26,15 @@ export default connectContainer(class Shipments extends Component {
   }
 
   componentWillMount() {
-    this.props.requestShipmentsForm();
+    this.props.requestPaymentsForm();
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.shipmentsReport !== this.props.shipmentsReport;
+    return nextProps.paymentsReport !== this.props.paymentsReport;
   }
 
-  openDownloadCsvDialog = (shipmentFields) => {
-    this.props.fetchShipmentsByDate(shipmentFields.startDate);
+  openDownloadCsvDialog = (paymentFields) => {
+    this.props.fetchPaymentsByDate(paymentFields.startDate);
   }
 
   onDownloadRequest() {
@@ -48,18 +48,18 @@ export default connectContainer(class Shipments extends Component {
   }
 
   render() {
-    const { loading, error, record } = this.props.shipmentsReport.toJS();
+    const { loading, error, record } = this.props.paymentsReport.toJS();
 
     return (
       <div className="order">
         <div className="row">
           <div className="col-xs-12 order-table-content">
-            <h1>Shipments</h1>
+            <h1>Payments</h1>
           </div>
         </div>
         <div className="row">
           <div className="col-xs-12 order-table-content">
-            <ShipmentForm
+            <PaymentForm
               ref={formInstance => this.form = formInstance}
               onSubmit={this.openDownloadCsvDialog.bind(this)}/>
           </div>

@@ -4,6 +4,7 @@ import { Router, Route, IndexRedirect } from 'react-router';
 import RequireAuthentication from './auth/containers/RequireAuthentication';
 import Login from './auth/containers/Login';
 import * as containers from './containers';
+import PaymentReport from './containers/Reports/Payments';
 import ShipmentReport from './containers/Reports/Shipments';
 
 export default (history) =>
@@ -12,6 +13,7 @@ export default (history) =>
       <IndexRedirect to="/orders" />
       <Route path="orders" component={containers.Orders} />
       <Route path="orders/:id" component={containers.Order} />
+      <Route path="report/payments" component={PaymentReport} />
       <Route path="report/shipments" component={ShipmentReport} />
       <Route path="report/show/:name" component={containers.ShowReport} />
       <Route path="report/month/:month" component={containers.MonthReport} />
