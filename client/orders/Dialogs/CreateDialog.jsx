@@ -19,6 +19,7 @@ export default connectContainer(class extends Component {
   }
 
   static stateToProps = (state) => ({
+    user: state.auth.get('user'),
     orderCreate: state.orderCreate,
     cases: state.cases,
     displays: state.displays,
@@ -64,17 +65,23 @@ export default connectContainer(class extends Component {
   }
 
   render() {
+    const user = this.props.user.toJS();
     const { error, loading, record } = this.props.orderCreate.toJS();
     const cases = this.props.cases.toJS().records;
     const displays = this.props.displays.toJS().records;
     const stores = this.props.stores;
+    const showShowAndSalesRep = user.email === 'carlos@beautyfullday.com' || user.email === 'jessica@beautyfullday.com';
 
     let initialValues = {};
     if (record) initialValues = JSON.parse(JSON.stringify(record));
 
+    const defaultSalesReps = {
+      'brooke@beautyfullday.com': { name: 'Brooke Davis' }
+    };
+
     /* Default the show name and sales rep for now */
     initialValues.show = initialValues.show || { name: "House Account" };
-    initialValues.salesRep = initialValues.salesRep || { name: "Max Bentley" };
+    initialValues.salesRep = initialValues.salesRep || defaultSalesReps[user.email] || { name: "Max Bentley" };
     if (initialValues.store) {
       initialValues.existingStore = JSON.stringify(initialValues.store);
       initialValues.store = undefined;
@@ -105,6 +112,8 @@ export default connectContainer(class extends Component {
         <Error message={error}/>
         <ConnectedOrderForm
           ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
+          showShow={showShowAndSalesRep}
+          showSalesRep={showShowAndSalesRep}
           stores={stores}
           cases={cases}
           displays={displays}

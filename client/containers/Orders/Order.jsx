@@ -13,6 +13,8 @@ import { requestPayCommission } from '../../orders/Dialogs/PayCommission/actions
 import PayCommissionDialog from '../../orders/Dialogs/PayCommission/Dialog';
 import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingInfo/actions';
 import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
+import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
+import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
 
 import './Order.css';
 
@@ -34,6 +36,7 @@ export default connectContainer(class Order extends Component {
 
   static actionsToProps = {
     ...orderActions,
+    requestUpdateDates,
     requestUpdatePayments,
     requestPayCommission,
     requestUpdateShippingInfo
@@ -160,6 +163,7 @@ TAX ID: ___________________________________________
             <div className="pull-right">
               <OrderActions
                 order={this.props.order}
+                updateDates={this.props.requestUpdateDates}
                 deleteOrder={this.props.requestDeleteOrder}
                 updatePayments={this.props.requestUpdatePayments}
                 payCommission={this.props.requestPayCommission}
@@ -283,6 +287,7 @@ TAX ID: ___________________________________________
         <dialogs.DeleteDialog />
         <UpdatePaymentsDialog />
         <PayCommissionDialog />
+        <UpdateDatesDialog />
         <UpdateShippingInfoDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />

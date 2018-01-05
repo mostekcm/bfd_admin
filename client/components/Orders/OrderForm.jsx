@@ -18,7 +18,9 @@ export default createForm('order', class OrderForm extends Component {
     displayItems: PropTypes.array,
     loading: PropTypes.bool.isRequired,
     existingStore: PropTypes.string,
-    initialValues: PropTypes.object
+    initialValues: PropTypes.object,
+    showShow: PropTypes.bool,
+    showSalesRep: PropTypes.bool
   };
 
   constructor() {
@@ -26,7 +28,10 @@ export default createForm('order', class OrderForm extends Component {
     this.renderStoreFields.bind(this);
   }
 
-  renderSalesRep(validationErrors) {
+  renderSalesRep(validationErrors, show) {
+    if (!show)
+      return null;
+
     const name = 'salesRep.name';
 
     const options = [
@@ -53,7 +58,10 @@ export default createForm('order', class OrderForm extends Component {
     );
   }
 
-  renderShow(validationErrors) {
+  renderShow(validationErrors, show) {
+    if (!show)
+      return null;
+
     const showOptions = [
       {
         text: 'House Account',
@@ -154,10 +162,10 @@ export default createForm('order', class OrderForm extends Component {
     return (
       <form className="create-order form-horizontal" style={{ marginTop: '30px' }}>
         <div className="row">
-          {this.renderShow(validationErrors)}
+          {this.renderShow(validationErrors, this.props.showShow)}
         </div>
         <div className="row">
-          {this.renderSalesRep(validationErrors)}
+          {this.renderSalesRep(validationErrors, this.props.showSalesRep)}
         </div>
         <div className="row">
           {this.renderStoresField(this.props.stores, validationErrors)}
