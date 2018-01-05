@@ -41,7 +41,7 @@ export default connectContainer(class UpdatePaymentsDialog extends Component {
   onSubmit = (paymentForm) => {
     const paymentsData = _(paymentForm.payments)
       .filter(payment => payment.amount && payment.amount > 0)
-      .map((payment) => { return { date: payment.date.format('X'), amount: payment.amount } })
+      .map((payment) => { return { date: moment(payment.date).format('X'), amount: payment.amount } })
       .value();
 
     this.props.update(paymentForm.orderId, { payments: paymentsData });
@@ -61,9 +61,9 @@ export default connectContainer(class UpdatePaymentsDialog extends Component {
     const className = `form-horizontal col-xs-12 shipping-info-confirm-form`;
 
     const initialPayments = JSON.parse(JSON.stringify(payments)) || [];
-    const initialValues = { orderId: orderId, payments: _.map(initialPayments, payment => { return { date: moment.unix(payment.date), amount: payment.amount }; }) };
+    const initialValues = { orderId: orderId, payments: _.map(initialPayments, payment => { return { date: moment.unix(payment.date).format('YYYY-MM-DD'), amount: payment.amount }; }) };
 
-    initialValues.payments.push({ date: moment() });
+    initialValues.payments.push({ date: moment().format('YYYY-MM-DD') });
 
     const selector = formValueSelector('updatePaymentsForm'); // <-- same as form name
 

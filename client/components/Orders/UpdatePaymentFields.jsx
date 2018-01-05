@@ -3,7 +3,7 @@ import { Field } from 'redux-form';
 import formatCurrency from 'format-currency';
 
 import {
-  InputDateTime,
+  InputDate,
   InputText,
   Table,
   TableCell,
@@ -49,10 +49,9 @@ export default class UpdatePaymentFields extends Component {
         <TableBody>
            {fields.map((fieldName, index) => {
              if (!payments || payments.length <= index) return null;
-             const field = payments[index];
              return <TableRow key={ index }>
                <TableTextCell skipTruncate={true} className="datePickerCell" >
-                 <Field component={InputDateTime} name={`${fieldName}.date`} props={{fieldName: 'date', label: '' }} />
+                 <Field component={InputDate} name={`${fieldName}.date`} props={{fieldName: 'date', label: '' }} />
                </TableTextCell>
                <TableTextCell>
                  <Field component={InputText} name={`${fieldName}.amount`} type='text' props={{fieldName: 'amount', label: '' }} />
