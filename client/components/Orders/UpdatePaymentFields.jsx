@@ -15,8 +15,6 @@ import {
   TableRow
 } from '../Dashboard';
 
-import './UpdatePaymentFields.css';
-
 export default class UpdatePaymentFields extends Component {
   static propTypes = {
     payments: React.PropTypes.array,
