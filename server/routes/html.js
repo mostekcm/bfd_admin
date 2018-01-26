@@ -49,8 +49,13 @@ export default () => {
       BASE_PATH: urlHelpers.getBasePath(req),
       TITLE: config('TITLE'),
       BASE_API_URL: config('BASE_API_URL'),
-      BFD_AUDIENCE: config('BFD_AUDIENCE')
+      BFD_AUDIENCE: config('BFD_AUDIENCE'),
+      HUBSPOT_CLIENT_ID: config('HUBSPOT_CLIENT_ID')
     };
+
+    if (settings.BASE_URL.indexOf('ngrok') >= 0) {
+      settings.BASE_URL = settings.BASE_URL.replace('http', 'https');
+    }
 
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');

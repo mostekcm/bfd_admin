@@ -3,6 +3,7 @@ import { Router, Route, IndexRedirect } from 'react-router';
 
 import RequireAuthentication from './auth/containers/RequireAuthentication';
 import Login from './auth/containers/Login';
+import AuthorizeCrm from './auth/containers/AuthorizeCrm';
 import * as containers from './containers';
 import PaymentReport from './containers/Reports/Payments';
 import ShipmentReport from './containers/Reports/Shipments';
@@ -18,6 +19,7 @@ export default (history) =>
       <Route path="report/show/:name" component={containers.ShowReport} />
       <Route path="report/month/:month" component={containers.MonthReport} />
       <Route path="report/commission/due/:name" component={containers.CommissionDueReport} />
+      <Route path="authorizeCrm" component={AuthorizeCrm} />
     </Route>
     <Route path="/login" component={Login} />
   </Router>;

@@ -47,77 +47,91 @@ export default class OrderActions extends Component {
     <MenuItem disabled={loading || false} onClick={this.printOrder}>
       Print Order
     </MenuItem>
-  )
+  );
 
   getUpdateDatesAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateDates}>
       Update Dates
     </MenuItem>
-  )
+  );
 
   getUpdateDiscountAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateDiscount}>
       Update Discount
     </MenuItem>
-  )
+  );
 
   getUpdatePaymentAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updatePayments}>
       Update Payments
     </MenuItem>
-  )
+  );
 
   getPayCommissionAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.payCommission}>
       Pay Commission
     </MenuItem>
-  )
+  );
+
+  getUpdateDealStageAction = (order, loading) => {
+    if (order.shippedDate) return null;
+
+    return (
+      <MenuItem disabled={loading || false} onClick={this.updateDealStage}>
+        Update Deal Stage
+      </MenuItem>
+    );
+  };
 
   getUpdateShippingInfoAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateShippingInfo}>
       Update Shipping Info
     </MenuItem>
-  )
+  );
 
   getUpdateLineItemsAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateLineItems}>
       Update Line Items
     </MenuItem>
-  )
+  );
 
   getDeleteAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.deleteOrder}>
       Delete Order
     </MenuItem>
-  )
+  );
 
   deleteOrder = () => {
     this.props.deleteOrder(this.state.order);
-  }
+  };
 
   updateLineItems = () => {
     this.props.updateLineItems(this.state.order);
-  }
+  };
 
   updateDates = () => {
     this.props.updateDates(this.state.order);
-  }
+  };
 
   updateDiscount = () => {
     this.props.updateDiscount(this.state.order);
-  }
+  };
 
   updatePayments = () => {
     this.props.updatePayments(this.state.order);
-  }
+  };
 
   payCommission = () => {
     this.props.payCommission(this.state.order);
-  }
+  };
+
+  updateDealStage = () => {
+    this.props.updateDealStage(this.state.order);
+  };
 
   updateShippingInfo = () => {
     this.props.updateShippingInfo(this.state.order);
-  }
+  };
 
   render() {
     if (!this.state.order) {
@@ -126,7 +140,7 @@ export default class OrderActions extends Component {
 
     return (
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
-        {this.getPrintAction(this.state.loading)}
+        {this.getUpdateDealStageAction(this.state.order, this.state.loading)}
         {this.getUpdateDatesAction(this.state.order, this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}

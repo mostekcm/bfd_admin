@@ -25,7 +25,11 @@ export default class OrdersTable extends Component {
 
   convertStatusToSortOrder(status) {
     const order = {
-      greenStatus: 3,
+      blackStatus: 7,
+      greyStatus: 6,
+      greenStatus: 5,
+      blueStatus: 4,
+      beigeStatus: 3,
       amberStatus: 2,
       redStatus: 1
     }
@@ -38,7 +42,9 @@ export default class OrdersTable extends Component {
     const opts = { format: '%s%v', symbol: '$' };
 
     orders.forEach((order) => {
-      order.shippedStatus = 'greenStatus'
+      order.shippedStatus = 'greenStatus';
+      // beige color#DEB887
+
       if (!order.shippedDate) {
         const redBarrier = 7 * 24 * 60 * 60; // 21 days
         const amberBarrier = 21 * 24 * 60 * 60; // 7 days
@@ -67,6 +73,20 @@ export default class OrdersTable extends Component {
           order.dueDateDisplay = moment.unix(dueDate).format('YYYY-MM-DD');
         }
       }
+
+      if (order.dealStage === 'Qualifying') {
+        order.paidStatus = 'beigeStatus';
+        order.shippedStatus = 'beigeStatus';
+      } else if (order.dealStage === 'Pending Approval') {
+        order.paidStatus = 'blueStatus';
+        order.shippedStatus = 'blueStatus';
+      } else if (order.dealStage === 'Closed Lost') {
+        order.paidStatus = 'blackStatus';
+        order.shippedStatus = 'blackStatus';
+      } else if (order.dealStage === 'Closed Won' && order.dueDateDisplay === 'PAID') {
+        order.paidStatus = 'greyStatus';
+        order.shippedStatus = 'greyStatus';
+      }
     });
 
     const me = this;
@@ -78,21 +98,24 @@ export default class OrdersTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="10%">Invoice #</TableColumn>
-          <TableColumn width="10%">Order Date</TableColumn>
-          <TableColumn width="10%">Ship(ped) Date</TableColumn>
-          <TableColumn width="10%">Payment Due Date</TableColumn>
+          <TableColumn width="11%">Invoice #</TableColumn>
+          <TableColumn width="4%">Stg</TableColumn>
+          <TableColumn width="9%">Order Date</TableColumn>
+          <TableColumn width="9%">Ship(ped) Date</TableColumn>
+          <TableColumn width="9%">Payment Due Date</TableColumn>
           <TableColumn width="25%">Store</TableColumn>
-          <TableColumn width="10%">Order Total</TableColumn>
-          <TableColumn width="10%">Total Due</TableColumn>
+          <TableColumn width="9%">Order Total</TableColumn>
+          <TableColumn width="9%">Total Due</TableColumn>
         </TableHeader>
         <TableBody>
-          { tableRowOrders.map((order, index) => {
+          {tableRowOrders.map((order, index) => {
             return <TableRow key={index}>
               <TableRouteCell
                 route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
+              <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>
               <TableTextCell>{moment.unix(order.date).format('YYYY-MM-DD')}</TableTextCell>
-              <TableTextCell className={order.shippedStatus}>{order.shippedDate ? moment.unix(order.shippedDate).format('YYYY-MM-DD') : (order.targetShipDate ? moment.unix(order.targetShipDate).format('?YYYY-MM-DD?') : '??')}</TableTextCell>
+              <TableTextCell
+                className={order.shippedStatus}>{order.shippedDate ? moment.unix(order.shippedDate).format('YYYY-MM-DD') : (order.targetShipDate ? moment.unix(order.targetShipDate).format('?YYYY-MM-DD?') : '??')}</TableTextCell>
               <TableTextCell className={order.paidStatus}>{order.dueDateDisplay}</TableTextCell>
               <TableTextCell>{order.store.name}</TableTextCell>
               <TableTextCell>{formatCurrency(order.totals.total, opts)}</TableTextCell>

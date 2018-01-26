@@ -1,6 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
-import jwtDecode from 'jwt-decode';
+import uuid from 'uuid';
+import queryString from 'querystring';
 import { routeActions } from 'redux-simple-router';
 
 import * as constants from './constants';
@@ -185,4 +186,43 @@ export function getAppSettings(onSuccess) {
       })
     }
   };
+}
+
+export function authorizeHubSpot() {
+  const state = uuid.v4();
+  window.localStorage.setItem(constants.AUTHORIZE_HUB_SPOT_STATE, state);
+
+  window.location = `https://app.hubspot.com/oauth/authorize?${queryString.stringify({
+    client_id: window.config.HUBSPOT_CLIENT_ID,
+    redirect_uri: `${window.config.BASE_URL}/authorizeCrm?state=${state}`,
+    scope: 'contacts'
+  })}`;
+}
+
+export function exchangeHubSpotCode(query) {
+  const baseUrl = window.config.BASE_API_URL;
+
+  const oldState = window.localStorage.getItem(constants.AUTHORIZE_HUB_SPOT_STATE);
+  window.localStorage.removeItem(constants.AUTHORIZE_HUB_SPOT_STATE);
+
+  if (oldState && oldState !== query.state) {
+    return {
+      type: constants.AUTHORIZE_HUB_SPOT,
+      payload: {
+        promise: Promise.reject(new Error('state mismatch'))
+      }
+    }
+  }
+
+  return dispatch => ({
+    type: constants.AUTHORIZE_HUB_SPOT,
+    payload: {
+      promise: axios.post(`${baseUrl}/api/crm/authorize`, {
+        code: query.code
+      }, {
+        responseType: 'json'
+      })
+        .then(() => dispatch(routeActions.push('/orders')))
+    }
+  });
 }

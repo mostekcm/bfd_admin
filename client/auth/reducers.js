@@ -17,7 +17,7 @@ const initialState = {
   returnTo: null
 };
 
-export default createReducer(fromJS(initialState), {
+export const auth = createReducer(fromJS(initialState), {
   [constants.LOGIN_PENDING]: state =>
     state.merge({
       ...initialState,
@@ -60,5 +60,30 @@ export default createReducer(fromJS(initialState), {
   [constants.LOGOUT_SUCCESS]: state =>
     state.merge({
       isAuthenticating: false
+    })
+});
+
+const hubSpotInit = {
+  error: null,
+  loading: false,
+  loaded: false
+};
+
+export const hubSpot = createReducer(fromJS(hubSpotInit), {
+  [constants.AUTHORIZE_HUB_SPOT_PENDING]: state =>
+    state.merge({
+      ...initialState,
+      loading: true
+    }),
+  [constants.AUTHORIZE_HUB_SPOT_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      loaded: false,
+      error: action.payload.error || 'Unknown Error'
+    }),
+  [constants.AUTHORIZE_HUB_SPOT_SUCCESS]: (state, action) =>
+    state.merge({
+      loading: false,
+      loaded: true
     })
 });

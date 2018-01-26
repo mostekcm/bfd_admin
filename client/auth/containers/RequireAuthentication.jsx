@@ -22,7 +22,7 @@ export default function RequireAuthentication(InnerComponent) {
         if (!this.props.location) {
           this.props.router.push('/login');
         } else {
-          this.props.router.push(`/login?returnUrl=${this.props.location.pathname}`);
+          this.props.router.push(`/login?returnUrl=${this.props.location.pathname}${this.props.location.search ? this.props.location.search : ''}`);
         }
       }
     }
@@ -36,5 +36,5 @@ export default function RequireAuthentication(InnerComponent) {
     }
   }
 
-  return connect((state) => ({ auth: state.auth.toJS() }), { })(RequireAuthenticationContainer);
+  return connect((state) => ({ auth: state.auth.toJS() }), {})(RequireAuthenticationContainer);
 }

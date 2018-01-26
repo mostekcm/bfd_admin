@@ -6,6 +6,8 @@ import { caseActions, displayActions } from '../actions';
 
 import Header from '../components/Header';
 
+import './App.css';
+
 class App extends Component {
   static propTypes = {
     user: PropTypes.object,

@@ -13,6 +13,8 @@ import { requestPayCommission } from '../../orders/Dialogs/PayCommission/actions
 import PayCommissionDialog from '../../orders/Dialogs/PayCommission/Dialog';
 import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingInfo/actions';
 import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
+import { requestUpdateDealStage } from '../../orders/Dialogs/UpdateDealStage/actions';
+import UpdateDealStageDialog from '../../orders/Dialogs/UpdateDealStage/Dialog';
 import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
 import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
 
@@ -39,8 +41,9 @@ export default connectContainer(class Order extends Component {
     requestUpdateDates,
     requestUpdatePayments,
     requestPayCommission,
-    requestUpdateShippingInfo
-  }
+    requestUpdateShippingInfo,
+    requestUpdateDealStage
+  };
 
   static propTypes = {
     error: PropTypes.string,
@@ -50,7 +53,7 @@ export default connectContainer(class Order extends Component {
     order: PropTypes.object,
     params: PropTypes.object,
     fetchOrder: React.PropTypes.func.isRequired
-  }
+  };
 
   componentWillMount() {
     this.props.fetchOrder(this.props.params.id);
@@ -102,7 +105,6 @@ export default connectContainer(class Order extends Component {
         {
           state ? <div className="address">
             { parts.map(part => {
-              console.log("part: ", part);
               return <div className="address">{part}<br /></div>;
             })
             }
@@ -168,6 +170,7 @@ TAX ID: ___________________________________________
                 updatePayments={this.props.requestUpdatePayments}
                 payCommission={this.props.requestPayCommission}
                 updateShippingInfo={this.props.requestUpdateShippingInfo}
+                updateDealStage={this.props.requestUpdateDealStage}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
               />
@@ -289,6 +292,7 @@ TAX ID: ___________________________________________
         <PayCommissionDialog />
         <UpdateDatesDialog />
         <UpdateShippingInfoDialog />
+        <UpdateDealStageDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />
       </div>

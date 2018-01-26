@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { routeReducer } from 'redux-simple-router';
 
-import auth from '../auth/reducers';
+import { auth, hubSpot } from '../auth/reducers';
 import cases from './cases';
 import displays from './displays';
 import order from './order';
@@ -19,6 +19,7 @@ import updateDiscount from './updateDiscount';
 import updateLineItems from './updateLineItems';
 import updateShipping from '../orders/Dialogs/UpdateShipping/reducer';
 import updateShippingInfo from '../orders/Dialogs/UpdateShippingInfo/reducer';
+import updateDealStage from '../orders/Dialogs/UpdateDealStage/reducer';
 import updatePayments from '../orders/Dialogs/UpdatePaymentInfo/reducer';
 import payCommission from '../orders/Dialogs/PayCommission/reducer';
 import payCommissions from './payCommissions';
@@ -30,6 +31,7 @@ function lastAction(state = null, action) {
 export default combineReducers({
   routing: routeReducer,
   auth,
+  hubSpot,
   cases,
   displays,
   lastAction,
@@ -50,5 +52,6 @@ export default combineReducers({
   payCommissions,
   updateShipping,
   updateShippingInfo,
+  updateDealStage,
   form: formReducer
 });

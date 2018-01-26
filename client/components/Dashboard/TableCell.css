@@ -3,9 +3,25 @@ td.greenStatus {
 }
 
 td.redStatus {
-  background-color: orangered;
+  background-color: #ff0000;
 }
 
 td.amberStatus {
-  background-color: orange;
+  background-color: #ffff66;
+}
+
+td.beigeStatus {
+  background-color: burlywood;
+}
+
+td.blueStatus {
+  background-color: dodgerblue;
+}
+
+td.greyStatus {
+  background-color: grey;
+}
+
+td.blackStatus {
+  background-color: black;
 }
