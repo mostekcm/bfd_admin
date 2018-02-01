@@ -25,7 +25,7 @@ export default class OrdersTable extends Component {
 
   convertStatusToSortOrder(status) {
     const order = {
-      blackStatus: 7,
+      blackStatus: 10,
       greyStatus: 6,
       greenStatus: 5,
       blueStatus: 4,

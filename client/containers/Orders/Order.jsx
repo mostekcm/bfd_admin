@@ -208,6 +208,12 @@ TAX ID: ___________________________________________
               <Error message={error}/>
             </div>
           </div>
+          { order.notesToCustomer ?
+            <div className="row">
+              <div className="col-xs-12 col-md-6">
+                NOTES: {order.notesToCustomer}
+              </div>
+            </div> : '' }
           <div className="row">
             <h3>Products</h3>
             <div className="col-xs-12">
@@ -264,12 +270,6 @@ TAX ID: ___________________________________________
               ESTIMATED SHIPPING WEIGHT: {this.renderShippingWeight(order.totals.weight)}
             </div>
           </div>
-          { order.notesToCustomer ?
-            <div className="row">
-              <div className="col-xs-12 col-md-6">
-                NOTES: {order.notesToCustomer}
-              </div>
-            </div> : '' }
           { order.totals.owed > 0 ?
             <div className="row">
               <h2>Payment Information</h2>
