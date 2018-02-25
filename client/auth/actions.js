@@ -73,7 +73,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
       axios.interceptors.response.use(response => response, (error) => {
         const value = error.response;
 
-        if (value.status === 401 && value.data.message === 'TokenExpired') {
+        if (value && value.status === 401 && value.data.message === 'TokenExpired') {
           // renewToken performs authentication using username/password saved in sessionStorage/localStorage
           return refreshTokens(dispatch, getState, location)
             .then(() => {
@@ -91,6 +91,9 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
 
       const user = JSON.parse(localStorage.getItem('profile'));
       user.iss = user.iss || 'https://unknown.com';
+
+      tokens.expiresAt = expiresAt;
+      localStorage.setItem('tokens', JSON.stringify(tokens));
 
       if (refreshing) {
         return dispatchSuccess(dispatch, idToken, accessToken, user, expiresAt, tokens.returnTo);
@@ -135,8 +138,8 @@ export function login(location, prompt) {
 
 export function logout(location) {
   return (dispatch) => {
-    localStorage.removeItem('apiToken');
-    sessionStorage.removeItem('apiToken');
+    localStorage.clear();
+    sessionStorage.clear();
 
     return dispatch({
       type: constants.LOGOUT,
@@ -156,7 +159,20 @@ export function loadCredentials(location) {
       return handleTokens(dispatch, getState, parseHash(window.location.hash), location);
     }
 
-    return Promise.resolve();
+    try {
+      const tokens = JSON.parse(localStorage.getItem('tokens') || '{}');
+      if (tokens.expiresAt && tokens.expiresAt > moment().unix()) {
+        dispatch({
+          type: constants.LOGIN_PENDING
+        });
+        tokens.returnTo = location && location.query && location.query.returnUrl;
+        return handleTokens(dispatch, getState, Promise.resolve(tokens), location);
+      }
+    } catch (e) {
+      console.warn('error reading tokens: ', e.message);
+    }
+
+    return dispatch(login(location, 'none'));
   };
 }
 
@@ -217,8 +233,9 @@ export function exchangeHubSpotCode(query) {
   return dispatch => ({
     type: constants.AUTHORIZE_HUB_SPOT,
     payload: {
-      promise: axios.post(`${baseUrl}/api/crm/authorize`, {
-        code: query.code
+      promise: axios.post(`${baseUrl}/api/crm/callback`, {
+        code: query.code,
+        state: query.state
       }, {
         responseType: 'json'
       })

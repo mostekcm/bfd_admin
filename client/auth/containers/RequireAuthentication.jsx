@@ -22,7 +22,8 @@ export default function RequireAuthentication(InnerComponent) {
         if (!this.props.location) {
           this.props.router.push('/login');
         } else {
-          this.props.router.push(`/login?returnUrl=${this.props.location.pathname}${this.props.location.search ? this.props.location.search : ''}`);
+          const returnTo = encodeURIComponent(this.props.location.pathname + (this.props.location.search ? this.props.location.search : ''));
+          this.props.router.push(`/login?returnUrl=${returnTo}`);
         }
       }
     }

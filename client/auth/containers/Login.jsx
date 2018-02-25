@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { login, loadCredentials } from '../actions';
+import { loadCredentials } from '../actions';
 import { LoadingPanel, Error } from '../../components/Dashboard';
 
 class LoginContainer extends Component {
   static propTypes = {
-    login: PropTypes.func.isRequired,
     loadCredentials: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return nextProps.auth !== this.props.auth;
@@ -21,11 +20,7 @@ class LoginContainer extends Component {
     if (this.props.auth.isAuthenticated) {
       this.props.router.push(this.props.auth.returnTo);
     } else if (!this.props.auth.isAuthenticating) {
-      if (window.location.hash) {
-        this.props.loadCredentials(this.props.location);
-      } else {
-        this.props.login(this.props.location, 'none');
-      }
+      this.props.loadCredentials(this.props.location);
     }
   }
 
@@ -57,4 +52,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { login, loadCredentials })(LoginContainer);
+export default connect(mapStateToProps, { loadCredentials })(LoginContainer);

@@ -84,6 +84,7 @@ export default connectContainer(class Order extends Component {
   }
 
   renderAddress(address, header) {
+    address = address || 'No Address';
     let parts = address.split(',');
     let postalCode = undefined;
     let state = undefined;
@@ -188,11 +189,11 @@ TAX ID: ___________________________________________
               { order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : '' }
               { order.store ? <div className="address"><br/>
                 {order.store.name}<br />
-                Attn: {order.store.contact}<br />
+                Attn: {order.store.contact || 'No Contact'}<br />
                 {this.renderAddress(order.store.shippingAddress)}
                 { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
-                {order.store.phone}<br />
-                {order.store.email}
+                {order.store.phone || 'No Phone'}<br />
+                {order.store.email || 'No Email'}
               </div> : <div></div> }
             </div>
             <div className="col-xs-6 col-md-6 wrapper">

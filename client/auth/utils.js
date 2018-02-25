@@ -107,7 +107,7 @@ export const redirect = (location, state, prompt) => {
     state: nonce,
     scope: 'openid profile picture name nickname email read:reports read:displays update:orders delete:orders' +
     ' create:orders read:orders' +
-    ' read:cases sync:crm',
+    ' read:cases sync:crm read:companies',
     nonce
   };
 
