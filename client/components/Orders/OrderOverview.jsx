@@ -11,6 +11,7 @@ export default class OrderOverview extends React.Component {
     onSearch: React.PropTypes.func.isRequired,
     error: React.PropTypes.object,
     errorCases: React.PropTypes.object,
+    errorCompanies: React.PropTypes.object,
     errorDisplays: React.PropTypes.object,
     orders: React.PropTypes.array.isRequired,
     query: React.PropTypes.string.isRequired,
@@ -25,7 +26,7 @@ export default class OrderOverview extends React.Component {
   }
 
   render() {
-    const { loading, error, orders, total, errorCases, errorDisplays} = this.props;
+    const { loading, error, orders, total, errorCases, errorCompanies, errorDisplays} = this.props;
     const opts = { format: '%s%v', symbol: '$' };
 
     let totalAccountsReceivable = 0;
@@ -45,6 +46,11 @@ export default class OrderOverview extends React.Component {
           <div className="row">
             <div className="col-xs-12 wrapper">
               <Error message={errorCases ? `Cases Error: ${errorCases}` : null } />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-12 wrapper">
+              <Error message={errorCompanies ? `Companies Error: ${errorCompanies}` : null } />
             </div>
           </div>
           <div className="row">

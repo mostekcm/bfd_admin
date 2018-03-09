@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { orderActions } from '../../actions';
@@ -11,20 +12,24 @@ import './Orders.css';
 
 class Orders extends Component {
   static propTypes = {
-    loading: React.PropTypes.bool.isRequired,
-    error: React.PropTypes.string,
-    errorCases: React.PropTypes.string,
-    errorDisplays: React.PropTypes.string,
-    orders: React.PropTypes.array,
-    cases: React.PropTypes.array,
-    displays: React.PropTypes.array,
-    orderCreateError: React.PropTypes.string,
-    orderCreateLoading: React.PropTypes.bool,
-    validationErrors: React.PropTypes.object,
-    appSettings: React.PropTypes.object,
-    total: React.PropTypes.number,
-    fetchOrders: React.PropTypes.func.isRequired,
-    createOrder: React.PropTypes.func.isRequired
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
+    errorCases: PropTypes.string,
+    errorCompanies: PropTypes.string,
+    errorDisplays: PropTypes.string,
+    errorPackages: PropTypes.string,
+    orders: PropTypes.array,
+    cases: PropTypes.array,
+    companies: PropTypes.array,
+    displays: PropTypes.array,
+    packages: PropTypes.array,
+    orderCreateError: PropTypes.string,
+    orderCreateLoading: PropTypes.bool,
+    validationErrors: PropTypes.object,
+    appSettings: PropTypes.object,
+    total: PropTypes.number,
+    fetchOrders: PropTypes.func.isRequired,
+    createOrder: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -51,14 +56,14 @@ class Orders extends Component {
   }
 
   render() {
-    const { loading, error, orders, total, cases, displays, errorCases, errorDisplays } = this.props;
+    const { loading, error, orders, total, cases, companies, displays, packages, errorCases, errorCompanies, errorDisplays, errorPackages } = this.props;
 
     return (
       <div className="orders">
         <div className="row content-header">
           <div className="col-xs-12 order-table-content">
             <h1>Orders</h1>
-            {(cases.length > 0 && displays.length > 0) ?
+            {(cases.length > 0 && displays.length > 0 && companies.length > 0 && Object.keys(packages).length > 0) ?
               <button className="btn btn-success pull-right new" onClick={this.createOrder}>
                 <i className="icon-budicon-473"></i>
                 New Order
@@ -73,7 +78,9 @@ class Orders extends Component {
           query={this.props.query}
           error={error}
           errorCases={errorCases}
+          errorCompanies={errorCompanies}
           errorDisplays={errorDisplays}
+          errorPackages={errorPackages}
           orders={orders}
           total={total}
           loading={loading}
@@ -87,15 +94,19 @@ function mapStateToProps(state) {
   return {
     error: state.orders.get('error'),
     errorCases: state.cases.get('error'),
+    errorCompanies: state.companies.get('error'),
     errorDisplays: state.displays.get('error'),
+    errorPackages: state.packages.get('error'),
     orderCreateError: state.orderCreate.get('error'),
     orderCreateLoading: state.orderCreate.get('loading'),
     validationErrors: state.orderCreate.get('validationErrors'),
-    loading: state.orders.get('loading') || state.cases.get('loading') || state.displays.get('loading'),
+    loading: state.orders.get('loading') || state.cases.get('loading') || state.displays.get('loading') || state.packages.get('loading'),
     orders: state.orders.get('records').toJS(),
-    query: state.orders.get('query'),
     cases: state.cases.get('records').toJS(),
+    companies: state.companies.get('records').toJS(),
     displays: state.displays.get('records').toJS(),
+    packages: state.packages.get('records').toJS(),
+    query: state.orders.get('query'),
     total: state.orders.get('total'),
     nextPage: state.orders.get('nextPage')
   };

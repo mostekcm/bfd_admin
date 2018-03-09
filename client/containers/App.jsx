@@ -1,8 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { logout } from '../auth/actions';
 import { caseActions, displayActions } from '../actions';
+import { fetchCompanies } from '../actions/company';
+import { fetchPackages } from '../actions/package';
 
 import Header from '../components/Header';
 
@@ -14,12 +17,16 @@ class App extends Component {
     issuer: PropTypes.string,
     logout: PropTypes.func,
     fetchCases: PropTypes.func.isRequired,
-    fetchDisplays: PropTypes.func.isRequired
-  }
+    fetchCompanies: PropTypes.func.isRequired,
+    fetchDisplays: PropTypes.func.isRequired,
+    fetchPackages: PropTypes.func.isRequired
+  };
 
   componentWillMount() {
     this.props.fetchCases();
+    this.props.fetchCompanies();
     this.props.fetchDisplays();
+    this.props.fetchPackages();
   }
 
   render() {
@@ -53,4 +60,4 @@ function select(state) {
   };
 }
 
-export default connect(select, { logout, ...caseActions, ...displayActions })(App);
+export default connect(select, { logout, fetchCompanies, fetchPackages, ...caseActions, ...displayActions })(App);

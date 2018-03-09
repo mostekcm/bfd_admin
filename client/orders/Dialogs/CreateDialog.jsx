@@ -22,29 +22,44 @@ export default connectContainer(class extends Component {
     user: state.auth.get('user'),
     orderCreate: state.orderCreate,
     cases: state.cases,
+    companies: state.companies,
     displays: state.displays,
-    stores: state.orders.get('stores').toJS()
+    packages: state.packages
   });
 
   static actionsToProps = {
     ...orderActions
-  }
+  };
 
   static propTypes = {
     cases: PropTypes.object.isRequired,
+    companies: PropTypes.object.isRequired,
     displays: PropTypes.object.isRequired,
+    packages: PropTypes.object.isRequired,
     orderCreate: PropTypes.object.isRequired,
     createOrder: PropTypes.func.isRequired,
     cancelCreateOrder: PropTypes.func.isRequired
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.orderCreate !== this.props.orderCreate || nextProps.cases !== this.props.cases || nextProps.displays !== this.props.displays;
+    return nextProps.orderCreate !== this.props.orderCreate ||
+      nextProps.cases !== this.props.cases ||
+      nextProps.companies !== this.props.companies ||
+      nextProps.packages !== this.props.packages ||
+      nextProps.displays !== this.props.displays;
   }
 
   onSubmit = (order) => {
     const simpleOrder = JSON.parse(JSON.stringify(order));
-    simpleOrder.lineItems = _.filter(simpleOrder.lineItems, (item) => item.quantity && item.quantity > 0);
+    simpleOrder.lineItems = _(simpleOrder.lineItems)
+      .filter((item) => item.quantity && item.quantity > 0)
+      .map(lineItem => {
+        // Clear out NULL values that might have been added by buttons that clear out items
+        if (lineItem.quantity===null) delete lineItem.quantity;
+        if (lineItem.tester.quantity===null) delete lineItem.tester.quantity;
+        return lineItem;
+      })
+      .value();
     simpleOrder.displayItems = _.filter(simpleOrder.displayItems, (item) => item.quantity && item.quantity > 0);
     if (simpleOrder.existingStore) {
       simpleOrder.store = JSON.parse(simpleOrder.existingStore);
@@ -68,8 +83,9 @@ export default connectContainer(class extends Component {
     const user = this.props.user.toJS();
     const { error, loading, record } = this.props.orderCreate.toJS();
     const cases = this.props.cases.toJS().records;
+    const stores = this.props.companies.toJS().records;
     const displays = this.props.displays.toJS().records;
-    const stores = this.props.stores;
+    const packages = this.props.packages.toJS().records;
     const showShowAndSalesRep = user.email === 'carlos@beautyfullday.com' || user.email === 'jessica@beautyfullday.com';
 
     let initialValues = {};
@@ -117,6 +133,7 @@ export default connectContainer(class extends Component {
           stores={stores}
           cases={cases}
           displays={displays}
+          packages={packages}
           onSubmit={this.onSubmit}
           loading={loading} />
       </Confirm>

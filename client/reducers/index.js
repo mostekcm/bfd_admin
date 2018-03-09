@@ -4,6 +4,7 @@ import { routeReducer } from 'redux-simple-router';
 
 import { auth, hubSpot } from '../auth/reducers';
 import cases from './cases';
+import companies from './companies';
 import displays from './displays';
 import order from './order';
 import orderCreate from './orderCreate';
@@ -12,6 +13,7 @@ import orders from './orders';
 import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
 import monthReport from './monthReport';
+import packages from './packages';
 import paymentsReport from './paymentsReport';
 import shipmentsReport from './shipmentsReport';
 import updateDates from '../orders/Dialogs/UpdateDates/reducer';
@@ -33,6 +35,7 @@ export default combineReducers({
   auth,
   hubSpot,
   cases,
+  companies,
   displays,
   lastAction,
   order,
@@ -41,6 +44,7 @@ export default combineReducers({
   orders,
   showReport,
   monthReport,
+  packages,
   paymentsReport,
   shipmentsReport,
   commissionDueReport,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import formatCurrency from 'format-currency';
 import _ from 'lodash';
+import moment from 'moment';
 
 import {
   Table,
