@@ -1,4 +1,4 @@
-const getItemKey = item => `${item.sku.product.name},${item.sku.variety},${item.sku.size}`;
+const getItemKey = item => `${item.sku.product.name},${item.sku.variety},${item.sku.size},${item.size}`;
 
 export const initializeLineItems = (initialValues, cases) => {
   let index = 0;

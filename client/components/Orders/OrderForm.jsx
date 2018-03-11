@@ -210,7 +210,7 @@ export default createForm('order', class OrderForm extends Component {
           {this.renderTextField('notesToCustomer', 'Notes to Store', validationErrors)}
         </div>
         <div className="row">
-          {this.renderTextField('internalNotes', 'Internal Notes', validationErrors)}
+          {this.renderTextField('internalNotes', 'Internal  Notes', validationErrors)}
         </div>
         <div className={"row"}>
           <h3>Packages</h3>

@@ -17,6 +17,7 @@
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "build": "npm run client:build && npm run server:build",
     "deploy": "npm run client:build && npm run server:build && cd dist && git add . && git commit -am 'auto deploy' && git push heroku master",
+    "deploy:server": "npm run server:build && cd dist && git add . && git commit -am 'auto deploy' && git push heroku master",
     "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack ."
   },
   "keywords": [

@@ -35,7 +35,7 @@ const dispatchSuccess = (dispatch, idToken, accessToken, decodedToken, expiresAt
 const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing) =>
   getTokensPromise
     .then((tokens) => {
-      if (!tokens) {
+      if (!tokens.idToken || !tokens.accessToken) {
         /* Must be a bad authorization */
         dispatch({
           type: constants.LOGIN_FAILED,
@@ -43,6 +43,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
             error: 'Unauthorized'
           }
         });
+        localStorage.clear();
         return dispatch(routeActions.push('/login'));
       }
 
@@ -105,6 +106,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
     })
     .catch((err) => {
       console.error('Error Loading Credentials: ', err);
+      localStorage.clear();
       if (err.error) {
         /* Check for login_required, otherwise just fail */
         if (err.error === 'login_required') {
@@ -172,7 +174,7 @@ export function loadCredentials(location) {
       console.warn('error reading tokens: ', e.message);
     }
 
-    return dispatch(login(location, 'none'));
+    return dispatch(login(location));
   };
 }
 

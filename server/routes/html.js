@@ -4,6 +4,7 @@ import path from 'path';
 import { urlHelpers } from 'auth0-extension-express-tools';
 
 import config from '../lib/config';
+import logger from '../lib/logger';
 
 export default () => {
   const template = `<!DOCTYPE html>
@@ -60,6 +61,7 @@ export default () => {
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');
     if (clientVersion) {
+      logger.info('carlos: settings: ', settings);
       return res.send(ejs.render(template, {
         config: settings,
         assets: {
