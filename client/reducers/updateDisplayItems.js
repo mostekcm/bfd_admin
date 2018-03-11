@@ -8,33 +8,33 @@ const initialState = {
   loading: false,
   requesting: false,
   orderId: null,
-  nextLineItems: null,
-  originalLineItems: null
+  nextDisplayItems: null,
+  originalDisplayItems: null
 };
 
 export default createReducer(fromJS(initialState), {
-  [constants.REQUEST_UPDATE_LINE_ITEMS]: (state, action) =>
+  [constants.REQUEST_UPDATE_DISPLAY_ITEMS]: (state, action) =>
     state.merge({
       ...initialState,
       orderId: action.order.id,
-      nextLineItems: JSON.parse(JSON.stringify(action.order.lineItems)),
-      originalLineItems: action.order.lineItems,
+      nextDisplayItems: JSON.parse(JSON.stringify(action.order.displayItems)),
+      originalDisplayItems: action.order.displayItems,
       requesting: true
     }),
-  [constants.CANCEL_UPDATE_LINE_ITEMS]: (state) =>
+  [constants.CANCEL_UPDATE_DISPLAY_ITEMS]: (state) =>
     state.merge({
       ...initialState
     }),
-  [constants.UPDATE_LINE_ITEMS_PENDING]: (state) =>
+  [constants.UPDATE_DISPLAY_ITEMS_PENDING]: (state) =>
     state.merge({
       loading: true
     }),
-  [constants.UPDATE_LINE_ITEMS_REJECTED]: (state, action) =>
+  [constants.UPDATE_DISPLAY_ITEMS_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
-      error: `An error occurred while changing the line items: ${action.errorMessage}`
+      error: `An error occurred while changing the display items: ${action.errorMessage}`
     }),
-  [constants.UPDATE_LINE_ITEMS_FULFILLED]: (state) =>
+  [constants.UPDATE_DISPLAY_ITEMS_FULFILLED]: (state) =>
     state.merge({
       ...initialState
     })

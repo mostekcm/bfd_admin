@@ -17,6 +17,8 @@ import { requestUpdateDealStage } from '../../orders/Dialogs/UpdateDealStage/act
 import UpdateDealStageDialog from '../../orders/Dialogs/UpdateDealStage/Dialog';
 import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
 import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
+import { requestUpdateDisplayItems } from '../../actions/order';
+import UpdateDisplayItemsDialog from '../../orders/Dialogs/UpdateDisplayItemsDialog';
 
 import './Order.css';
 
@@ -42,7 +44,8 @@ export default connectContainer(class Order extends Component {
     requestUpdatePayments,
     requestPayCommission,
     requestUpdateShippingInfo,
-    requestUpdateDealStage
+    requestUpdateDealStage,
+    requestUpdateDisplayItems
   };
 
   static propTypes = {
@@ -174,6 +177,7 @@ TAX ID: ___________________________________________
                 updateDealStage={this.props.requestUpdateDealStage}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
+                updateDisplayItems={this.props.requestUpdateDisplayItems}
               />
             </div>
           </div>
@@ -296,6 +300,7 @@ TAX ID: ___________________________________________
         <UpdateDealStageDialog />
         <dialogs.UpdateDiscountDialog />
         <dialogs.UpdateLineItemsDialog />
+        <UpdateDisplayItemsDialog />
       </div>
     );
 

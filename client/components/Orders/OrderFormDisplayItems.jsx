@@ -71,7 +71,7 @@ export default class OrderFormDisplayItems extends Component {
             <TableTextCell>Total For</TableTextCell>
             <TableTextCell>Displays</TableTextCell>
             <TableTextCell>{formatCurrency(total, opts)}</TableTextCell>
-          </TableRow>;
+          </TableRow>
         </TableBody>
       </Table>
     );

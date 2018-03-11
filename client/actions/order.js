@@ -246,3 +246,42 @@ export function updateLineItems(orderId, data) {
     });
   };
 }
+
+/*
+ * Get confirmation to update discount.
+ */
+export function requestUpdateDisplayItems(order) {
+  return {
+    type: constants.REQUEST_UPDATE_DISPLAY_ITEMS,
+    order
+  };
+}
+
+/*
+ * Cancel the discount update.
+ */
+export function cancelUpdateDisplayItems() {
+  return {
+    type: constants.CANCEL_UPDATE_DISPLAY_ITEMS
+  };
+}
+
+/*
+ * Change username.
+ */
+export function updateDisplayItems(orderId, data) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.UPDATE_DISPLAY_ITEMS,
+      meta: {
+        orderId,
+        onSuccess: () => {
+          dispatch(fetchOrderDetail(orderId));
+        }
+      },
+      payload: {
+        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, { displayItems: data }, { responseType: 'json' })
+      }
+    });
+  };
+}

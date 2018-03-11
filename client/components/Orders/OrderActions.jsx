@@ -95,6 +95,12 @@ export default class OrderActions extends Component {
     </MenuItem>
   );
 
+  getUpdateDisplayItemsAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.updateDisplayItems}>
+      Update Display Items
+    </MenuItem>
+  );
+
   getDeleteAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.deleteOrder}>
       Delete Order
@@ -107,6 +113,10 @@ export default class OrderActions extends Component {
 
   updateLineItems = () => {
     this.props.updateLineItems(this.state.order);
+  };
+
+  updateDisplayItems = () => {
+    this.props.updateDisplayItems(this.state.order);
   };
 
   updateDates = () => {
@@ -144,6 +154,7 @@ export default class OrderActions extends Component {
         {this.getUpdateDatesAction(this.state.order, this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
+        {this.getUpdateDisplayItemsAction(this.state.order, this.state.loading)}
         {this.getUpdateShippingInfoAction(this.state.order, this.state.loading)}
         {this.getUpdatePaymentAction(this.state.order, this.state.loading)}
         {this.getPayCommissionAction(this.state.order, this.state.loading)}

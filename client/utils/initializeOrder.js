@@ -25,14 +25,24 @@ export const initializeLineItems = (initialValues, cases) => {
   });
 };
 
-export const initializeDisplayItems = (initialValues, displays) => {
-  if (!initialValues.displayItems || initialValues.displayItems.length == 0) {
-    initialValues.displayItems = [];
+const getDisplayItemKey = item => `${item.name},${item.product.name}`;
 
-    /* Parse through the cases and add to the initial values */
-    if (displays && displays.length > 0) displays.forEach((thisDisplay) => {
-      initialValues.displayItems.push(thisDisplay);
-    });
-  }
+export const initializeDisplayItems = (initialValues, displays) => {
+  initialValues.displayItems = initialValues.displayItems || [];
+
+  const originalDisplayItems = initialValues.displayItems;
+
+  const values = {};
+
+  originalDisplayItems.forEach(item => item.quantity && item.quantity > 0 && (values[getDisplayItemKey(item)] = item));
+
+  /* Parse through the cases and add to the initial values */
+  if (displays && displays.length > 0) displays.map((thisDisplay, index) => {
+    if (!values[getDisplayItemKey(thisDisplay)]) {
+      initialValues.displayItems[index] = thisDisplay;
+    } else {
+      initialValues.displayItems[index] = values[getDisplayItemKey(thisDisplay)];
+    }
+  });
 };
 
