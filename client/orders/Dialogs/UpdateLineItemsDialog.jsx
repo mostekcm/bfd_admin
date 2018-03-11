@@ -13,18 +13,19 @@ import './UpdateLineItemsDialog.css';
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
     updateLineItemsState: state.updateLineItems,
-    cases: state.cases
+    cases: state.cases,
+    packages: state.packages.toJS().records
   });
 
   static actionsToProps = {
     ...orderActions
-  }
+  };
 
   static propTypes = {
     cancelUpdateLineItems: PropTypes.func.isRequired,
     updateLineItems: PropTypes.func.isRequired,
     updateLineItemsState: PropTypes.object.isRequired
-  }
+  };
 
   constructor() {
     super();
@@ -36,7 +37,15 @@ export default connectContainer(class extends Component {
   }
 
   onSubmit = (lineItemForm) => {
-    const lineItems = _.filter(lineItemForm.lineItems, (item) => item.quantity && item.quantity > 0);
+    const lineItems = _(lineItemForm.lineItems)
+      .filter((item) => item.quantity && item.quantity > 0)
+      .map(lineItem => {
+        // Clear out NULL values that might have been added by buttons that clear out items
+        if (lineItem.quantity===null) delete lineItem.quantity;
+        if (lineItem.tester.quantity===null) delete lineItem.tester.quantity;
+        return lineItem;
+      })
+      .value();
 
     this.props.updateLineItems(lineItemForm.orderId, lineItems);
   }
@@ -50,7 +59,7 @@ export default connectContainer(class extends Component {
       }
     }
 
-  }
+  };
 
   render() {
     const { cancelUpdateDiscount } = this.props;
@@ -89,6 +98,7 @@ export default connectContainer(class extends Component {
           <ConnectedUpdateLineItemForm
             ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
             onSubmit={this.onSubmit}
+            packages={this.props.packages}
             loading={loading} />
         </div>
       </Confirm>

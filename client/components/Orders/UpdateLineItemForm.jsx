@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { Field, FieldArray } from 'redux-form';
 
 import { OrderFormLineItems } from './';
+import OrderFormQuickAddButtons from './OrderFormQuickAddButtons';
 
 import createForm from '../../utils/createForm';
 
@@ -10,6 +11,7 @@ export default createForm('lineItemForm', class UpdateLineItemForm extends Compo
   static propTypes = {
     orderId: PropTypes.string,
     lineItems: PropTypes.array,
+    packages: PropTypes.array,
     loading: PropTypes.bool.isRequired,
     initialValues: PropTypes.object
   };
@@ -17,6 +19,9 @@ export default createForm('lineItemForm', class UpdateLineItemForm extends Compo
   render() {
     return (
       <form className="form-horizontal col-xs-12" style={{ marginTop: '40px' }}>
+        <div className={"row"}>
+          <OrderFormQuickAddButtons change={this.props.change} lineItems={this.props.lineItems} packages={this.props.packages}/>
+        </div>
         <div className="row">
           <h3>Products</h3>
           <div className="col-xs-12">
