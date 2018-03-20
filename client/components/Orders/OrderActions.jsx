@@ -1,9 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { MenuItem, DropdownButton } from 'react-bootstrap';
 
 export default class OrderActions extends Component {
   static propTypes = {
+    updateCompany: PropTypes.func.isRequired,
     updateDates: PropTypes.func.isRequired,
+    updateDealStage: PropTypes.func.isRequired,
     updateDiscount: PropTypes.func.isRequired,
     updatePayments: PropTypes.func.isRequired,
     payCommission: PropTypes.func.isRequired,
@@ -73,6 +76,14 @@ export default class OrderActions extends Component {
     </MenuItem>
   );
 
+  getUpdateCompanyAction = (order, loading) => {
+    return (
+      <MenuItem disabled={loading || false} onClick={this.updateCompany}>
+        Pull Company from HubSpot
+      </MenuItem>
+    );
+  };
+
   getUpdateDealStageAction = (order, loading) => {
     if (order.shippedDate) return null;
 
@@ -135,6 +146,10 @@ export default class OrderActions extends Component {
     this.props.payCommission(this.state.order);
   };
 
+  updateCompany = () => {
+    this.props.updateCompany(this.state.order);
+  };
+
   updateDealStage = () => {
     this.props.updateDealStage(this.state.order);
   };
@@ -150,6 +165,7 @@ export default class OrderActions extends Component {
 
     return (
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
+        {this.getUpdateCompanyAction(this.state.order, this.state.loading)}
         {this.getUpdateDealStageAction(this.state.order, this.state.loading)}
         {this.getUpdateDatesAction(this.state.order, this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}

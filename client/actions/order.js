@@ -189,7 +189,7 @@ export function cancelUpdateDiscount() {
 }
 
 /*
- * Change username.
+ * Change discount.
  */
 export function updateDiscount(orderId, data) {
   return (dispatch) => {
@@ -207,6 +207,27 @@ export function updateDiscount(orderId, data) {
     });
   };
 }
+
+/*
+ * Sync Company.
+ */
+export function updateCompany(order) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.UPDATE_COMPANY,
+      meta: {
+        orderId: order.id,
+        onSuccess: () => {
+          dispatch(fetchOrderDetail(order.id));
+        }
+      },
+      payload: {
+        promise: axios.patch(`${baseUrl}/api/orders/${order.id}/company`, {}, { responseType: 'json' })
+      }
+    });
+  };
+}
+
 
 /*
  * Get confirmation to update discount.

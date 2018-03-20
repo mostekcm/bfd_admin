@@ -19,6 +19,7 @@ import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
 import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
 import { requestUpdateDisplayItems } from '../../actions/order';
 import UpdateDisplayItemsDialog from '../../orders/Dialogs/UpdateDisplayItemsDialog';
+import { updateCompany } from '../../actions/order';
 
 import './Order.css';
 
@@ -31,8 +32,8 @@ import {
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
-    error: state.order.get('error'),
-    loading: state.order.get('loading'),
+    error: state.order.get('error') + state.updateCompany.get('error'),
+    loading: state.order.get('loading') || state.updateCompany.get('loading'),
     order: state.order,
     lineItems: state.order.get('record').toJS().lineItems,
     displayItems: state.order.get('record').toJS().displayItems
@@ -45,7 +46,8 @@ export default connectContainer(class Order extends Component {
     requestPayCommission,
     requestUpdateShippingInfo,
     requestUpdateDealStage,
-    requestUpdateDisplayItems
+    requestUpdateDisplayItems,
+    updateCompany
   };
 
   static propTypes = {
@@ -119,6 +121,19 @@ export default connectContainer(class Order extends Component {
     );
   }
 
+  getContactName(store) {
+    return store.contacts ? _.map(store.contacts, 'name').join(' or ') :
+      (store.contact && store.contact.name) || 'No Contact';
+  }
+
+  getPhone(store) {
+    return store.contacts ? _.map(store.contacts, 'phone').join(' or ') : store.phone || 'No Phone';
+  }
+
+  getEmail(store) {
+    return store.contacts ? _.map(store.contacts, 'email').join(' or ') : store.email || 'No Email';
+  }
+
   render() {
     const { loading, error, record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
@@ -174,6 +189,7 @@ TAX ID: ___________________________________________
                 updatePayments={this.props.requestUpdatePayments}
                 payCommission={this.props.requestPayCommission}
                 updateShippingInfo={this.props.requestUpdateShippingInfo}
+                updateCompany={this.props.updateCompany}
                 updateDealStage={this.props.requestUpdateDealStage}
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
@@ -193,11 +209,11 @@ TAX ID: ___________________________________________
               { order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : '' }
               { order.store ? <div className="address"><br/>
                 {order.store.name}<br />
-                Attn: {order.store.contact || 'No Contact'}<br />
+                Attn: {this.getContactName(order.store)}<br />
                 {this.renderAddress(order.store.shippingAddress)}
                 { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
-                {order.store.phone || 'No Phone'}<br />
-                {order.store.email || 'No Email'}
+                {this.getPhone(order.store)}<br />
+                {this.getEmail(order.store)}
               </div> : <div></div> }
             </div>
             <div className="col-xs-6 col-md-6 wrapper">
