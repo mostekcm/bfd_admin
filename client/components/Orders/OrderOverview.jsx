@@ -29,11 +29,13 @@ export default class OrderOverview extends React.Component {
     const { loading, error, orders, total, errorCases, errorCompanies, errorDisplays} = this.props;
     const opts = { format: '%s%v', symbol: '$' };
 
-    let totalAccountsReceivable = 0;
+    let totalAccountsReceivable = {};
 
-    orders.forEach(order => totalAccountsReceivable += order.totals.owed);
-
-    const totalDue = formatCurrency(totalAccountsReceivable, opts);
+    orders.forEach(order => {
+      if (!totalAccountsReceivable[order.dealStage])
+        totalAccountsReceivable[order.dealStage] = 0;
+      totalAccountsReceivable[order.dealStage] += order.totals.owed;
+    });
 
     return (
       <div>
@@ -66,7 +68,7 @@ export default class OrderOverview extends React.Component {
           </div>
           <div className="row">
             <div className="col-xs-12">
-              Total Accounts Receivable: {totalDue}
+              {Object.keys(totalAccountsReceivable).map((stage, index) => <div key={index}>Total Accounts Receivable ({stage}): {formatCurrency(totalAccountsReceivable[stage], opts)}<br/></div>)}
             </div>
           </div>
         </LoadingPanel>
