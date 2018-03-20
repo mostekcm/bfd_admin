@@ -122,16 +122,16 @@ export default connectContainer(class Order extends Component {
   }
 
   getContactName(store) {
-    return store.contacts ? _.map(store.contacts, 'name').join(' or ') :
+    return store.contacts ? _.map(store.contacts, 'name').filter(attr => attr && attr.length > 0).join(' or ') :
       (store.contact && store.contact.name) || 'No Contact';
   }
 
   getPhone(store) {
-    return store.contacts ? _.map(store.contacts, 'phone').join(' or ') : store.phone || 'No Phone';
+    return store.contacts ? _.map(store.contacts, 'phone').filter(attr => attr && attr.length > 0).join(' or ') : store.phone || 'No Phone';
   }
 
   getEmail(store) {
-    return store.contacts ? _.map(store.contacts, 'email').join(' or ') : store.email || 'No Email';
+    return store.contacts ? _.map(store.contacts, 'email').filter(attr => attr && attr.length > 0).join(' or ') : store.email || 'No Email';
   }
 
   render() {
