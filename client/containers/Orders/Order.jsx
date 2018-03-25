@@ -123,7 +123,7 @@ export default connectContainer(class Order extends Component {
 
   getContactName(store) {
     return store.contacts ? _.map(store.contacts, 'name').filter(attr => attr && attr.length > 0).join(' or ') :
-      (store.contact && store.contact.name) || 'No Contact';
+      store.contact || 'No Contact';
   }
 
   getPhone(store) {
