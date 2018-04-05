@@ -8,7 +8,7 @@ export const initializeLineItems = (initialValues, cases) => {
 
   const values = {};
 
-  originalLineItems.forEach(item => item.quantity && item.quantity > 0 && (values[getItemKey(item)] = item));
+  originalLineItems.forEach(item => ((item.quantity && item.quantity > 0) || (item.tester && item.tester.quantity && item.tester.quantity > 0)) && (values[getItemKey(item)] = item));
 
   /* Parse through the cases and add to the initial values */
   if (cases && cases.length > 0) cases.forEach((thisCase) => {

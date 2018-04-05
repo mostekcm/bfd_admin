@@ -38,11 +38,12 @@ export default connectContainer(class extends Component {
 
   onSubmit = (lineItemForm) => {
     const lineItems = _(lineItemForm.lineItems)
-      .filter((item) => item.quantity && item.quantity > 0)
+      .filter((item) => (item.quantity && item.quantity > 0) || (item.tester.quantity && item.tester.quantity > 0))
       .map(lineItem => {
         // Clear out NULL values that might have been added by buttons that clear out items
         if (lineItem.quantity===null) delete lineItem.quantity;
         if (lineItem.tester.quantity===null) delete lineItem.tester.quantity;
+        if (lineItem.tester && lineItem.tester > 0 && !lineItem.quantity) lineItem.quantity = 0;
         return lineItem;
       })
       .value();

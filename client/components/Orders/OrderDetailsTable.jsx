@@ -38,7 +38,9 @@ export default class OrderDetailsTable extends Component {
     const { lineItems } = this.props;
     // now include the currency symbol
     let opts = { format: '%s%v', symbol: '$' };
-    const totalOrderCost = formatCurrency(this.getTotalOrderCost(lineItems), opts);
+
+    const skuLineItems = _.filter(lineItems, item => item.quantity && item.quantity > 0);
+    const totalOrderCost = formatCurrency(this.getTotalOrderCost(skuLineItems), opts);
 
     return (
       <Table>
@@ -54,7 +56,7 @@ export default class OrderDetailsTable extends Component {
           <TableColumn width="8%">Sub Total</TableColumn>
         </TableHeader>
         <TableBody>
-          {lineItems.map((lineItem, index) => {
+          {skuLineItems.map((lineItem, index) => {
             const cpu = formatCurrency(lineItem.cpu, opts);
             const costPerCase = formatCurrency(lineItem.cpu * lineItem.size, opts);
             const totalCost = formatCurrency(this.getRowCost(lineItem), opts);
@@ -73,6 +75,7 @@ export default class OrderDetailsTable extends Component {
             </TableRow>;
           })}
           <TableRow key={lineItems.length}>
+            <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>

@@ -52,11 +52,12 @@ export default connectContainer(class extends Component {
   onSubmit = (order) => {
     const simpleOrder = JSON.parse(JSON.stringify(order));
     simpleOrder.lineItems = _(simpleOrder.lineItems)
-      .filter((item) => item.quantity && item.quantity > 0)
+      .filter((item) => (item.quantity && item.quantity > 0) || (item.tester.quantity && item.tester.quantity > 0))
       .map(lineItem => {
         // Clear out NULL values that might have been added by buttons that clear out items
         if (lineItem.quantity===null) delete lineItem.quantity;
         if (lineItem.tester.quantity===null) delete lineItem.tester.quantity;
+        if (lineItem.tester && lineItem.tester > 0 && !lineItem.quantity) lineItem.quantity = 0;
         return lineItem;
       })
       .value();
@@ -67,7 +68,7 @@ export default connectContainer(class extends Component {
     }
 
     this.props.createOrder(simpleOrder);
-  }
+  };
 
   onConfirm = () => {
     if (this.form) {
@@ -77,7 +78,7 @@ export default connectContainer(class extends Component {
         console.error("error submitting order: ", err.message);
       }
     }
-  }
+  };
 
   render() {
     const user = this.props.user.toJS();
