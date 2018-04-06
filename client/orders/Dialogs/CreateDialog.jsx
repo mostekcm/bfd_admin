@@ -57,7 +57,7 @@ export default connectContainer(class extends Component {
         // Clear out NULL values that might have been added by buttons that clear out items
         if (lineItem.quantity===null) delete lineItem.quantity;
         if (lineItem.tester.quantity===null) delete lineItem.tester.quantity;
-        if (lineItem.tester && lineItem.tester > 0 && !lineItem.quantity) lineItem.quantity = 0;
+        if (lineItem.tester && lineItem.tester.quantity > 0 && !lineItem.quantity) lineItem.quantity = 0;
         return lineItem;
       })
       .value();
