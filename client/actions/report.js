@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Promise from 'bluebird';
+import moment from 'moment';
 
 import * as constants from '../constants';
 import { getPaidCommissionData } from '../orders/utils';
@@ -29,17 +30,19 @@ export function fetchShowReport(showName) {
 /*
  * Get Month Report.
  */
-export function fetchMonthReport(month) {
+export function fetchMonthReport(month, year) {
+  year = year || moment().year();
   return (dispatch) => {
     dispatch({
       type: constants.FETCH_MONTH_REPORT,
       payload: {
-        promise: axios.get(`${baseUrl}/api/reports/month/${month}`, {
+        promise: axios.get(`${baseUrl}/api/reports/month/${month}/${year}`, {
           responseType: 'json'
         })
       },
       meta: {
-        month: month
+        month,
+        year
       }
     });
   };

@@ -43,7 +43,6 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
             error: 'Unauthorized'
           }
         });
-        localStorage.clear();
         return dispatch(routeActions.push('/login'));
       }
 
@@ -58,7 +57,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
         const expiresAt = getState().auth.get('expiresAt');
 
         if (aboutToRequestTime >= expiresAt) {
-          // renewToken performs authentication using username/password saved in sessionStorage/localStorage
+          // renewToken performs authentication using username/password saved in sessionStorage/sessionStorage
           return refreshTokens(dispatch, getState, location)
             .then(() => {
               config.headers.Authorization = axios.defaults.headers.common.Authorization;
@@ -75,7 +74,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
         const value = error.response;
 
         if (value && value.status === 401 && value.data.message === 'TokenExpired') {
-          // renewToken performs authentication using username/password saved in sessionStorage/localStorage
+          // renewToken performs authentication using username/password saved in sessionStorage/sessionStorage
           return refreshTokens(dispatch, getState, location)
             .then(() => {
               error.config.headers.Authorization = axios.defaults.headers.common.Authorization;
@@ -90,11 +89,10 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
       const expiresIn = tokens.expiresIn > 70 ? tokens.expiresIn - 60 : 10;
       const expiresAt = now + expiresIn;
 
-      const user = JSON.parse(localStorage.getItem('profile'));
+      const user = JSON.parse(sessionStorage.getItem('profile'));
       user.iss = user.iss || 'https://unknown.com';
 
       tokens.expiresAt = expiresAt;
-      localStorage.setItem('tokens', JSON.stringify(tokens));
 
       if (refreshing) {
         return dispatchSuccess(dispatch, idToken, accessToken, user, expiresAt, tokens.returnTo);
@@ -106,7 +104,7 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
     })
     .catch((err) => {
       console.error('Error Loading Credentials: ', err);
-      localStorage.clear();
+      sessionStorage.clear();
       if (err.error) {
         /* Check for login_required, otherwise just fail */
         if (err.error === 'login_required') {
@@ -140,7 +138,7 @@ export function login(location, prompt) {
 
 export function logout(location) {
   return (dispatch) => {
-    localStorage.clear();
+    sessionStorage.clear();
     sessionStorage.clear();
 
     return dispatch({
@@ -161,19 +159,19 @@ export function loadCredentials(location) {
       return handleTokens(dispatch, getState, parseHash(window.location.hash), location);
     }
 
-    try {
-      const tokens = JSON.parse(localStorage.getItem('tokens') || '{}');
-      if (tokens.expiresAt && tokens.expiresAt > moment().unix()) {
-        dispatch({
-          type: constants.LOGIN_PENDING
-        });
-        tokens.returnTo = location && location.query && location.query.returnUrl;
-        return handleTokens(dispatch, getState, Promise.resolve(tokens), location);
-      }
-    } catch (e) {
-      console.warn('error reading tokens: ', e.message);
-    }
-
+    // try {
+    //   const tokens = JSON.parse(sessionStorage.getItem('tokens') || '{}');
+    //   if (tokens.expiresAt && tokens.expiresAt > moment().unix()) {
+    //     dispatch({
+    //       type: constants.LOGIN_PENDING
+    //     });
+    //     tokens.returnTo = location && location.query && location.query.returnUrl;
+    //     return handleTokens(dispatch, getState, Promise.resolve(tokens), location);
+    //   }
+    // } catch (e) {
+    //   console.warn('error reading tokens: ', e.message);
+    // }
+    //
     return dispatch(login(location));
   };
 }
@@ -208,7 +206,7 @@ export function getAppSettings(onSuccess) {
 
 export function authorizeHubSpot() {
   const state = uuid.v4();
-  window.localStorage.setItem(constants.AUTHORIZE_HUB_SPOT_STATE, state);
+  window.sessionStorage.setItem(constants.AUTHORIZE_HUB_SPOT_STATE, state);
 
   window.location = `https://app.hubspot.com/oauth/authorize?${queryString.stringify({
     client_id: window.config.HUBSPOT_CLIENT_ID,
@@ -220,8 +218,8 @@ export function authorizeHubSpot() {
 export function exchangeHubSpotCode(query) {
   const baseUrl = window.config.BASE_API_URL;
 
-  const oldState = window.localStorage.getItem(constants.AUTHORIZE_HUB_SPOT_STATE);
-  window.localStorage.removeItem(constants.AUTHORIZE_HUB_SPOT_STATE);
+  const oldState = window.sessionStorage.getItem(constants.AUTHORIZE_HUB_SPOT_STATE);
+  window.sessionStorage.removeItem(constants.AUTHORIZE_HUB_SPOT_STATE);
 
   if (oldState && oldState !== query.state) {
     return {

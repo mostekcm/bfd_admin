@@ -7,6 +7,7 @@ import AuthorizeCrm from './auth/containers/AuthorizeCrm';
 import * as containers from './containers';
 import PaymentReport from './containers/Reports/Payments';
 import ShipmentReport from './containers/Reports/Shipments';
+import ShowReport from './containers/Reports/Show';
 
 export default (history) =>
   <Router history={history}>
@@ -16,7 +17,7 @@ export default (history) =>
       <Route path="orders/:id" component={containers.Order} />
       <Route path="report/payments" component={PaymentReport} />
       <Route path="report/shipments" component={ShipmentReport} />
-      <Route path="report/show/:name" component={containers.ShowReport} />
+      <Route path="report/show(/:show/:year)" component={ShowReport} />
       <Route path="report/month/:month" component={containers.MonthReport} />
       <Route path="report/commission/due/:name" component={containers.CommissionDueReport} />
       <Route path="authorizeCrm" component={AuthorizeCrm} />

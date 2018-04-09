@@ -78,6 +78,13 @@ export const FETCH_ORDERS_PENDING = 'FETCH_ORDERS_PENDING';
 export const FETCH_ORDERS_REJECTED = 'FETCH_ORDERS_REJECTED';
 export const FETCH_ORDERS_FULFILLED = 'FETCH_ORDERS_FULFILLED';
 
+// Fetch all.
+export const RESET_SHOW_ORDERS = 'RESET_SHOW_ORDERS';
+export const FETCH_SHOW_ORDERS = 'FETCH_SHOW_ORDERS';
+export const FETCH_SHOW_ORDERS_PENDING = 'FETCH_SHOW_ORDERS_PENDING';
+export const FETCH_SHOW_ORDERS_REJECTED = 'FETCH_SHOW_ORDERS_REJECTED';
+export const FETCH_SHOW_ORDERS_FULFILLED = 'FETCH_SHOW_ORDERS_FULFILLED';
+
 // Fetch single.
 export const FETCH_ORDER = 'FETCH_ORDER';
 export const FETCH_ORDER_PENDING = 'FETCH_ORDER_PENDING';
@@ -159,3 +166,43 @@ export const PAY_COMMISSIONS = 'PAY_COMMISSIONS';
 export const PAY_COMMISSIONS_PENDING = 'PAY_COMMISSIONS_PENDING';
 export const PAY_COMMISSIONS_REJECTED = 'PAY_COMMISSIONS_REJECTED';
 export const PAY_COMMISSIONS_FULFILLED = 'PAY_COMMISSIONS_FULFILLED';
+
+// Shows
+export const SHOW_LIST = [
+  {
+    text: 'House Account',
+    value: 'House Account'
+  },
+  {
+    text: 'On the Road',
+    value: 'On the Road'
+  },
+  {
+    text: 'Mpls Mart Reorder',
+    value: 'Reorder'
+  },
+  {
+    text: 'January Expo',
+    value: 'January Expo'
+  },
+  {
+    text: 'March Expo',
+    value: 'March Expo'
+  },
+  {
+    text: 'April Expo',
+    value: 'April Expo'
+  },
+  {
+    text: 'June Expo',
+    value: 'June Expo'
+  },
+  {
+    text: 'August Expo',
+    value: 'August Expo'
+  },
+  {
+    text: 'October Expo',
+    value: 'October Expo'
+  }
+];

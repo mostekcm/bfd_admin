@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import { routeActions } from 'redux-simple-router';
 
 import * as constants from '../constants';
@@ -28,6 +29,37 @@ export function fetchOrders(search = '', reset = false, page = 0) {
       }
     });
   };
+}
+
+/*
+ * Get Show Orders
+ */
+export function fetchShowOrders(show, year) {
+  year = year || moment().year();
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_SHOW_ORDERS,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/orders/show/${show}/${year}`, {
+          responseType: 'json'
+        })
+      },
+      meta: {
+        show,
+        year
+      }
+    });
+  };
+}
+
+export function resetShowOrders(show, year) {
+  return {
+    type: constants.RESET_SHOW_ORDERS,
+    meta: {
+      show,
+      year
+    }
+  }
 }
 
 /*

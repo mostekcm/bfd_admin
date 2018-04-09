@@ -29,6 +29,7 @@ import {
   OrderActions, OrderDetailsTable, OrderDisplayDetailsTable, OrderTestersTable/*, OrderHeader, OrderProfile, OrderLogs,
  OrderInfo*/
 } from '../../components/Orders';
+import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
@@ -207,14 +208,8 @@ TAX ID: ___________________________________________
               { order.targetShipDate && !order.shippedDate ? <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : '' }
               { order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : '' }
               { order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : '' }
-              { order.store ? <div className="address"><br/>
-                {order.store.name}<br />
-                Attn: {this.getContactName(order.store)}<br />
-                {this.renderAddress(order.store.shippingAddress)}
-                { order.store.billingAddress ? this.renderAddress(order.store.billingAddress, 'bill to: ') : '' }
-                {this.getPhone(order.store)}<br />
-                {this.getEmail(order.store)}
-              </div> : <div></div> }
+              <br/>
+              <OrderStoreInfo store={order.store}/>
             </div>
             <div className="col-xs-6 col-md-6 wrapper">
               Beauty Full Day LLC<br />

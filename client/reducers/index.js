@@ -10,6 +10,7 @@ import order from './order';
 import orderCreate from './orderCreate';
 import orderDelete from './orderDelete';
 import orders from './orders';
+import ordersForShow from './ordersForShow';
 import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
 import monthReport from './monthReport';
@@ -44,6 +45,7 @@ export default combineReducers({
   orderCreate,
   orderDelete,
   orders,
+  ordersForShow,
   showReport,
   monthReport,
   packages,

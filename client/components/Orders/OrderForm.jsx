@@ -8,6 +8,7 @@ import { OrderFormLineItems, OrderFormDisplayItems } from './';
 import OrderFormQuickAddButtons from './OrderFormQuickAddButtons';
 
 import createForm from '../../utils/createForm';
+import * as constants from '../../constants';
 
 import {
   ComboField,
@@ -66,44 +67,7 @@ export default createForm('order', class OrderForm extends Component {
     if (!show)
       return null;
 
-    const showOptions = [
-      {
-        text: 'House Account',
-        value: 'House Account'
-      },
-      {
-        text: 'On the Road',
-        value: 'On the Road'
-      },
-      {
-        text: 'Mpls Mart Reorder',
-        value: 'Reorder'
-      },
-      {
-        text: 'January Expo',
-        value: 'January Expo'
-      },
-      {
-        text: 'March Expo',
-        value: 'March Expo'
-      },
-      {
-        text: 'April Expo',
-        value: 'April Expo'
-      },
-      {
-        text: 'June Expo',
-        value: 'June Expo'
-      },
-      {
-        text: 'August Expo',
-        value: 'August Expo'
-      },
-      {
-        text: 'October Expo',
-        value: 'October Expo'
-      }
-    ];
+    const showOptions = constants.SHOW_LIST;
 
     return (
       <div className="col-xs-12">

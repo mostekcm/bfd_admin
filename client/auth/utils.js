@@ -58,15 +58,13 @@ const processAuthResult = (authResult) => {
       return reject(new Error('The state is not a valid state, please re-initiate login'));
     }
 
-    localStorage.setItem('apiToken', authResult.accessToken);
-
     /* TODO: Validate ID token */
     return resolve({ accessToken: authResult.accessToken, idToken: authResult.idToken, returnTo, expiresIn: authResult.expiresIn });
   })
     .then(tokens => getUserInfo(tokens)
       .then((user) => {
         // Now you have the user's information
-        localStorage.setItem('profile', JSON.stringify(user));
+        sessionStorage.setItem('profile', JSON.stringify(user));
         return tokens;
       }));
 };
@@ -120,5 +118,6 @@ export const redirect = (location, state, prompt) => {
       .then(authResult => processAuthResult(authResult));
   }
 
-  return webAuth.authorize(options);
+  webAuth.authorize(options);
+  return Promise.resolve({});
 };

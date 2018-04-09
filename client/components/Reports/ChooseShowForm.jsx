@@ -1,77 +1,63 @@
+import _ from 'lodash';
+import moment from 'moment';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { Button } from 'react-bootstrap';
 
 import { InputCombo } from 'auth0-extension-ui';
+
+import * as constants from '../../constants';
 
 class ChooseShowForm extends Component {
   static propTypes = {
     initialValues: PropTypes.object,
-    clients: PropTypes.array,
-    running: PropTypes.bool,
-    submitting: PropTypes.bool,
-    handleSubmit: PropTypes.func.isRequired
+    submitting: PropTypes.bool
   };
 
-  renderButton(running, submitting, handleSubmit) {
-    return <Button bsSize="large" bsStyle="primary" disabled={submitting}
-                   onClick={handleSubmit}>
-      {running ? 'Extend Timer' : 'Start Timer'}
-    </Button>;
-  }
-
-  renderClientDropDown(clients, running, submitting) {
+  renderShowDropDown(submitting) {
     return <Field
-      name={'clientID'}
+      name={'show'}
       type={'select'}
       component={InputCombo}
-      label={'Client'}
-      placeholder={'Choose a client: '}
-      options={_.map(clients, client => ({ text: client.name, value: client.client_id }))}
-      disabled={submitting || running}
+      label={'Show'}
+      placeholder={'Choose a Show: '}
+      options={constants.SHOW_LIST}
+      disabled={submitting}
     />;
   }
 
-  renderTimeDropDown(clients, running, submitting) {
+  renderTimeDropDown(submitting) {
+    const thisYear = moment().year();
     return <Field
-      name={'amount'}
+      name={'year'}
       type={'select'}
       component={InputCombo}
-      label={'Time'}
-      placeholder={'Amount:'}
-      options={[{text: '1 minute', value: 1}, {text: '5 minutes', value: 5}]}
-      disabled={submitting || running}
+      label={'Year'}
+      placeholder={"Year: "}
+      options={_.range(2017,thisYear+1).map(year => ({text:year, value:year}))}
+      disabled={submitting}
     />;
   }
 
   render() {
     const {
-      clients,
-      running,
-      submitting,
-      handleSubmit
+      submitting
     } = this.props;
 
     return <div className={'row'}>
       <div className={'col-xs-12 col-md-9'}>
-        {this.renderClientDropDown(clients, running, submitting)}
+        {this.renderShowDropDown(submitting)}
       </div>
       <div className={'col-xs-12 col-md-9'}>
         {this.renderTimeDropDown(submitting)}
       </div>
-      <div className={'col-xs-12 col-md-3 pull-right'}>
-        <Button bsSize="large" bsStyle="primary" disabled={submitting}
-                onClick carlos you were here, need to make this a push={handleSubmit}>
-          Get
-        </Button>      </div>
     </div>;
   }
 }
 
-const reduxFormDecorator = reduxForm({
-  form: 'controls'
-});
+export const ChooseShowFormName = 'showForm';
 
-export const ControlsForm = reduxFormDecorator(ControlsFormBase);
-export default ControlsForm;
+export default (onSubmit) => reduxForm({
+  form: ChooseShowFormName,
+  onSubmit
+})(ChooseShowForm);

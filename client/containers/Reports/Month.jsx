@@ -15,13 +15,13 @@ export default connectContainer(class MonthReport extends Component {
 
   static actionsToProps = {
     ...reportActions
-  }
+  };
 
   static propTypes = {
     monthReport: PropTypes.array,
     params: PropTypes.object,
     fetchMonthReport: React.PropTypes.func.isRequired
-  }
+  };
 
   componentWillMount() {
     this.props.fetchMonthReport(this.props.params.month);

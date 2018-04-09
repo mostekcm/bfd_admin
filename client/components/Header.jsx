@@ -42,8 +42,8 @@ export default class Header extends Component {
           </Link>
         </li>
         <li role="presentation">
-          <Link to="/report/month/5">
-            May Report
+          <Link to="/report/show">
+            Show Report
           </Link>
         </li>
         <li role="presentation">
