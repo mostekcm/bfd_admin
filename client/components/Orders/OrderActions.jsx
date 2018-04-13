@@ -13,8 +13,9 @@ export default class OrderActions extends Component {
     updateShippingInfo: PropTypes.func.isRequired,
     updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
+    viewPackingList: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
-  }
+  };
 
   state = {
     order: null,
@@ -118,6 +119,16 @@ export default class OrderActions extends Component {
     </MenuItem>
   );
 
+  getViewPackingListAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.viewPackingList}>
+      View Packing List
+    </MenuItem>
+  );
+
+  viewPackingList = () => {
+    this.props.viewPackingList(this.state.order);
+  };
+
   deleteOrder = () => {
     this.props.deleteOrder(this.state.order);
   };
@@ -175,6 +186,7 @@ export default class OrderActions extends Component {
         {this.getUpdatePaymentAction(this.state.order, this.state.loading)}
         {this.getPayCommissionAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
+        {this.getViewPackingListAction(this.state.order, this.state.loading)}
       </DropdownButton>
     );
   }

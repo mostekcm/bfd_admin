@@ -48,7 +48,6 @@ export default connectContainer(class ShowReport extends Component {
 
     if (prevProps.params !== this.props.params) {
       if (this.props.params.show && this.props.params.year) {
-        console.log('carlos, fetching orders');
         this.props.fetchShowOrders(this.props.params.show, this.props.params.year);
       } else {
         this.props.resetShowOrders(this.props.params.show, this.props.params.year)

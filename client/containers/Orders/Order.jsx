@@ -29,6 +29,7 @@ import {
   OrderActions, OrderDetailsTable, OrderDisplayDetailsTable, OrderTestersTable/*, OrderHeader, OrderProfile, OrderLogs,
  OrderInfo*/
 } from '../../components/Orders';
+import EstimatedShippingWeight from '../../components/orders/EstimatedShippingWeight';
 import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
 
 export default connectContainer(class Order extends Component {
@@ -66,7 +67,9 @@ export default connectContainer(class Order extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.loading !== this.props.loading || nextProps.lineItems !== this.props.lineItems || nextProps.displayItems !== this.props.displayItems;
+    return nextProps.loading !== this.props.loading ||
+      nextProps.lineItems !== this.props.lineItems ||
+      nextProps.displayItems !== this.props.displayItems;
   }
 
   getTesterCost(item) {
@@ -77,63 +80,10 @@ export default connectContainer(class Order extends Component {
     return item.quantity * item.cpu * item.size;
   }
 
-  renderShippingWeight(weight) {
-    const weightWithPackingMaterials = parseFloat(weight) * 1.15;
-    const weightInPoundsFloat = weightWithPackingMaterials / 16.0;
-    let weightInPounds = Math.floor(weightInPoundsFloat);
-    let remainingOunces = Math.ceil((weightInPoundsFloat - weightInPounds)*16);
-    if (remainingOunces === 16) {
-      weightInPounds += 1;
-      remainingOunces = 0;
-    }
-    return `${weightInPounds} lbs ${remainingOunces} oz`;
+  viewPackingList(order) {
+    this.props.router.push(`/orders/packing/${order.id}`);
   }
 
-  renderAddress(address, header) {
-    address = address || 'No Address';
-    let parts = address.split(',');
-    let postalCode = undefined;
-    let state = undefined;
-    let city = undefined;
-    if (parts.length >= 2) {
-      const lastLine = parts.pop().trim();
-      city = parts.pop().trim();
-      const stateZipParts = lastLine.split(' ');
-      state = stateZipParts.shift();
-      postalCode = stateZipParts.join('');
-    }
-
-    return (
-      <div className="address">
-        { header ?
-          <div className="address">
-            {header}<br />
-          </div> : '' }
-        {
-          state ? <div className="address">
-            { parts.map(part => {
-              return <div className="address">{part}<br /></div>;
-            })
-            }
-            {city}, {state} &nbsp;{postalCode}<br />
-          </div> : <div className="address">{address}<br /></div>
-        }<br />
-      </div>
-    );
-  }
-
-  getContactName(store) {
-    return store.contacts ? _.map(store.contacts, 'name').filter(attr => attr && attr.length > 0).join(' or ') :
-      store.contact || 'No Contact';
-  }
-
-  getPhone(store) {
-    return store.contacts ? _.map(store.contacts, 'phone').filter(attr => attr && attr.length > 0).join(' or ') : store.phone || 'No Phone';
-  }
-
-  getEmail(store) {
-    return store.contacts ? _.map(store.contacts, 'email').filter(attr => attr && attr.length > 0).join(' or ') : store.email || 'No Email';
-  }
 
   render() {
     const { loading, error, record } = this.props.order.toJS();
@@ -195,6 +145,7 @@ TAX ID: ___________________________________________
                 updateDiscount={this.props.requestUpdateDiscount}
                 updateLineItems={this.props.requestUpdateLineItems}
                 updateDisplayItems={this.props.requestUpdateDisplayItems}
+                viewPackingList={this.viewPackingList.bind(this)}
               />
             </div>
           </div>
@@ -283,7 +234,7 @@ TAX ID: ___________________________________________
             </div> : '' }
           <div className="row">
             <div className="col-xs-12 wrapper totals">
-              ESTIMATED SHIPPING WEIGHT: {this.renderShippingWeight(order.totals.weight)}
+              <EstimatedShippingWeight weight={order.totals.weight}/>
             </div>
           </div>
           { order.totals.owed > 0 ?

@@ -48,7 +48,6 @@ export default class OrderDisplayDetailsTable extends Component {
         quantity: displayItem.quantity,
         total: totalCost
       });
-      console.log(rows[rows.length - 1]);
       displayItem.offsetMerch.forEach((offsetMerch) => {
         const offsetQuantity = parseFloat(offsetMerch.quantity) * parseFloat(displayItem.quantity);
         const totalRetail = formatCurrency(parseFloat(offsetMerch.sku.msrp) * offsetQuantity, opts);
