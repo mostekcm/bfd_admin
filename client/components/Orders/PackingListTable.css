@@ -1,3 +1,7 @@
 .packingList table {
     width: 75%;
 }
+
+td.align-right {
+    align: right;
+}

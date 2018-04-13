@@ -6,7 +6,8 @@ export default class TableTextCell extends Component {
     className: PropTypes.string,
     onClick: PropTypes.func,
     clickArgs: PropTypes.array,
-    rowSpan: PropTypes.number
+    rowSpan: PropTypes.number,
+    colSpan: PropTypes.number
   };
 
   static defaultProps = {
@@ -20,7 +21,7 @@ export default class TableTextCell extends Component {
   render() {
     if (this.props.onClick) {
       return (
-        <TableCell className={this.props.className} rowSpan={this.props.rowSpan}>
+        <TableCell className={this.props.className} rowSpan={this.props.rowSpan} colSpan={this.props.colSpan}>
           <a href="#" onClick={this.clickCell} title={ this.props.children || '' }>
             { this.props.children || '' }
           </a>
@@ -28,7 +29,7 @@ export default class TableTextCell extends Component {
       );
     }
 
-    return <TableCell className={this.props.className} rowSpan={this.props.rowSpan}>
+    return <TableCell className={this.props.className} rowSpan={this.props.rowSpan} colSpan={this.props.colSpan}>
       <span title={ this.props.children || '' }>{ this.props.children || '' }</span>
     </TableCell>;
   }

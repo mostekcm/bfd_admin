@@ -37,6 +37,19 @@ export default class OrderOverview extends React.Component {
       totalAccountsReceivable[order.dealStage] += order.totals.owed;
     });
 
+    const dealPercent = {
+      'Closed Won': 1.0,
+      'Closed Lost': 0.0,
+      'Approved': 0.9,
+      'Pending Approval': 0.6,
+      'Qualifying': 0.3
+    };
+
+    let overallEstimatedAR = 0;
+    Object.keys(totalAccountsReceivable).forEach(key => {
+      overallEstimatedAR += dealPercent[key] * totalAccountsReceivable[key];
+    });
+
     return (
       <div>
         <LoadingPanel show={loading}>
@@ -69,6 +82,7 @@ export default class OrderOverview extends React.Component {
           <div className="row">
             <div className="col-xs-12">
               {Object.keys(totalAccountsReceivable).map((stage, index) => <div key={index}>Total Accounts Receivable ({stage}): {formatCurrency(totalAccountsReceivable[stage], opts)}<br/></div>)}
+              Total Estimated Accounts Receivable: {formatCurrency(overallEstimatedAR, opts)}
             </div>
           </div>
         </LoadingPanel>

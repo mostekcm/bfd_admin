@@ -35,8 +35,8 @@ export default class PackingListTable extends Component {
         <TableBody>
           {lineItems.map((lineItem, index) => {
             return <TableRow key={index}>
-              <TableTextCell><Checkbox/></TableTextCell>
-              <TableTextCell><Checkbox/></TableTextCell>
+              <TableTextCell><input type={'checkbox'}/></TableTextCell>
+              <TableTextCell><input type={'checkbox'}/></TableTextCell>
               <TableTextCell>{lineItem.name}</TableTextCell>
               <TableTextCell>{lineItem.quantity}</TableTextCell>
             </TableRow>;

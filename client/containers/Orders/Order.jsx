@@ -32,6 +32,8 @@ import {
 import EstimatedShippingWeight from '../../components/orders/EstimatedShippingWeight';
 import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
 
+import { getEstimatedShippingAndHandling } from '../../orders/utils';
+
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
     error: state.order.get('error') + state.updateCompany.get('error'),
@@ -84,7 +86,6 @@ export default connectContainer(class Order extends Component {
     this.props.router.push(`/orders/packing/${order.id}`);
   }
 
-
   render() {
     const { loading, error, record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
@@ -127,12 +128,16 @@ TAX ID: ___________________________________________
    1. *limit 1 tester per product ordered per 6 cases ordered*
 `;
 
+    const owed = order.totals.owed + (order.shippedDate ? 0 : getEstimatedShippingAndHandling(order.totals.product));
+    const amountDue = formatCurrency(owed, opts);
+
     return (
       <div className="order">
         <div className="row content-header">
-          <div className="col-xs-12">
-            <h2 className="pull-left">Order Details</h2>
-            <div className="pull-right">
+          <div className="col-xs-9">
+            <h2 className="pull-left">{order.shippedDate ? 'INVOICE' : 'ORDER CONFIRMATION'}</h2>
+          </div>
+          <div className={'col-xs-3 pull-right'}>
               <OrderActions
                 order={this.props.order}
                 updateDates={this.props.requestUpdateDates}
@@ -147,27 +152,35 @@ TAX ID: ___________________________________________
                 updateDisplayItems={this.props.requestUpdateDisplayItems}
                 viewPackingList={this.viewPackingList.bind(this)}
               />
-            </div>
           </div>
         </div>
         <LoadingPanel show={loading}>
+          <div className={"row"}>
+            <div className="col-xs-12 col-md-12 wrapper">
+              <h3
+                className={"pull-left"}>{order.shippedDate ? order.totals.owed > 0 ? 'AMOUNT DUE: ' + amountDue : 'PAID' : 'ESTIMATED TOTAL: ' + amountDue}
+              </h3>
+            </div>
+          </div>
           <div className="row">
             <div className="col-xs-6 col-md-6 wrapper">
               <div className="inline">INVOICE NUMBER: {order.invoiceNumber}</div>
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
-              { order.dueDate ? <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : '' }
-              { order.targetShipDate && !order.shippedDate ? <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : '' }
-              { order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : '' }
-              { order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : '' }
+              {order.dueDate ?
+                <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : ''}
+              {order.targetShipDate && !order.shippedDate ?
+                <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : ''}
+              {order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : ''}
+              {order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : ''}
               <br/>
               <OrderStoreInfo store={order.store}/>
             </div>
             <div className="col-xs-6 col-md-6 wrapper">
-              Beauty Full Day LLC<br />
-              12084 Waconia Cir NE<br />
-              Blaine, MN  55449<br /><br />
-              (612) 247-6537<br />
-              orders@beautyfullday.com<br />
+              Beauty Full Day LLC<br/>
+              12084 Waconia Cir NE<br/>
+              Blaine, MN 55449<br/><br/>
+              (612) 247-6537<br/>
+              orders@beautyfullday.com<br/>
             </div>
           </div>
           <div className="row">
@@ -175,75 +188,80 @@ TAX ID: ___________________________________________
               <Error message={error}/>
             </div>
           </div>
-          { order.notesToCustomer ?
+          {order.notesToCustomer ?
             <div className="row">
               <div className="col-xs-12 col-md-6">
                 NOTES: {order.notesToCustomer}
               </div>
-            </div> : '' }
+            </div> : ''}
           <div className="row">
             <h3>Products</h3>
             <div className="col-xs-12">
               <OrderDetailsTable lineItems={lineItems}/>
             </div>
           </div>
-          { displayItems.length > 0 ?
+          {displayItems.length > 0 ?
             <div className="row">
               <h3>Displays</h3>
               <div className="col-xs-12">
                 <OrderDisplayDetailsTable displayItems={displayItems}/>
               </div>
-            </div> : '' }
-          { order.totals.tester > 0 ?
+            </div> : ''}
+          {order.totals.tester > 0 ?
             <div className="row">
               <h3>Testers</h3>
               <div className="col-xs-12">
                 <OrderTestersTable lineItems={lineItems}/>
               </div>
-            </div> : '' }
+            </div> : ''}
           <div className="row">
             <div className="col-xs-12 wrapper totals">
               TOTAL PRODUCT COST: {formatCurrency(order.totals.product, opts)}
             </div>
           </div>
-          { order.totals.shippingAndHandling > 0 ?
+          {order.totals.shippingAndHandling > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
                 TOTAL SHIPPING &amp; HANDLING: {formatCurrency(order.totals.shippingAndHandling, opts)}
               </div>
-            </div> : '' }
-          { order.totals.discount > 0 ?
+            </div> : ''}
+          {order.totals.shippingAndHandling <= 0 ?
+            <div className="row">
+              <div className="col-xs-12 wrapper totals">
+                ESTIMATED SHIPPING &amp; HANDLING: {formatCurrency(getEstimatedShippingAndHandling(order.totals.product), opts)}
+              </div>
+            </div> : ''}
+          {order.totals.discount > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
                 TOTAL DISCOUNT: {formatCurrency(order.totals.discount, opts)}
               </div>
-            </div> : '' }
-          { order.totals.totalPaid > 0 ?
+            </div> : ''}
+          {order.totals.totalPaid > 0 ?
             order.payments.map((payment, index) =>
               <div className="row" key={index}>
                 <div className="col-xs-12 wrapper totals">
-                  PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): { formatCurrency(payment.amount, opts) }
+                  PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): {formatCurrency(payment.amount, opts)}
                 </div>
               </div>
-            ) : '' }
-          { order.totals.shippingAndHandling > 0 ?
+            ) : ''}
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                AMOUNT OWED: {formatCurrency(order.totals.owed, opts)}
+                {order.totals.shippingAndHandling <= 0 ? "ESTIMATED" : "" } AMOUNT OWED: {amountDue}
               </div>
-            </div> : '' }
+            </div>
           <div className="row">
             <div className="col-xs-12 wrapper totals">
               <EstimatedShippingWeight weight={order.totals.weight}/>
             </div>
           </div>
-          { order.totals.owed > 0 ?
+          {order.totals.owed > 0 ?
             <div className="row">
               <h2>Payment Information</h2>
               <div className="col-xs-12">
                 <Markdown source={paymentInfo}/>
               </div>
-            </div> : '' }
+            </div> : ''}
           <div className="row">
             <h2>Ordering Information</h2>
             <div className="col-xs-6 col-md-6">
@@ -254,15 +272,15 @@ TAX ID: ___________________________________________
             </div>
           </div>
         </LoadingPanel>
-        <dialogs.DeleteDialog />
-        <UpdatePaymentsDialog />
-        <PayCommissionDialog />
-        <UpdateDatesDialog />
-        <UpdateShippingInfoDialog />
-        <UpdateDealStageDialog />
-        <dialogs.UpdateDiscountDialog />
-        <dialogs.UpdateLineItemsDialog />
-        <UpdateDisplayItemsDialog />
+        <dialogs.DeleteDialog/>
+        <UpdatePaymentsDialog/>
+        <PayCommissionDialog/>
+        <UpdateDatesDialog/>
+        <UpdateShippingInfoDialog/>
+        <UpdateDealStageDialog/>
+        <dialogs.UpdateDiscountDialog/>
+        <dialogs.UpdateLineItemsDialog/>
+        <UpdateDisplayItemsDialog/>
       </div>
     );
 

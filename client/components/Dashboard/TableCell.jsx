@@ -6,6 +6,7 @@ class TableCell extends Component {
   static propTypes = {
     skipTruncate: PropTypes.bool,
     className: PropTypes.string,
+    rowSpan: PropTypes.number,
     rowSpan: PropTypes.number
   }
 
@@ -15,8 +16,9 @@ class TableCell extends Component {
 
   render() {
     const rowSpan = this.props.rowSpan || 1;
+    const colSpan = this.props.colSpan || 1;
     const className = this.props.skipTruncate ? this.props.className : 'truncate' + ' ' + this.props.className;
-    return <td className={className} rowSpan={rowSpan}>
+    return <td className={className} rowSpan={rowSpan} colSpan={colSpan}>
         { this.props.children }
       </td>;
   }

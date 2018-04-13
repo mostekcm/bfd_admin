@@ -67,8 +67,7 @@ export default class OrderDetailsTable extends Component {
           <TableRow key={lineItems.length}>
             <TableTextCell> </TableTextCell>
             <TableTextCell> </TableTextCell>
-            <TableTextCell> </TableTextCell>
-            <TableTextCell>Total</TableTextCell>
+            <TableTextCell colSpan={2} className={'text-right'}>Tester SubTotal</TableTextCell>
             <TableTextCell>{totalOrderCost}</TableTextCell>
           </TableRow>
         </TableBody>

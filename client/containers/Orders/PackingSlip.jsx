@@ -67,7 +67,7 @@ export default connectContainer(class Order extends Component {
     const purchaseLineItems = _(lineItems)
       .map(lineItem => ({
         name: this.getName(lineItem.sku || {}),
-        quantity: lineItem.quantity * lineItem.size
+        quantity: Math.round(lineItem.quantity * lineItem.size)
       }))
       .filter(lineItem => lineItem.quantity)
       .sortBy('name')
@@ -137,6 +137,8 @@ export default connectContainer(class Order extends Component {
               {order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : ''}
               {order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : ''}
               <br/>
+            </div>
+            <div className="col-xs-6 col-md-6 wrapper">
               <OrderStoreInfo store={order.store}/>
             </div>
           </div>

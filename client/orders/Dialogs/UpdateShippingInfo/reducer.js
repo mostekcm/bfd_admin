@@ -3,6 +3,8 @@ import { fromJS } from 'immutable';
 import * as constants from './constants';
 import createReducer from '../../../utils/createReducer';
 
+import { getEstimatedShipping } from '../../utils';
+
 const initialState = {
   error: null,
   loading: false,
@@ -25,7 +27,7 @@ export default createReducer(fromJS(initialState), {
       nextShippingCost: action.order.shipping,
       nextDueDate: action.order.dueDate,
       originalShippedDate: action.order.shippedDate,
-      originalShippingCost: action.order.shipping,
+      originalShippingCost: action.order.shipping || getEstimatedShipping(action.order.totals.product),
       originalDueDate: action.order.dueDate,
       requesting: true
     }),

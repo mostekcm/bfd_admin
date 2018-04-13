@@ -42,7 +42,8 @@ export default connectContainer(class extends Component {
       payee: record.store.name,
       account: 'Assets:Accounts Receivable',
       show: `Income:Sales:Wholesale:${record.salesRep.name}:${record.show.name}`,
-      amount: record.totals.total
+      amount: record.totals.total,
+      shipping: parseFloat(record.shipping)
     }));
 
     return (
