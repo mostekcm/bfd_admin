@@ -59,7 +59,7 @@ const processAuthResult = (authResult) => {
     }
 
     /* TODO: Validate ID token */
-    return resolve({ accessToken: authResult.accessToken, idToken: authResult.idToken, returnTo, expiresIn: authResult.expiresIn });
+    return resolve({ accessToken: authResult.accessToken, idToken: authResult.idToken, returnTo, expiresIn: authResult.expiresIn, idTokenPayload: authResult.idTokenPayload });
   })
     .then(tokens => getUserInfo(tokens)
       .then((user) => {

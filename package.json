@@ -10,7 +10,7 @@
     "client:build": "cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors",
     "server:build": "cross-env NODE_ENV=production webpack --config ./build/server/webpack.config.js --colors",
     "serve:dev": "cross-env NODE_ENV=development nodemon -e js --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore server/data.json --ignore node_modules/ ./build/webpack/server.js",
-    "serve:prod": "cross-env NODE_ENV=production node ./dist/bfd_admin.server.0.0.1.js",
+    "serve:prod": "cross-env NODE_ENV=production MANIFEST_FILE=./dist/manifest.json node ./dist/bfd_admin.server.0.0.2.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/mocha.js ./tests/**/*.tests.js",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/mocha.js ./tests/**/*.tests.js --watch",
     "test:pre": "npm run test:clean && npm run lint:js",
