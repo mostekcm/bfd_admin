@@ -61,11 +61,13 @@ export default connectContainer(class extends Component {
         return lineItem;
       })
       .value();
+    simpleOrder.shipAsap = !!simpleOrder.shipAsap;
     simpleOrder.displayItems = _.filter(simpleOrder.displayItems, (item) => item.quantity && item.quantity > 0);
     if (simpleOrder.existingStore) {
       simpleOrder.store = JSON.parse(simpleOrder.existingStore);
       delete simpleOrder.existingStore;
     }
+    simpleOrder.targetShipDate = moment(simpleOrder.targetShipDate).unix();
 
     this.props.createOrder(simpleOrder);
   };
@@ -93,10 +95,15 @@ export default connectContainer(class extends Component {
     if (record) initialValues = JSON.parse(JSON.stringify(record));
 
     const defaultSalesReps = {
-      'brooke@beautyfullday.com': { name: 'Brooke Davis' }
+      'brooke@beautyfullday.com': { name: 'Brooke Davis' },
+      'jessica@beautyfullday.com': { name: 'Jes Mostek' }
     };
 
     /* Default the show name and sales rep for now */
+    initialValues.shipAsap = initialValues.shipAsap === undefined ? 1 : !!initialValues.shipAsap;
+    initialValues.targetShipDate = initialValues.targetShipDate ?
+      moment.unix(initialValues.targetShipDate).format('YYYY-MM-DD') :
+      moment().add(14, 'days').format('YYYY-MM-DD');
     initialValues.show = initialValues.show || { name: "House Account" };
     initialValues.salesRep = initialValues.salesRep || defaultSalesReps[user.email] || { name: "Max Bentley" };
     if (initialValues.store) {

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { Checkbox } from 'react-bootstrap';
 
 import PropTypes from 'prop-types';
 
@@ -12,8 +13,11 @@ import * as constants from '../../constants';
 
 import {
   ComboField,
+  InputDate,
   InputText
 } from '../Dashboard';
+
+import './OrderForm.css';
 
 export default createForm('order', class OrderForm extends Component {
   static propTypes = {
@@ -33,6 +37,38 @@ export default createForm('order', class OrderForm extends Component {
     this.renderStoreFields.bind(this);
   }
 
+  renderShipAsap() {
+    return (
+      <div className="col-xs-12">
+        <div className="custom-field">
+          <div className={'form-group'}>
+            <label htmlFor="shipAsap">Ship ASAP?</label>
+            <Field component={'input'} type={'checkbox'} name={'shipAsap'}
+                   props={{ className: 'checkbox' }}/>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderTargetShipDate() {
+    return (
+      <div className="col-xs-12">
+        <div className="custom-field">
+          <Field component={InputDate}
+                 name={'targetShipDate'}
+                 props={
+                   {
+                     fieldName: 'date', label:
+                     'Target Ship Date'
+                   }
+                 }
+          />
+        </div>
+      </div>
+    );
+  }
+
   renderSalesRep(validationErrors, show) {
     if (!show)
       return null;
@@ -49,6 +85,10 @@ export default createForm('order', class OrderForm extends Component {
         value: 'Jes Mostek'
       },
       {
+        text: 'Brooke Davis',
+        value: 'Brooke Davis'
+      },
+      {
         text: 'Eric Wiltgen',
         value: 'Eric Wiltgen'
       }
@@ -57,7 +97,7 @@ export default createForm('order', class OrderForm extends Component {
     return (
       <div className="col-xs-12">
         <div className="custom-field">
-          <ComboField options={options} name={name} label='Sales Rep' validationErrors={validationErrors} />
+          <ComboField options={options} name={name} label='Sales Rep' validationErrors={validationErrors}/>
         </div>
       </div>
     );
@@ -72,18 +112,19 @@ export default createForm('order', class OrderForm extends Component {
     return (
       <div className="col-xs-12">
         <div className="custom-field">
-          <ComboField options={showOptions} name='show.name' label='Show' validationErrors={validationErrors} />
+          <ComboField options={showOptions} name='show.name' label='Show' validationErrors={validationErrors}/>
         </div>
       </div>
     );
   }
 
   renderStoresField(stores, validationErrors) {
-    const storeOptions = _.map(stores, store => ({text: store.name, value: JSON.stringify(store)}));
+    const storeOptions = _.map(stores, store => ({ text: store.name, value: JSON.stringify(store) }));
     return (
       <div className="col-xs-12">
         <div className="custom-field">
-          <ComboField options={storeOptions} name='existingStore' label='Existing Store' validationErrors={validationErrors} />
+          <ComboField options={storeOptions} name='existingStore' label='Existing Store'
+                      validationErrors={validationErrors}/>
         </div>
       </div>
     );
@@ -129,6 +170,12 @@ export default createForm('order', class OrderForm extends Component {
 
     return (
       <form className="create-order form-horizontal" style={{ marginTop: '30px' }}>
+        <div className={"row"}>
+          {this.renderShipAsap()}
+        </div>
+        <div className={"row"}>
+          {this.renderTargetShipDate()}
+        </div>
         <div className="row">
           {this.renderShow(validationErrors, this.props.showShow)}
         </div>
@@ -146,20 +193,20 @@ export default createForm('order', class OrderForm extends Component {
           {this.renderTextField('internalNotes', 'Internal  Notes', validationErrors)}
         </div>
         <div className={"row"}>
-          <OrderFormQuickAddButtons change={this.props.change} lineItems={lineItems} packages={this.props.packages} />
+          <OrderFormQuickAddButtons change={this.props.change} lineItems={lineItems} packages={this.props.packages}/>
         </div>
         <div className="row">
           <h3>Products</h3>
           <div className="col-xs-12">
             <FieldArray name='lineItems' component={OrderFormLineItems}
-                        props={ { loading: this.props.loading, lineItems: lineItems } }/>
+                        props={{ loading: this.props.loading, lineItems: lineItems }}/>
           </div>
         </div>
         <div className="row">
           <h3>Displays</h3>
           <div className="col-xs-12">
             <FieldArray name='displayItems' component={OrderFormDisplayItems}
-                        props={ { loading: this.props.loading, displayItems: displayItems } }/>
+                        props={{ loading: this.props.loading, displayItems: displayItems }}/>
           </div>
         </div>
       </form>

@@ -169,7 +169,7 @@ TAX ID: ___________________________________________
               {order.dueDate ?
                 <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : ''}
               {order.targetShipDate && !order.shippedDate ?
-                <div>TARGET SHIP DATE: {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : ''}
+                <div>TARGET SHIP DATE: {order.shipAsap ? 'ASAP' : ''} {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : ''}
               {order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : ''}
               {order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : ''}
               <br/>

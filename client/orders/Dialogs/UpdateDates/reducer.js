@@ -9,6 +9,7 @@ const initialState = {
   requesting: false,
   orderId: null,
   originalTargetShipDate: null,
+  originalShipAsap: null,
   shippedDate: null,
   originalDate: null
 };
@@ -19,6 +20,7 @@ export default createReducer(fromJS(initialState), {
       ...initialState,
       orderId: action.order.id,
       originalTargetShipDate: action.order.targetShipDate,
+      originalShipAsap: action.order.shipAsap,
       shippedDate: action.order.shippedDate,
       originalDate: action.order.date,
       requesting: true
