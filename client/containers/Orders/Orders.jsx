@@ -84,6 +84,7 @@ class Orders extends Component {
           orders={orders}
           total={total}
           loading={loading}
+          push={this.props.router.push}
         />
       </div>
     );

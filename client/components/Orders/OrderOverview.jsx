@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 
 import { SearchBar, OrdersTable } from './';
@@ -7,26 +8,53 @@ import formatCurrency from 'format-currency';
 
 export default class OrderOverview extends React.Component {
   static propTypes = {
-    onReset: React.PropTypes.func.isRequired,
-    onSearch: React.PropTypes.func.isRequired,
-    error: React.PropTypes.object,
-    errorCases: React.PropTypes.object,
-    errorCompanies: React.PropTypes.object,
-    errorDisplays: React.PropTypes.object,
-    orders: React.PropTypes.array.isRequired,
-    query: React.PropTypes.string.isRequired,
-    total: React.PropTypes.number.isRequired,
-    loading: React.PropTypes.bool.isRequired
+    onReset: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
+    error: PropTypes.object,
+    errorCases: PropTypes.object,
+    errorCompanies: PropTypes.object,
+    errorDisplays: PropTypes.object,
+    orders: PropTypes.array.isRequired,
+    query: PropTypes.string.isRequired,
+    total: PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired,
+    push: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = { ordersToShip: {} };
   }
 
   onKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.props.onSearch(findDOMNode(this.refs.search).value);
     }
+  };
+
+  createSpeedeeEmail()  {
+    this.props.push({
+      pathname: '/speedee',
+      state: {
+        orders: this.state.ordersToShip
+      }
+    });
+  }
+
+  onRowSelect(order, selected) {
+    const ordersToShip = this.state.ordersToShip;
+    if (selected) {
+      if (!(order.id in ordersToShip)) ordersToShip[order.id] = order;
+    } else {
+      if (order.id in ordersToShip) delete ordersToShip[order.id];
+    }
+
+    this.setState({ ordersToShip });
   }
 
   render() {
-    const { loading, error, orders, total, errorCases, errorCompanies, errorDisplays} = this.props;
+    const { loading, error, orders, errorCases, errorCompanies, errorDisplays} = this.props;
     const opts = { format: '%s%v', symbol: '$' };
 
     let totalAccountsReceivable = {};
@@ -74,9 +102,15 @@ export default class OrderOverview extends React.Component {
             </div>
           </div>
           <SearchBar onReset={this.props.onReset} onSearch={this.props.onSearch} query={this.props.query} enabled={!loading} />
+          <div className={"row"}>
+            <button className={`btn btn-success pull-left new`} disabled={Object.keys(this.state.ordersToShip).length <= 0} onClick={this.createSpeedeeEmail.bind(this)}>
+              <i className="icon-budicon-778"></i>
+              Email Speedee
+            </button>
+          </div>
           <div className="row">
             <div className="col-xs-12">
-              <OrdersTable loading={loading} orders={orders} />
+              <OrdersTable loading={loading} orders={orders} onRowSelect={this.onRowSelect.bind(this)} />
             </div>
           </div>
           <div className="row">

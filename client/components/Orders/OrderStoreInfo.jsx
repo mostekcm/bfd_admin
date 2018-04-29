@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import formatCurrency from 'format-currency';
+import ShippingAddress from './ShippingAddress';
 
 export default class OrderStoreInfo extends Component {
   static propTypes = {
@@ -41,11 +42,6 @@ export default class OrderStoreInfo extends Component {
     );
   }
 
-  getContactName(store) {
-    return store.contacts ? _.map(store.contacts, 'name').filter(attr => attr && attr.length > 0).join(' or ') :
-      store.contact || 'No Contact';
-  }
-
   getPhone(store) {
     return store.contacts ? _.map(store.contacts, 'phone').filter(attr => attr && attr.length > 0).join(' or ') : store.phone || 'No Phone';
   }
@@ -60,9 +56,7 @@ export default class OrderStoreInfo extends Component {
     return (
       <div>
           { store ? <div className="address">
-            {store.name}<br />
-            Attn: {this.getContactName(store)}<br />
-            {this.renderAddress(store.shippingAddress)}
+            <ShippingAddress store={store}/>
             { store.billingAddress ? this.renderAddress(store.billingAddress, 'bill to: ') : '' }
             {this.getPhone(store)}<br />
             {this.getEmail(store)}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import formatCurrency from 'format-currency';
 import _ from 'lodash';
 import moment from 'moment';
@@ -16,8 +17,9 @@ import {
 
 export default class OrdersTable extends Component {
   static propTypes = {
-    orders: React.PropTypes.array.isRequired,
-    loading: React.PropTypes.bool.isRequired
+    orders: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    onRowSelect: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps) {
@@ -111,11 +113,12 @@ export default class OrdersTable extends Component {
     return (
       <Table>
         <TableHeader>
+          <TableColumn width="2%">&nbsp;</TableColumn>
           <TableColumn width="11%">Invoice #</TableColumn>
           <TableColumn width="4%">Stg</TableColumn>
           <TableColumn width="8%">Order Date</TableColumn>
           <TableColumn width="10%">Ship(ped) Date</TableColumn>
-          <TableColumn width="10%">Payment Due Date</TableColumn>
+          <TableColumn width="10%">Pay Date</TableColumn>
           <TableColumn width="25%">Store</TableColumn>
           <TableColumn width="9%">Order Total</TableColumn>
           <TableColumn width="9%">Total Due</TableColumn>
@@ -123,6 +126,7 @@ export default class OrdersTable extends Component {
         <TableBody>
           {tableRowOrders.map((order, index) => {
             return <TableRow key={index}>
+              <TableTextCell><input type={'checkbox'} onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableTextCell>
               <TableRouteCell
                 route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
               <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>
