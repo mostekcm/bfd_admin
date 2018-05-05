@@ -12,7 +12,7 @@ import ChooseShowAndYearDialog from './Dialogs/ChooseShowAndYear';
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import OrderDetailsTable from '../../components/Orders/OrderDetailsTable';
 import OrderDisplayDetailsTable from '../../components/Orders/OrderDisplayDetailsTable';
-import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
+import OrderStoreInfo from '../../components/Orders/OrderStoreInfo';
 
 export default connectContainer(class ShowReport extends Component {
   static stateToProps = (state) => ({

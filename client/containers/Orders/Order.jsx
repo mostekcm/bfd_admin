@@ -29,8 +29,8 @@ import {
   OrderActions, OrderDetailsTable, OrderDisplayDetailsTable, OrderTestersTable/*, OrderHeader, OrderProfile, OrderLogs,
  OrderInfo*/
 } from '../../components/Orders';
-import EstimatedShippingWeight from '../../components/orders/EstimatedShippingWeight';
-import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
+import EstimatedShippingWeight from '../../components/Orders/EstimatedShippingWeight';
+import OrderStoreInfo from '../../components/Orders/OrderStoreInfo';
 
 import { getEstimatedShippingAndHandling } from '../../orders/utils';
 

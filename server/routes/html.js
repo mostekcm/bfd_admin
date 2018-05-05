@@ -54,7 +54,7 @@ export default () => {
       HUBSPOT_CLIENT_ID: config('HUBSPOT_CLIENT_ID')
     };
 
-    if (settings.BASE_URL.indexOf('ngrok') >= 0) {
+    if (settings.BASE_URL.indexOf('appliance-trial') >= 0) {
       settings.BASE_URL = settings.BASE_URL.replace('http', 'https');
     }
 

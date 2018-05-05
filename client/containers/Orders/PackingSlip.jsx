@@ -7,9 +7,9 @@ import './Order.css';
 
 import { fetchOrder } from '../../actions/order';
 import { Error, LoadingPanel } from '../../components/Dashboard';
-import EstimatedShippingWeight from '../../components/orders/EstimatedShippingWeight';
-import OrderStoreInfo from '../../components/orders/OrderStoreInfo';
-import PackingListTable from '../../components/orders/PackingListTable';
+import EstimatedShippingWeight from '../../components/Orders/EstimatedShippingWeight';
+import OrderStoreInfo from '../../components/Orders/OrderStoreInfo';
+import PackingListTable from '../../components/Orders/PackingListTable';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
