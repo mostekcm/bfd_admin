@@ -110,22 +110,25 @@ TAX ID: ___________________________________________
 `;
 
     const terms1 = `
+1. *Orders typically ship in two weeks, unless otherwise specified.*
 1. *Minimum of $100 applies only to opening orders*
-1. *All orders prepaid or payment by Credit Card (CC)*
-1. *A $25.00 charge on returned checks.*
+1. *No minimum order for re-orders*
+1. *All payments by Credit Card (CC) or prepaid, except in special circumstances, with approval only*
+1. *Late or returned payments are subject to late fees of 15% and may result in rejection of subsequent orders*
 1. *Shipping charges will be added to all orders.*
-1. *Beauty Full Day LLC does not ship COD*
 1. *Please notify us of special ship dates or events.*
 1. *Prices are subject to change without notice*
 `;
 
     const terms2 = `
-8. *No merchandise may be returned without prior approval.*
+1. *No items may be returned without approval*
 1. *A 15% restocking fee will be charged on any item approved for return.*
 1. *Tester pricing:*
-   1. *1 oz special tester size, offered when available, at $1/tester*
-   1. *Otherwise full-size testers available at 1/2 wholesale cost*
-   1. *limit 1 tester per product ordered per 6 cases ordered*
+   1. *Tester pricing limited to one tester per six cases per product*
+   1. *Tester sizes offered as available*
+   1. *Special tester sizes cost $1 each, on a limited basis*
+   1. *Full-sized testers offered when miniature tester sizes are not available, or in special circumstances, with approval only*
+   1. *Full-sized testers cost 50% of wholesale pricing, on a limited basis*
 `;
 
     const owed = order.totals.owed + (order.shippedDate ? 0 : getEstimatedShippingAndHandling(order.totals.product));
