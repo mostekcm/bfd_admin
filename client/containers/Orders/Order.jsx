@@ -182,7 +182,7 @@ TAX ID: ___________________________________________
               Beauty Full Day LLC<br/>
               12084 Waconia Cir NE<br/>
               Blaine, MN 55449<br/><br/>
-              (612) 247-6537<br/>
+              (651) 401-5402<br/>
               orders@beautyfullday.com<br/>
             </div>
           </div>
