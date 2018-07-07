@@ -9,6 +9,8 @@ import OrderPackingSlip from './containers/Orders/PackingSlip';
 import PaymentReport from './containers/Reports/Payments';
 import ShipmentReport from './containers/Reports/Shipments';
 import ShowReport from './containers/Reports/Show';
+import OrderRollup from './containers/Orders/OrderRollup';
+import IconSheet from './containers/IconSheet';
 import SpeedeeEmail from './containers/Orders/SpeedeeEmail';
 import ManageShowAndSalesRep from './orders/ManageShowAndSalesRep/Container';
 
@@ -26,6 +28,8 @@ export default (history) =>
       <Route path="report/month/:month" component={containers.MonthReport} />
       <Route path="report/commission/due/:name" component={containers.CommissionDueReport} />
       <Route path="speedee" component={SpeedeeEmail} />
+      <Route path="orderRollup" component={OrderRollup} />
+      <Route path="iconSheet" component={IconSheet} />
       <Route path="authorizeCrm" component={AuthorizeCrm} />
     </Route>
     <Route path="/login" component={Login} />

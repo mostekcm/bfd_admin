@@ -10,14 +10,13 @@ import { Error, LoadingPanel } from '../../components/Dashboard';
 import EstimatedShippingWeight from '../../components/Orders/EstimatedShippingWeight';
 import OrderStoreInfo from '../../components/Orders/OrderStoreInfo';
 import PackingListTable from '../../components/Orders/PackingListTable';
+import { getSimpleLineItemsForOrder } from '../../utils/getSimpleLineItems';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
     error: state.order.get('error') + state.updateCompany.get('error'),
     loading: state.order.get('loading') || state.updateCompany.get('loading'),
-    order: state.order,
-    lineItems: state.order.get('record').toJS().lineItems,
-    displayItems: state.order.get('record').toJS().displayItems
+    order: state.order
   });
 
   static actionsToProps = {
@@ -27,8 +26,6 @@ export default connectContainer(class Order extends Component {
   static propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
-    displayItems: PropTypes.array,
-    lineItems: PropTypes.array,
     order: PropTypes.object,
     params: PropTypes.object,
     router: PropTypes.object,
@@ -42,8 +39,7 @@ export default connectContainer(class Order extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.params !== this.props.params ||
       nextProps.loading !== this.props.loading ||
-      nextProps.lineItems !== this.props.lineItems ||
-      nextProps.displayItems !== this.props.displayItems ||
+      nextProps.order !== this.props.order ||
       nextProps.location !== this.props.location;
   }
 
@@ -51,68 +47,15 @@ export default connectContainer(class Order extends Component {
     this.props.router.push('/orders/' + this.props.params.id);
   }
 
-  getName(sku) {
-    return `${sku.product.name}${ sku.size !== 'N/A' ? ', ' + sku.size : ''}${ sku.variety ? ', ' + sku.variety : ''}`;
-  }
-
   render() {
     const { loading, error, record } = this.props.order.toJS();
-    const opts = { format: '%s%v', symbol: '$' };
 
     const order = record;
-    order.totals = order.totals || {};
-    const lineItems = this.props.lineItems || [];
-    const displayItems = this.props.displayItems || [];
-
-    const purchaseLineItems = _(lineItems)
-      .map(lineItem => ({
-        name: this.getName(lineItem.sku || {}),
-        quantity: Math.round(lineItem.quantity * lineItem.size)
-      }))
-      .filter(lineItem => lineItem.quantity)
-      .sortBy('name')
-      .value();
-
-    const displayLineItems = _(displayItems)
-      .map(displayItem => ({
-        name: displayItem.product.name.length > 0 ? `${displayItem.name} for ${displayItem.product.name}` : displayItem.name,
-        quantity: displayItem.quantity
-      }))
-      .filter(displayItem => displayItem.quantity)
-      .sortBy('name')
-      .value();
-
-    const offsetMerchItems = _(displayItems)
-      .map(displayItem => _.map(displayItem.offsetMerch, offsetMerch => ({
-        name: this.getName(offsetMerch.sku),
-        quantity: Math.round(parseFloat(offsetMerch.quantity) * parseFloat(displayItem.quantity))
-      })))
-      .flatten()
-      .value();
-
-    const packingLineItems = _(purchaseLineItems)
-      .concat(offsetMerchItems)
-      .groupBy('name')
-      .map(groups => ({
-        name: groups[0].name,
-        quantity: _.sumBy(groups, 'quantity')
-      }))
-      .sortBy('name')
-      .value();
-
-    const testerLineItems = _(lineItems)
-      .map(lineItem => ({
-        name: this.getName(lineItem.sku).replace(`, ${lineItem.sku.size}`, ''),
-        quantity: lineItem.tester.quantity
-      }))
-      .filter(lineItem => lineItem.quantity)
-      .groupBy('name')
-      .map(groups => ({
-        name: groups[0].name,
-        quantity: _.sumBy(groups, 'quantity')
-      }))
-      .sortBy('name')
-      .value();
+    const {
+      displayLineItems,
+      packingLineItems,
+      testerLineItems
+    } = getSimpleLineItemsForOrder(order);
 
     return (
       <div className="order">

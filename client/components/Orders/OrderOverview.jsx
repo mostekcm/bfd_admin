@@ -24,7 +24,7 @@ export default class OrderOverview extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { ordersToShip: {} };
+    this.state = { selectedOrders: {} };
   }
 
   onKeyPress = (e) => {
@@ -37,20 +37,29 @@ export default class OrderOverview extends React.Component {
     this.props.push({
       pathname: '/speedee',
       state: {
-        orders: this.state.ordersToShip
+        orders: this.state.selectedOrders
+      }
+    });
+  }
+
+  orderRollup()  {
+    this.props.push({
+      pathname: '/orderRollup',
+      state: {
+        orders: this.state.selectedOrders
       }
     });
   }
 
   onRowSelect(order, selected) {
-    const ordersToShip = this.state.ordersToShip;
+    const selectedOrders = this.state.selectedOrders;
     if (selected) {
-      if (!(order.id in ordersToShip)) ordersToShip[order.id] = order;
+      if (!(order.id in selectedOrders)) selectedOrders[order.id] = order;
     } else {
-      if (order.id in ordersToShip) delete ordersToShip[order.id];
+      if (order.id in selectedOrders) delete selectedOrders[order.id];
     }
 
-    this.setState({ ordersToShip });
+    this.setState({ selectedOrders });
   }
 
   render() {
@@ -103,9 +112,13 @@ export default class OrderOverview extends React.Component {
           </div>
           <SearchBar onReset={this.props.onReset} onSearch={this.props.onSearch} query={this.props.query} enabled={!loading} />
           <div className={"row"}>
-            <button className={`btn btn-success pull-left new`} disabled={Object.keys(this.state.ordersToShip).length <= 0} onClick={this.createSpeedeeEmail.bind(this)}>
+            <button className={`btn btn-success pull-left new`} disabled={Object.keys(this.state.selectedOrders).length <= 0} onClick={this.createSpeedeeEmail.bind(this)}>
               <i className="icon-budicon-778"></i>
               Email Speedee
+            </button>
+            <button className={`btn btn-success pull-left new`} disabled={Object.keys(this.state.selectedOrders).length <= 0} onClick={this.orderRollup.bind(this)}>
+              <i className="icon-budicon-715"></i>
+              Order Rollup
             </button>
           </div>
           <div className="row">
