@@ -10,10 +10,10 @@ const baseUrl = window.config.BASE_API_URL;
 /*
  * Search for orders.
  */
-export function fetchOrders(search = '', reset = false, page = 0) {
+export function fetchOrders(search = '', reset = false, page = 0, actionType) {
   return (dispatch) => {
     dispatch({
-      type: constants.FETCH_ORDERS,
+      type: actionType || constants.FETCH_ORDERS,
       payload: {
         promise: axios.get(`${baseUrl}/api/orders`, {
           params: {
@@ -139,23 +139,27 @@ export function fetchOrder(orderId) {
 /*
  * Update the order details.
  */
-export function updateOrder(orderId, data, onSuccess) {
+export function updateOrder(orderId, data, onSuccess, actionType) {
   return (dispatch) => {
     dispatch({
-      type: constants.UPDATE_ORDER,
+      type: actionType || constants.UPDATE_ORDER,
       meta: {
         orderId,
-        onSuccess: () => {
+        onSuccess: (response) => {
           if (onSuccess) {
-            onSuccess();
+            return onSuccess(response);
           }
           dispatch(fetchOrderDetail(orderId));
         }
       },
       payload: {
-        promise: axios.put(`${baseUrl}/api/orders/${orderId}`, data, {
+        promise: axios.patch(`${baseUrl}/api/orders/${orderId}`, data, {
           responseType: 'json'
         })
+      },
+      meta: {
+        orderId,
+        data
       }
     });
   };

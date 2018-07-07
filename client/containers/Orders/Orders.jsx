@@ -30,7 +30,7 @@ class Orders extends Component {
     total: PropTypes.number,
     fetchOrders: PropTypes.func.isRequired,
     createOrder: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);

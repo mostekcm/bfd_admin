@@ -13,6 +13,7 @@ import orders from './orders';
 import ordersForShow from './ordersForShow';
 import commissionDueReport from './commissionDueReport';
 import showReport from './showReport';
+import manageShowAndSalesRep from '../orders/ManageShowAndSalesRep/reducer';
 import monthReport from './monthReport';
 import packages from './packages';
 import paymentsReport from './paymentsReport';
@@ -41,6 +42,7 @@ export default combineReducers({
   companies,
   displays,
   lastAction,
+  manageShowAndSalesRep,
   order,
   orderCreate,
   orderDelete,

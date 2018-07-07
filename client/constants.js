@@ -206,3 +206,22 @@ export const SHOW_LIST = [
     value: 'October Expo'
   }
 ];
+
+export const SALES_REP_LIST = [
+  {
+    text: 'Max Bentley',
+    value: 'Max Bentley'
+  },
+  {
+    text: 'Jes Mostek',
+    value: 'Jes Mostek'
+  },
+  {
+    text: 'Brooke Davis',
+    value: 'Brooke Davis'
+  },
+  {
+    text: 'Eric Wiltgen',
+    value: 'Eric Wiltgen'
+  }
+];

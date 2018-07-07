@@ -75,24 +75,7 @@ export default createForm('order', class OrderForm extends Component {
 
     const name = 'salesRep.name';
 
-    const options = [
-      {
-        text: 'Max Bentley',
-        value: 'Max Bentley'
-      },
-      {
-        text: 'Jes Mostek',
-        value: 'Jes Mostek'
-      },
-      {
-        text: 'Brooke Davis',
-        value: 'Brooke Davis'
-      },
-      {
-        text: 'Eric Wiltgen',
-        value: 'Eric Wiltgen'
-      }
-    ];
+    const options = constants.SALES_REP_LIST;
 
     return (
       <div className="col-xs-12">

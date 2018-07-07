@@ -5,7 +5,7 @@ const config = require('./config.dev.js');
 const logger = require('../../server/lib/logger');
 
 const options = {
-  publicPath: 'http://localhost:3001/app/',
+  publicPath: 'https://bfd-admin.appliance-trial.com/app/',
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -31,7 +31,7 @@ new WebpackDevServer(webpack(config), options)
       if (err) {
         logger.error(err);
       } else {
-        logger.info('Webpack proxy listening on: http://localhost:3001');
+        logger.info('Webpack proxy listening on: https://bfd-admin.appliance-trial.com');
 
         // Start the actual webserver.
         require('../../index.dev');

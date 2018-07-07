@@ -4,8 +4,8 @@ const webpack = require('webpack');
 const logger = require('../../server/lib/logger');
 logger.info('Running development configuration...');
 
-const WEBPACK_HOST = 'localhost';
-const WEBPACK_PORT = 3001;
+const WEBPACK_HOST = 'bfd-admin.appliance-trial.com';
+const WEBPACK_PORT = 443;
 
 // Override base configuration.
 let config = require('./config.base.js');
@@ -16,7 +16,7 @@ config.entry = [
   'webpack/hot/only-dev-server',
   config.entry.app
 ];
-config.output.publicPath = 'http://localhost:3001' + config.output.publicPath;
+config.output.publicPath = 'https://bfd-admin.appliance-trial.com' + config.output.publicPath;
 
 // Stats configuration.
 config.stats = {

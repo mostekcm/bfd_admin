@@ -10,6 +10,7 @@ import PaymentReport from './containers/Reports/Payments';
 import ShipmentReport from './containers/Reports/Shipments';
 import ShowReport from './containers/Reports/Show';
 import SpeedeeEmail from './containers/Orders/SpeedeeEmail';
+import ManageShowAndSalesRep from './orders/ManageShowAndSalesRep/Container';
 
 export default (history) =>
   <Router history={history}>
@@ -18,6 +19,7 @@ export default (history) =>
       <Route path="orders" component={containers.Orders} />
       <Route path="orders/:id" component={containers.Order} />
       <Route path="orders/packing/:id" component={OrderPackingSlip} />
+      <Route path="manageShowAndSalesRep" component={ManageShowAndSalesRep} />
       <Route path="report/payments" component={PaymentReport} />
       <Route path="report/shipments" component={ShipmentReport} />
       <Route path="report/show(/:show/:year)" component={ShowReport} />
