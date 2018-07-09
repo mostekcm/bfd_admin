@@ -32,12 +32,12 @@ module.exports = {
     //     warnings: false
     //   }
     // }),
-    new Webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-        CLIENT_VERSION: JSON.stringify(project.version)
-      }
-    })
+    // new Webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production'),
+    //     CLIENT_VERSION: JSON.stringify(project.version)
+    //   }
+    // })
   ],
   resolve: {
     modules: [
@@ -48,6 +48,7 @@ module.exports = {
     alias: {}
   },
   node: {
-    __dirname: true
+    __dirname: true,
+    process: false
   }
 };
