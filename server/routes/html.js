@@ -1,10 +1,42 @@
 import fs from 'fs';
 import ejs from 'ejs';
-import path from 'path';
-import { urlHelpers } from 'auth0-extension-express-tools';
 
 import config from '../lib/config';
 import logger from '../lib/logger';
+
+const url = require('url');
+
+const getBasePathBase = function(originalUrl, path) {
+  var basePath = url.parse(originalUrl).pathname || '';
+  basePath = basePath.replace(path, '')
+    .replace(/^\/|\/$/g, '');
+  if (!basePath.startsWith('/')) {
+    basePath = '/' + basePath;
+  }
+  if (!basePath.endsWith('/')) {
+    basePath += '/';
+  }
+  return basePath;
+};
+
+const getBasePath = function(req) {
+  return getBasePathBase(req.originalUrl || '', req.path);
+};
+
+const getBaseUrl = function(req, protocol) {
+  var urlProtocol = protocol;
+
+  const originalUrl = url.parse(req.originalUrl || '').pathname || '';
+  if (!urlProtocol && process.env.NODE_ENV === 'development') {
+    console.log('originalUrl: ', originalUrl);
+    urlProtocol = 'http';
+  }
+  return url.format({
+    protocol: urlProtocol || 'https',
+    host: req.headers.host,
+    pathname: originalUrl.replace(req.path, '').replace(/\/$/g, '')
+  });
+};
 
 export default () => {
   const template = `<!DOCTYPE html>
@@ -20,7 +52,7 @@ export default () => {
   <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/manage/v0.3.1672/css/index.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styleguide/4.6.13/index.min.css" />
   <% if (assets.style) { %><link rel="stylesheet" type="text/css" href="/app/<%= assets.style %>" /><% } %>
-  <% if (assets.version) { %><link rel="stylesheet" type="text/css" href="//cdn.auth0.com/extensions/auth0-delegated-admin/assets/auth0-delegated-admin.ui.<%= assets.version %>.css" /><% } %>
+  <link rel="stylesheet" type="text/css" href="/app/bfd_admin.ui.<%= assets.version %>.css" />
   <% if (assets.customCss) { %><link rel="stylesheet" type="text/css" href="<%= assets.customCss %>" /><% } %>
 </head>
 <body>
@@ -31,8 +63,8 @@ export default () => {
   <% if (assets.vendors) { %><script type="text/javascript" src="/app/<%= assets.vendors %>"></script><% } %>
   <% if (assets.app) { %><script type="text/javascript" src="/app/<%= assets.app %>"></script><% } %>
   <% if (assets.version) { %>
-  <script type="text/javascript" src="//cdn.auth0.com/extensions/auth0-delegated-admin/assets/auth0-delegated-admin.ui.vendors.<%= assets.version %>.js"></script>
-  <script type="text/javascript" src="//cdn.auth0.com/extensions/auth0-delegated-admin/assets/auth0-delegated-admin.ui.<%= assets.version %>.js"></script>
+  <script type="text/javascript" src="/app/bfd_admin.ui.vendors.<%= assets.version %>.js"></script>
+  <script type="text/javascript" src="/app/bfd_admin.ui.<%= assets.version %>.js"></script>
   <% } %>
 </body>
 </html>
@@ -46,17 +78,13 @@ export default () => {
     const settings = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
-      BASE_URL: urlHelpers.getBaseUrl(req),
-      BASE_PATH: urlHelpers.getBasePath(req),
+      BASE_URL: getBaseUrl(req),
+      BASE_PATH: getBasePath(req),
       TITLE: config('TITLE'),
       BASE_API_URL: config('BASE_API_URL'),
       BFD_AUDIENCE: config('BFD_AUDIENCE'),
       HUBSPOT_CLIENT_ID: config('HUBSPOT_CLIENT_ID')
     };
-
-    if (settings.BASE_URL.indexOf('appliance-trial') >= 0) {
-      settings.BASE_URL = settings.BASE_URL.replace('http', 'https');
-    }
 
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const getName = sku => `${sku.product.name}${ sku.size !== 'N/A' ? ', ' + sku.size : ''}${ sku.variety ? ', ' + sku.variety : ''}`;
 
 export const getSimpleLineItemsForOrder = (order) => {
