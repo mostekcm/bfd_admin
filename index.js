@@ -14,7 +14,7 @@ process.on('uncaughtException', (err) => {
 nconf
   .argv()
   .env()
-  .file(path.join(__dirname, './server/config.json'))
+  .file('./server/config.json')
   .defaults({
     DATA_CACHE_MAX_AGE: 1000 * 10,
     NODE_ENV: 'development',
@@ -22,6 +22,9 @@ nconf
     PORT: 3000,
     TITLE: 'Beauty Full Day LLC Order Management'
   });
+
+const staticDir = nconf.get('STATIC_DIR');
+if (!staticDir) throw new Error('Configuration is broken, no STATIC_DIR defined');
 
 // Start the server.
 const app = server(key => nconf.get(key), null);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { PropTypes, Component } from 'react';
 
 import './TableCell.css';

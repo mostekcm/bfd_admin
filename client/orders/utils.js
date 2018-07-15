@@ -3,17 +3,20 @@ import _ from 'lodash';
 export const getEstimatedShipping = (total) => {
   if (total === 0) return 0;
   total = parseFloat(total);
-  const hundreds = Math.ceil(total/100.0);
-  const shippingPercent = {
-    1: 16.87,
-    2: 13,
-    3: 11,
-    4: 9,
-    5: 8,
-    default: 6.87
-  };
+  const shippingPercent = [
+    { amount: 300, percent: 2.0 },
+    { amount: 150, percent: 4.5 },
+    { amount: 0, percent: 7.0 }
+  ];
 
-  return total * (hundreds <= 5 ? shippingPercent[hundreds] : shippingPercent.default) / 100.0;
+  if (total < 0) return 0;
+
+  let percent = 0;
+  shippingPercent.forEach((data) => {
+    if (percent === 0 && total > data.amount) percent = data.percent;
+  });
+
+  return total * percent / 100.0;
 };
 
 export const getEstimatedShippingAndHandling = (total) => {

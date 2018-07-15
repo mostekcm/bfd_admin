@@ -19,6 +19,7 @@ process.on('uncaughtException', (err) => {
 });
 
 // Initialize configuration.
+logger.info('Looking for config in: ' + path.join(__dirname, './server/config.json'));
 nconf
   .argv()
   .env()
