@@ -71,6 +71,7 @@ export default connectContainer(class Order extends Component {
           <div className="row">
             <div className="col-xs-6 col-md-6 wrapper">
               <div className="inline">INVOICE NUMBER: {order.invoiceNumber}</div>
+              <div className={"inline"}>TODAY: {moment().format('MM/DD/YYYY')}</div>
               ORDER DATE: {moment.unix(order.date).format('MM/DD/YYYY')}
               {order.dueDate ?
                 <div className="inline">DUE DATE: {moment.unix(order.dueDate).format('MM/DD/YYYY')}</div> : ''}

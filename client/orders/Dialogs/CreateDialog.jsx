@@ -89,12 +89,13 @@ export default connectContainer(class extends Component {
     const stores = this.props.companies.toJS().records;
     const displays = this.props.displays.toJS().records;
     const packages = this.props.packages.toJS().records;
-    const showShowAndSalesRep = user.email === 'brooke@beautyfullday.com' || user.email === 'carlos@beautyfullday.com' || user.email === 'jessica@beautyfullday.com';
+    const showShowAndSalesRep = true;
 
     let initialValues = {};
     if (record) initialValues = JSON.parse(JSON.stringify(record));
 
     const defaultSalesReps = {
+      'amy@beautyfullday.com': { name: 'Amy Zwolanek Laird' },
       'brooke@beautyfullday.com': { name: 'Brooke Davis' },
       'jessica@beautyfullday.com': { name: 'Jes Mostek' }
     };

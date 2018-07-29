@@ -221,6 +221,10 @@ export const SALES_REP_LIST = [
     value: 'Brooke Davis'
   },
   {
+    text: 'Amy Zwolanek Laird',
+    value: 'Amy Zwolanek Laird'
+  },
+  {
     text: 'Eric Wiltgen',
     value: 'Eric Wiltgen'
   }
