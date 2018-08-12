@@ -11,6 +11,14 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /node_modules\/(pdfkit|fontkit|png-js|linebreak|unicode-properties|brotli)\//,
+        loader: "transform-loader?brfs"
+      },
+      {
+        test: /node_modules\/unicode-properties.*\.json$/,
+        use: 'json-loader',
+      },
+      {
         test: /\.js|\.jsx$/,
         exclude: /node_modules/,
         use: {
@@ -18,8 +26,20 @@ module.exports = {
         }
       },
       {
+        test:/\.(png|jpg|gif)$/,
+        use:[{
+          loader:'url-loader',
+          options:{
+            limit:50,  //it's important
+            outputPath:'images'
+          }
+        }]
+      },
+      {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"]
+        use: [{
+          loader: MiniCssExtractPlugin.loader
+        }, 'css-loader']
       },
       {
         test: /\.svg$/,

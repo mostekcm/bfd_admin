@@ -17,6 +17,7 @@ import manageShowAndSalesRep from '../orders/ManageShowAndSalesRep/reducer';
 import monthReport from './monthReport';
 import packages from './packages';
 import paymentsReport from './paymentsReport';
+import saveOrderPdf from './saveOrderPdf';
 import shipmentsReport from './shipmentsReport';
 import updateCompany from './updateCompany';
 import updateDates from '../orders/Dialogs/UpdateDates/reducer';
@@ -52,6 +53,7 @@ export default combineReducers({
   monthReport,
   packages,
   paymentsReport,
+  saveOrderPdf,
   shipmentsReport,
   commissionDueReport,
   updateCompany,

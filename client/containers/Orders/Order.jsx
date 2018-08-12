@@ -19,7 +19,7 @@ import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
 import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
 import { requestUpdateDisplayItems } from '../../actions/order';
 import UpdateDisplayItemsDialog from '../../orders/Dialogs/UpdateDisplayItemsDialog';
-import { updateCompany } from '../../actions/order';
+import { updateCompany, saveOrderPdf } from '../../actions/order';
 
 import './Order.css';
 
@@ -51,7 +51,8 @@ export default connectContainer(class Order extends Component {
     requestUpdateShippingInfo,
     requestUpdateDealStage,
     requestUpdateDisplayItems,
-    updateCompany
+    updateCompany,
+    saveOrderPdf
   };
 
   static propTypes = {
@@ -154,6 +155,7 @@ TAX ID: ___________________________________________
                 updateLineItems={this.props.requestUpdateLineItems}
                 updateDisplayItems={this.props.requestUpdateDisplayItems}
                 viewPackingList={this.viewPackingList.bind(this)}
+                savePdf={this.props.saveOrderPdf}
               />
           </div>
         </div>

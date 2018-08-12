@@ -1,5 +1,8 @@
 import axios from 'axios';
 import moment from 'moment';
+// import PDFDocument from 'pdfkit';
+// import blobStream from 'blob-stream';
+import domtoimage from 'dom-to-image-chrome-fix';
 import { routeActions } from 'redux-simple-router';
 
 import * as constants from '../constants';
@@ -165,6 +168,71 @@ export function updateOrder(orderId, data, onSuccess, actionType) {
   };
 }
 
+// const printPDF = (id) => {
+//   var doc = new jsPDF();
+//   var elementHandler = {
+//     '#clientPrintContent': function (element, renderer) {
+//       return true;
+//     }
+//   };
+//   var source = document.getElementById(id);
+//   doc.fromHTML(
+//     source,
+//     15,
+//     15,
+//     {
+//       'width': 180, 'elementHandlers': elementHandler
+//     });
+//   // Output
+//   return doc.output();
+//}
+
+const printPDF = (id) => {
+  // return domtoimage.toBlob(document.getElementById('app'), { });
+  return domtoimage.toBlob(document.body.parentNode, {  });
+};
+//         const doc = new PDFDocument;
+//         const stream = doc.pipe(blobStream());
+//
+//         doc.image(dataUrl, 0, 0);
+//
+//         doc.end();
+//
+//         stream.on('finish', () => {
+//           //const blob = stream.toBlob('application/pdf');
+//           const url = stream.toBlobURL('application/pdf');
+//
+//           const link = document.createElement('a');
+//           link.download = 'my-image-name.svg';
+//           link.href = url;
+//           link.click();
+//           return "something";
+//         });
+//       }
+//     );
+// };
+
+export function saveOrderPdf(order) {
+  return {
+    type: constants.SAVE_ORDER_PDF,
+    meta: {
+      orderId: order.id
+    },
+    payload: {
+      promise: printPDF('body')
+        .then((pdf) => {
+          const data = new FormData();
+
+          data.append('pdf', pdf, { type: 'image/png' });
+
+          return axios.post(`${baseUrl}/api/orders/${order.id}/pdf`, data, {
+            responseType: 'json'
+          });
+        })
+    }
+  };
+}
+
 /*
  * Get confirmation to delete a order.
  */
@@ -263,7 +331,6 @@ export function updateCompany(order) {
     });
   };
 }
-
 
 /*
  * Get confirmation to update discount.

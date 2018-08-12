@@ -15,7 +15,7 @@ header.dashboard-header nav .navbar-brand {
 
 header.dashboard-header nav #header {
   background-size: 100px 40px;
-  background-image: url("https://beautyfullday.com/wp-content/uploads/2016/12/beauty_full_day_invoice_header.png");
+  background-image: url("../images/beauty_full_day_invoice_header.png");
   background-position: center left;
   background-repeat: no-repeat;
 }

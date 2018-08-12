@@ -46,16 +46,14 @@ export default () => {
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="https://cdn.auth0.com/styleguide/4.6.13/lib/logos/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styles/zocial.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/manage/v0.3.1672/css/index.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styleguide/4.6.13/index.min.css" />
+  <link rel="stylesheet" type="text/css" href="/app/css/zocial.css" />
+  <link rel="stylesheet" type="text/css" href="/app/css/auth0-manage.0.3.1672.css" />
+  <link rel="stylesheet" type="text/css" href="/app/css/auth0-styleguide.4.6.13.css" />
   <% if (assets.style) { %><link rel="stylesheet" type="text/css" href="/app/<%= assets.style %>" /><% } %>
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.auth0.com/js/lock/10.11.0/lock.min.js"></script>
   <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1672/js/bundle.js"></script>
   <script type="text/javascript">window.config = <%- JSON.stringify(config) %>;</script>
   <% if (assets.app) { %><script type="text/javascript" src="/app/<%= assets.app %>"></script><% } %>
