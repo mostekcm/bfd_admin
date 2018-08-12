@@ -33,9 +33,12 @@ export const getSimpleLineItemsForOrder = (order) => {
     .flatten()
     .value();
 
-  const packingLineItems = _(purchaseLineItems)
+  const packingLineItems1 = _(purchaseLineItems)
     .concat(offsetMerchItems)
     .groupBy('name')
+    .value();
+
+  const packingLineItems = _(packingLineItems1)
     .map(groups => ({
       name: groups[0].name,
       quantity: _.sumBy(groups, 'quantity')
@@ -75,9 +78,36 @@ export const getSimpleLineItems = (orders) => {
       packingLineItems,
       testerLineItems
     } = getSimpleLineItemsForOrder(order);
-    allDisplayLineItems = allDisplayLineItems.concat(displayLineItems);
-    allPackingLineItems = allPackingLineItems.concat(packingLineItems);
-    allTesterLineItems = allTesterLineItems.concat(testerLineItems);
+    allDisplayLineItems = _(allDisplayLineItems)
+      .concat(displayLineItems)
+      .groupBy('name')
+      .map(groups => ({
+        name: groups[0].name,
+        quantity: _.sumBy(groups, 'quantity')
+      }))
+      .sortBy('name')
+      .value();
+
+    allPackingLineItems = _(allPackingLineItems)
+      .concat(packingLineItems)
+      .groupBy('name')
+      .map(groups => ({
+        name: groups[0].name,
+        quantity: _.sumBy(groups, 'quantity')
+      }))
+      .sortBy('name')
+      .value();
+
+    allTesterLineItems = _(allTesterLineItems)
+      .concat(testerLineItems)
+      .groupBy('name')
+      .map(groups => ({
+        name: groups[0].name,
+        quantity: _.sumBy(groups, 'quantity')
+      }))
+      .sortBy('name')
+      .value();
+
   });
 
   return {
