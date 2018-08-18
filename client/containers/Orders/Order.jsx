@@ -111,7 +111,7 @@ TAX ID: ___________________________________________
 `;
 
     const terms1 = `
-1. *Please allow two weeks of lead-time for orders to ship (although we do make every effort to shorten this process when resources allow). *
+1. *Please allow two weeks of lead-time for orders to ship (although we do make every effort to shorten this process when resources allow).*
 1. *Please notify us of delayed shipping requirements or requests for expedited processing.*
 1. *Minimum of $100 applies only to opening orders; no minimum order for re-orders. Case quantities apply for all orders.*
 1. *All payments by Credit Card (CC) or prepaid, except in special circumstances, with approval.*
