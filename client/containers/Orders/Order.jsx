@@ -111,25 +111,30 @@ TAX ID: ___________________________________________
 `;
 
     const terms1 = `
-1. *Orders typically ship in two weeks, unless otherwise specified.*
-1. *Minimum of $100 applies only to opening orders*
-1. *No minimum order for re-orders*
-1. *All payments by Credit Card (CC) or prepaid, except in special circumstances, with approval only*
-1. *Late or returned payments are subject to late fees of 15% and may result in rejection of subsequent orders*
-1. *Shipping charges will be added to all orders.*
-1. *Please notify us of special ship dates or events.*
-1. *Prices are subject to change without notice*
+1. *Please allow two weeks of lead-time for orders to ship (although we do make every effort to shorten this process when resources allow). *
+1. *Please notify us of delayed shipping requirements or requests for expedited processing.*
+1. *Minimum of $100 applies only to opening orders; no minimum order for re-orders. Case quantities apply for all orders.*
+1. *All payments by Credit Card (CC) or prepaid, except in special circumstances, with approval.*
+1. *Prices are subject to change.*
+1. *Late or returned payments are subject to a 15% fee and may result in rejection of future orders.*
+1. *The following shipping charges will apply:*
+    1. *Up to 150: 10%*
+    1. *$151-$300: 7.5%*
+    1. *$301+: 5%*
 `;
 
     const terms2 = `
-1. *No items may be returned without approval*
+1. *No items may be returned without approval.*
 1. *A 15% restocking fee will be charged on any item approved for return.*
-1. *Tester pricing:*
+1. *Tester & Sample details as follows:*
+   1. *Testers are not intended for resale*
+   1. *Staff Samples may be obtainable upon request, subject to availability*
    1. *Tester pricing limited to one tester per six cases per product*
    1. *Tester sizes offered as available*
    1. *Special tester sizes cost $1 each, on a limited basis*
-   1. *Full-sized testers offered when miniature tester sizes are not available, or in special circumstances, with approval only*
+   1. *Full-sized testers offered when miniature tester sizes are not available*
    1. *Full-sized testers cost 50% of wholesale pricing, on a limited basis*
+   1. *Tester cost may be waived when two or more cases are ordered per instance.*
 `;
 
     const owed = order.totals.owed + (order.shippedDate ? 0 : getEstimatedShippingAndHandling(order.totals.product));
