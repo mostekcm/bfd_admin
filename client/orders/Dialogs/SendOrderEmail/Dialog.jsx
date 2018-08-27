@@ -32,15 +32,28 @@ export default connectContainer(class SendOrderEmailDialog extends Component {
   }
 
   onConfirm = () => {
-    const { orderId, pdf } = this.props.sendOrderEmailState.toJS();
-    this.props.sendOrderEmail(orderId, this.emailText.value, pdf);
+    const { order, pdf } = this.props.sendOrderEmailState.toJS();
+    this.props.sendOrderEmail(order.id, this.emailText.value, pdf);
   };
 
   render() {
     const { cancel } = this.props;
-    const { orderId, pdf, emailText, error, loading } = this.props.sendOrderEmailState.toJS();
+    const { order: { id: orderId, totals, dealStage }, pdf, emailText, error, loading } = this.props.sendOrderEmailState.toJS();
 
     const className = `form-horizontal col-xs-12 dates-confirm-form`;
+
+    let defaultEmailText = emailText;
+    if (!defaultEmailText) {
+      if (dealStage === 'Closed Won') {
+        if (Math.abs(totals.owed) < 0.01) {
+          defaultEmailText = `Please find a copy of your paid invoice attached.`;
+        } else {
+          defaultEmailText = `Please find a copy of your invoice attached.`;
+        }
+      } else {
+        defaultEmailText = `A copy of your order confirmation is attached.  Please let me know if it is what you want and we will get it shipped out for you!`;
+      }
+    }
 
     return (
       <Confirm title={`Send Order Email`} show={!!pdf} loading={loading} onCancel={cancel}
@@ -57,7 +70,7 @@ export default connectContainer(class SendOrderEmailDialog extends Component {
                   ref: (nextValue => {
                     return this.emailText = nextValue
                   }),
-                  defaultValue: emailText
+                  defaultValue: defaultEmailText
                 }} fieldName='emailText' label='Email Text'/>
               </div>
             </div>

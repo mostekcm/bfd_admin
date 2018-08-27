@@ -6,7 +6,7 @@ import createReducer from '../../../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  orderId: null,
+  order: {},
   emailText: null,
   pdf: null,
   success: false
@@ -20,7 +20,7 @@ export default createReducer(fromJS(initialState), {
   [constants.REQUEST_SEND_ORDER_EMAIL_PENDING]: (state, action) =>
     state.merge({
       ...initialState,
-      orderId: action.meta.orderId
+      order: action.meta.order
     }),
   [constants.REQUEST_SEND_ORDER_EMAIL_REJECTED]: (state, action) =>
     state.merge({

@@ -115,7 +115,6 @@ export const redirect = (location, state, prompt) => {
     ' read:cases sync:crm read:companies',
     nonce,
     access_type: 'offline'
-    // if you need to force login: approval_prompt: 'force'
   };
 
   if (prompt === 'none') {

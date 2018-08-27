@@ -75,7 +75,7 @@ export function requestSendOrderEmail(order) {
   return {
     type: constants.REQUEST_SEND_ORDER_EMAIL,
     meta: {
-      orderId: order.id
+      order
     },
     payload: {
       promise: printPDF('body')
