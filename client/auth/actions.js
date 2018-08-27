@@ -127,6 +127,10 @@ const handleTokens = (dispatch, getState, getTokensPromise, location, refreshing
       });
     });
 
+export function authorizeGoogle(location) {
+  login(location, 'login');
+}
+
 export function login(location, prompt) {
   return (dispatch, getState) => {
     dispatch({
@@ -211,7 +215,7 @@ export function authorizeHubSpot() {
   window.location = `https://app.hubspot.com/oauth/authorize?${queryString.stringify({
     client_id: window.config.HUBSPOT_CLIENT_ID,
     redirect_uri: `${window.config.BASE_URL}/authorizeCrm?state=${state}`,
-    scope: 'contacts'
+    scope: 'contacts files'
   })}`;
 }
 

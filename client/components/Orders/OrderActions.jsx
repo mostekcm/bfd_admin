@@ -14,7 +14,7 @@ export default class OrderActions extends Component {
     updateLineItems: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
     viewPackingList: PropTypes.func.isRequired,
-    savePdf: PropTypes.func.isRequired,
+    sendOrderEmail: PropTypes.func.isRequired,
     order: PropTypes.object.isRequired
   };
 
@@ -126,9 +126,9 @@ export default class OrderActions extends Component {
     </MenuItem>
   );
 
-  getSavePdfAction = (order, loading) => (
-    <MenuItem disabled={loading || false} onClick={this.savePdf}>
-      Save PDF
+  getSendOrderEmailAction = (order, loading) => (
+    <MenuItem disabled={loading || false} onClick={this.sendOrderEmail}>
+      Send Order Email
     </MenuItem>
   );
 
@@ -136,8 +136,8 @@ export default class OrderActions extends Component {
     this.props.viewPackingList(this.state.order);
   };
 
-  savePdf = () => {
-    this.props.savePdf(this.state.order);
+  sendOrderEmail = () => {
+    this.props.sendOrderEmail(this.state.order);
   };
 
   deleteOrder = () => {
@@ -198,7 +198,7 @@ export default class OrderActions extends Component {
         {this.getPayCommissionAction(this.state.order, this.state.loading)}
         {this.getDeleteAction(this.state.order, this.state.loading)}
         {this.getViewPackingListAction(this.state.order, this.state.loading)}
-        {this.getSavePdfAction(this.state.order, this.state.loading)}
+        {this.getSendOrderEmailAction(this.state.order, this.state.loading)}
       </DropdownButton>
     );
   }

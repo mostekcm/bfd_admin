@@ -59,7 +59,13 @@ const processAuthResult = (authResult) => {
     }
 
     /* TODO: Validate ID token */
-    return resolve({ accessToken: authResult.accessToken, idToken: authResult.idToken, returnTo, expiresIn: authResult.expiresIn, idTokenPayload: authResult.idTokenPayload });
+    return resolve({
+      accessToken: authResult.accessToken,
+      idToken: authResult.idToken,
+      returnTo,
+      expiresIn: authResult.expiresIn,
+      idTokenPayload: authResult.idTokenPayload
+    });
   })
     .then(tokens => getUserInfo(tokens)
       .then((user) => {
@@ -102,14 +108,17 @@ export const redirect = (location, state, prompt) => {
     redirectUri: `${window.config.BASE_URL}/login`,
     responseType: 'token id_token',
     audience: window.config.BFD_AUDIENCE,
+    connection: 'google-oauth2',
     state: nonce,
     scope: 'openid profile picture name nickname email read:reports read:displays update:orders delete:orders' +
     ' create:orders read:orders' +
     ' read:cases sync:crm read:companies',
-    nonce
+    nonce,
+    access_type: 'offline'
+    // if you need to force login: approval_prompt: 'force'
   };
 
-  if (prompt) {
+  if (prompt === 'none') {
     options.redirectUri = `${window.config.BASE_URL}`;
 
     const checkSession = Promise.promisify(webAuth.checkSession, { context: webAuth });
@@ -118,6 +127,9 @@ export const redirect = (location, state, prompt) => {
       .then(authResult => processAuthResult(authResult));
   }
 
-  webAuth.authorize(options);
-  return Promise.resolve({});
+  return new Promise((resolve, reject) =>
+    webAuth.authorize(options, (err, result) => {
+      if (err) return reject(err);
+      return resolve(result);
+    }));
 };

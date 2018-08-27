@@ -6,6 +6,7 @@ import ComboField from './ComboField';
 import InputDate from './InputDate';
 import InputDateTime from './InputDateTime';
 import InputText from './InputText';
+import InputTextArea from './InputTextArea';
 import InputCombo from './InputCombo';
 import LoadingPanel from './LoadingPanel';
 import NavigationLink from './NavigationLink';
@@ -31,6 +32,7 @@ export {
   InputDate,
   InputDateTime,
   InputText,
+  InputTextArea,
   InputCombo,
   LoadingPanel,
   NavigationLink,

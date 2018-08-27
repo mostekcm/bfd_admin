@@ -3,6 +3,7 @@ import connectContainer from 'redux-static';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import formatCurrency from 'format-currency';
+import { Alert } from 'react-bootstrap';
 
 import { orderActions } from '../../actions';
 
@@ -17,9 +18,11 @@ import { requestUpdateDealStage } from '../../orders/Dialogs/UpdateDealStage/act
 import UpdateDealStageDialog from '../../orders/Dialogs/UpdateDealStage/Dialog';
 import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
 import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
+import { requestSendOrderEmail, cancelSendOrderEmail } from '../../orders/Dialogs/SendOrderEmail/actions';
+import SendOrderEmailDialog from '../../orders/Dialogs/SendOrderEmail/Dialog';
 import { requestUpdateDisplayItems } from '../../actions/order';
 import UpdateDisplayItemsDialog from '../../orders/Dialogs/UpdateDisplayItemsDialog';
-import { updateCompany, saveOrderPdf } from '../../actions/order';
+import { updateCompany } from '../../actions/order';
 
 import './Order.css';
 
@@ -36,6 +39,7 @@ import { getEstimatedShippingAndHandling } from '../../orders/utils';
 
 export default connectContainer(class Order extends Component {
   static stateToProps = (state) => ({
+    emailSuccess: state.sendOrderEmail.get('success'),
     error: state.order.get('error') + state.updateCompany.get('error'),
     loading: state.order.get('loading') || state.updateCompany.get('loading'),
     order: state.order,
@@ -52,7 +56,8 @@ export default connectContainer(class Order extends Component {
     requestUpdateDealStage,
     requestUpdateDisplayItems,
     updateCompany,
-    saveOrderPdf
+    requestSendOrderEmail,
+    cancelSendOrderEmail
   };
 
   static propTypes = {
@@ -160,11 +165,17 @@ TAX ID: ___________________________________________
                 updateLineItems={this.props.requestUpdateLineItems}
                 updateDisplayItems={this.props.requestUpdateDisplayItems}
                 viewPackingList={this.viewPackingList.bind(this)}
-                savePdf={this.props.saveOrderPdf}
+                sendOrderEmail={this.props.requestSendOrderEmail}
               />
           </div>
         </div>
         <LoadingPanel show={loading}>
+          <div className={'row'}>
+            { this.props.emailSuccess ?
+            <Alert bsStyle="success" onDismiss={this.props.cancelSendOrderEmail}>
+              <h4>Your email was sent successfully</h4>
+            </Alert> : null }
+          </div>
           <div className={"row"}>
             <div className="col-xs-12 col-md-12 wrapper">
               <h3
@@ -286,6 +297,7 @@ TAX ID: ___________________________________________
         <dialogs.DeleteDialog/>
         <UpdatePaymentsDialog/>
         <PayCommissionDialog/>
+        <SendOrderEmailDialog/>
         <UpdateDatesDialog/>
         <UpdateShippingInfoDialog/>
         <UpdateDealStageDialog/>
