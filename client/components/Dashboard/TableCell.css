@@ -25,3 +25,7 @@ td.greyStatus {
 td.blackStatus {
   background-color: black;
 }
+
+td.pinkStatus {
+  background-color: #FF33F0;
+}

@@ -63,7 +63,7 @@ export default class OrdersTable extends Component {
       const dueDate = order.dueDate || order.shippedDate || order.targetShipDate;
       order.dueDateDisplay = 'PAID';
       order.paidStatus = 'greenStatus';
-      if (!order.totals.owed <= 0) {
+      if (Math.abs(order.totals.owed) >= 0.01) {
         if (!dueDate) {
           order.dueDateDisplay = '??';
           order.paidStatus = 'redStatus';
@@ -76,6 +76,15 @@ export default class OrdersTable extends Component {
           if (paidDiff >= redBarrier) order.paidStatus = 'redStatus';
           else if (paidDiff >= amberBarrier) order.paidStatus = 'amberStatus';
           order.dueDateDisplay = moment.unix(dueDate).format('YYYY-MM-DD');
+        }
+
+        if (order.totals.owed < 0) {
+          if (!order.shippedDate) {
+            order.paidStatus = order.shippedStatus;
+          } else {
+            order.paidStatus = 'blueStatus';
+            order.dueDateDisplay = 'CREDIT';
+          }
         }
       }
 
@@ -126,7 +135,8 @@ export default class OrdersTable extends Component {
         <TableBody>
           {tableRowOrders.map((order, index) => {
             return <TableRow key={index}>
-              <TableTextCell><input type={'checkbox'} onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableTextCell>
+              <TableTextCell><input type={'checkbox'}
+                                    onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableTextCell>
               <TableRouteCell
                 route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
               <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>

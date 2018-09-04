@@ -45,15 +45,15 @@ class Orders extends Component {
 
   onSearch = (query) => {
     this.props.fetchOrders(query);
-  }
+  };
 
   onReset = () => {
     this.props.fetchOrders('', true);
-  }
+  };
 
   createOrder = () => {
     this.props.requestCreateOrder(this.props.cases, this.props.displays);
-  }
+  };
 
   render() {
     const { loading, error, orders, total, cases, companies, displays, packages, errorCases, errorCompanies, errorDisplays, errorPackages } = this.props;
