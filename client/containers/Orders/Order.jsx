@@ -92,6 +92,18 @@ export default connectContainer(class Order extends Component {
     this.props.router.push(`/orders/packing/${order.id}`);
   }
 
+  renderAmountDue(shipped, owed, amountDue) {
+    if (!shipped) {
+      return `ESTIMATED TOTAL: ${amountDue}`;
+    }
+
+    if (Math.abs(owed) < 0.01) return 'PAID';
+
+    if (owed < 0) return `CREDIT: ${amountDue}`;
+
+    return `AMOUNT DUE: ${amountDue}`;
+  }
+
   render() {
     const { loading, error, record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
@@ -143,7 +155,7 @@ TAX ID: ___________________________________________
 `;
 
     const owed = order.totals.owed + (order.shippedDate ? 0 : getEstimatedShippingAndHandling(order.totals.product));
-    const amountDue = formatCurrency(owed, opts);
+    const amountDue = formatCurrency(Math.abs(owed) < 0.01 ? 0.00 : owed, opts);
 
     return (
       <div className="order">
@@ -179,7 +191,7 @@ TAX ID: ___________________________________________
           <div className={"row"}>
             <div className="col-xs-12 col-md-12 wrapper">
               <h3
-                className={"pull-left"}>{order.shippedDate ? order.totals.owed > 0 ? 'AMOUNT DUE: ' + amountDue : 'PAID' : 'ESTIMATED TOTAL: ' + amountDue}
+                className={"pull-left strong"}>{this.renderAmountDue(order.shippedDate, owed, amountDue)}
               </h3>
             </div>
           </div>

@@ -27,7 +27,7 @@ export default connectContainer(class UpdatePaymentsDialog extends Component {
     cancelUpdate: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     updateState: PropTypes.object.isRequired
-  }
+  };
 
   constructor() {
     super();
@@ -40,19 +40,19 @@ export default connectContainer(class UpdatePaymentsDialog extends Component {
 
   onSubmit = (paymentForm) => {
     const paymentsData = _(paymentForm.payments)
-      .filter(payment => payment.amount && payment.amount > 0)
+      .filter(payment => payment.amount && Math.abs(payment.amount) >= 0.01)
       .map((payment) => { return { date: moment(payment.date).format('X'), amount: payment.amount } })
       .value();
 
     this.props.update(paymentForm.orderId, { payments: paymentsData });
-  }
+  };
 
   onConfirm = () => {
     if (this.form) {
       this.form.submit()
         .catch(e => console.error("error payments update: ", e.message));
     }
-  }
+  };
 
   render() {
     const { cancelUpdate } = this.props;

@@ -78,13 +78,9 @@ export default class OrdersTable extends Component {
           order.dueDateDisplay = moment.unix(dueDate).format('YYYY-MM-DD');
         }
 
-        if (order.totals.owed < 0) {
-          if (!order.shippedDate) {
-            order.paidStatus = order.shippedStatus;
-          } else {
-            order.paidStatus = 'blueStatus';
-            order.dueDateDisplay = 'CREDIT';
-          }
+        if (order.totals.owed < 0 && order.shippedDate) {
+          order.paidStatus = 'blueStatus';
+          order.dueDateDisplay = 'CREDIT';
         }
       }
 
