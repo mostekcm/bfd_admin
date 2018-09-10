@@ -21,7 +21,7 @@ export default class UpdatePaymentFields extends Component {
     totalCost: React.PropTypes.number.isRequired,
     fields: React.PropTypes.object.isRequired,
     loading: React.PropTypes.bool.isRequired
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return nextProps.payments !== this.props.payments || nextProps.totalCost !== this.props.totalCost;
