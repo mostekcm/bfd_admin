@@ -54,9 +54,9 @@ export default class OrderActions extends Component {
     </MenuItem>
   );
 
-  getUpdateDatesAction = (order, loading) => (
+  getUpdateDatesAndNotesAction = (order, loading) => (
     <MenuItem disabled={loading || false} onClick={this.updateDates}>
-      Update Dates
+      Update Dates and Notes
     </MenuItem>
   );
 
@@ -189,7 +189,7 @@ export default class OrderActions extends Component {
       <DropdownButton bsStyle="success" title="Actions" id="order-actions">
         {this.getUpdateCompanyAction(this.state.order, this.state.loading)}
         {this.getUpdateDealStageAction(this.state.order, this.state.loading)}
-        {this.getUpdateDatesAction(this.state.order, this.state.loading)}
+        {this.getUpdateDatesAndNotesAction(this.state.order, this.state.loading)}
         {this.getUpdateDiscountAction(this.state.order, this.state.loading)}
         {this.getUpdateLineItemsAction(this.state.order, this.state.loading)}
         {this.getUpdateDisplayItemsAction(this.state.order, this.state.loading)}

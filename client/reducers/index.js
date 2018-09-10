@@ -20,7 +20,7 @@ import paymentsReport from './paymentsReport';
 import sendOrderEmail from '../orders/Dialogs/SendOrderEmail/reducer';
 import shipmentsReport from './shipmentsReport';
 import updateCompany from './updateCompany';
-import updateDates from '../orders/Dialogs/UpdateDates/reducer';
+import updateDates from '../orders/Dialogs/UpdateDatesAndNotes/reducer';
 import updateDiscount from './updateDiscount';
 import updateDisplayItems from './updateDisplayItems';
 import updateLineItems from './updateLineItems';

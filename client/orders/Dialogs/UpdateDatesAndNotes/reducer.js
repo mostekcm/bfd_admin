@@ -11,7 +11,9 @@ const initialState = {
   originalTargetShipDate: null,
   originalShipAsap: null,
   shippedDate: null,
-  originalDate: null
+  originalDate: null,
+  originalNotesToCustomer: null,
+  originalInternalNotes: null
 };
 
 export default createReducer(fromJS(initialState), {
@@ -23,6 +25,8 @@ export default createReducer(fromJS(initialState), {
       originalShipAsap: action.order.shipAsap,
       shippedDate: action.order.shippedDate,
       originalDate: action.order.date,
+      originalNotesToCustomer: action.order.notesToCustomer,
+      originalInternalNotes: action.order.internalNotes,
       requesting: true
     }),
   [constants.CANCEL_UPDATE_DATES]: (state) =>

@@ -2,19 +2,19 @@ import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import moment from 'moment';
 
-import { cancelUpdateDates, updateDates } from './actions';
+import { cancelUpdateDatesAndNotes, updateDates } from './actions';
 
-import { Error, Confirm, InputDate } from '../../../components/Dashboard';
+import { Error, Confirm, InputDate, InputText } from '../../../components/Dashboard';
 
 import './Dialog.css';
 
-export default connectContainer(class UpdateDatesDialog extends Component {
+export default connectContainer(class UpdateDatesAndNotesDialog extends Component {
   static stateToProps = (state) => ({
     updateState: state.updateDates
   });
 
   static actionsToProps = {
-    cancelUpdate: cancelUpdateDates,
+    cancelUpdate: cancelUpdateDatesAndNotes,
     update: updateDates
   };
 
@@ -30,6 +30,8 @@ export default connectContainer(class UpdateDatesDialog extends Component {
     this.nextTargetShipDate = undefined;
     this.nextOrderDate = undefined;
     this.nextShipAsap = undefined;
+    this.nextNotesToCustomer = undefined;
+    this.nextInternalNotes = undefined;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -39,6 +41,8 @@ export default connectContainer(class UpdateDatesDialog extends Component {
   onConfirm = () => {
     const data = {
       date: moment(this.nextOrderDate.value).format('X'),
+      notesToCustomer: this.nextNotesToCustomer.value,
+      internalNotes: this.nextInternalNotes.value
     };
 
     if (this.nextTargetShipDate) {
@@ -66,7 +70,17 @@ export default connectContainer(class UpdateDatesDialog extends Component {
 
   render() {
     const { cancelUpdate } = this.props;
-    const { orderId, originalTargetShipDate, originalShipAsap, shippedDate, originalDate, error, requesting, loading } = this.props.updateState.toJS();
+    const {
+      orderId,
+      originalTargetShipDate,
+      originalShipAsap,
+      originalNotesToCustomer,
+      originalInternalNotes,
+      shippedDate,
+      originalDate,
+      error,
+      requesting,
+      loading } = this.props.updateState.toJS();
 
     const className = `form-horizontal col-xs-12 dates-confirm-form`;
 
@@ -90,8 +104,24 @@ export default connectContainer(class UpdateDatesDialog extends Component {
               </div>
               {this.renderTargetShipDate(originalTargetShipDate, shippedDate)}
               <div className="col-xs-12 col-md-12">
-                <label htmlFor={'shipAsap'}>Ship ASAP?</label><br/>
+                <label htmlFor={'shipAsap'}>Ship ASAP?</label>&nbsp;
                 <input type={'checkbox'} name={'shipAsap'} ref={shipAsap => this.nextShipAsap = shipAsap} className={'checked'} defaultChecked={!!originalShipAsap}/>
+              </div>
+              <div className="col-xs-12 col-md-12">
+                <InputText input={{
+                  ref: (nextValue => {
+                    return this.nextNotesToCustomer = nextValue
+                  }),
+                  defaultValue: originalNotesToCustomer
+                }} fieldName='notesToCustomer' label='Notes to Customer'/>
+              </div>
+              <div className="col-xs-12 col-md-12">
+                <InputText input={{
+                  ref: (nextValue => {
+                    return this.nextInternalNotes = nextValue
+                  }),
+                  defaultValue: originalInternalNotes
+                }} fieldName='internalNotes' label='Internal Notes'/>
               </div>
             </div>
             <input ref={orderId => this.orderId = orderId} type="hidden" readOnly="readonly" className="form-control"

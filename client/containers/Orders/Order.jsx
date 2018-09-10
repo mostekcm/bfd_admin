@@ -16,8 +16,8 @@ import { requestUpdateShippingInfo } from '../../orders/Dialogs/UpdateShippingIn
 import UpdateShippingInfoDialog from '../../orders/Dialogs/UpdateShippingInfo/Dialog';
 import { requestUpdateDealStage } from '../../orders/Dialogs/UpdateDealStage/actions';
 import UpdateDealStageDialog from '../../orders/Dialogs/UpdateDealStage/Dialog';
-import { requestUpdateDates } from '../../orders/Dialogs/UpdateDates/actions';
-import UpdateDatesDialog from '../../orders/Dialogs/UpdateDates/Dialog';
+import { requestUpdateDatesAndNotes } from '../../orders/Dialogs/UpdateDatesAndNotes/actions';
+import UpdateDatesAndNotesDialog from '../../orders/Dialogs/UpdateDatesAndNotes/Dialog';
 import { requestSendOrderEmail, cancelSendOrderEmail } from '../../orders/Dialogs/SendOrderEmail/actions';
 import SendOrderEmailDialog from '../../orders/Dialogs/SendOrderEmail/Dialog';
 import { requestUpdateDisplayItems } from '../../actions/order';
@@ -49,7 +49,7 @@ export default connectContainer(class Order extends Component {
 
   static actionsToProps = {
     ...orderActions,
-    requestUpdateDates,
+    requestUpdateDatesAndNotes,
     requestUpdatePayments,
     requestPayCommission,
     requestUpdateShippingInfo,
@@ -166,7 +166,7 @@ TAX ID: ___________________________________________
           <div className={'col-xs-3 pull-right'}>
               <OrderActions
                 order={this.props.order}
-                updateDates={this.props.requestUpdateDates}
+                updateDates={this.props.requestUpdateDatesAndNotes}
                 deleteOrder={this.props.requestDeleteOrder}
                 updatePayments={this.props.requestUpdatePayments}
                 payCommission={this.props.requestPayCommission}
@@ -310,7 +310,7 @@ TAX ID: ___________________________________________
         <UpdatePaymentsDialog/>
         <PayCommissionDialog/>
         <SendOrderEmailDialog/>
-        <UpdateDatesDialog/>
+        <UpdateDatesAndNotesDialog/>
         <UpdateShippingInfoDialog/>
         <UpdateDealStageDialog/>
         <dialogs.UpdateDiscountDialog/>

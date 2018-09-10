@@ -9,7 +9,7 @@ const baseUrl = window.config.BASE_API_URL;
 /*
  * Get confirmation to update shipping.
  */
-export function requestUpdateDates(order) {
+export function requestUpdateDatesAndNotes(order) {
   return {
     type: constants.REQUEST_UPDATE_DATES,
     order
@@ -19,7 +19,7 @@ export function requestUpdateDates(order) {
 /*
  * Cancel the shipping update.
  */
-export function cancelUpdateDates() {
+export function cancelUpdateDatesAndNotes() {
   return {
     type: constants.CANCEL_UPDATE_DATES
   };
