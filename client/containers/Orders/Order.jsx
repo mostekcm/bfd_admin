@@ -105,13 +105,15 @@ export default connectContainer(class Order extends Component {
   }
 
   render() {
-    const { loading, error, record } = this.props.order.toJS();
+    const { record } = this.props.order.toJS();
     const opts = { format: '%s%v', symbol: '$' };
 
     const order = record;
     order.totals = order.totals || {};
     const lineItems = this.props.lineItems || [];
     const displayItems = this.props.displayItems || [];
+
+    const { loading, error } = this.props;
 
     const paymentInfo = `
 \`\`\`
@@ -188,6 +190,11 @@ TAX ID: ___________________________________________
               <h4>Your email was sent successfully</h4>
             </Alert> : null }
           </div>
+          <div className="row">
+            <div className="col-xs-12 wrapper">
+              <Error message={error}/>
+            </div>
+          </div>
           <div className={"row"}>
             <div className="col-xs-12 col-md-12 wrapper">
               <h3
@@ -215,11 +222,6 @@ TAX ID: ___________________________________________
               Blaine, MN 55449<br/><br/>
               (651) 401-5402<br/>
               orders@beautyfullday.com<br/>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              <Error message={error}/>
             </div>
           </div>
           {order.notesToCustomer ?

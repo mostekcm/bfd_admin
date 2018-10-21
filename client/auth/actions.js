@@ -136,6 +136,7 @@ export function login(location, prompt) {
     dispatch({
       type: constants.LOGIN_PENDING
     });
+    // Do a check session before the redirect
     return handleTokens(dispatch, getState, redirect(location, null, prompt), location);
   };
 }
