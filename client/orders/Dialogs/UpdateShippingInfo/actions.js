@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 import { fetchOrderDetail } from '../../../actions/order';
 import * as constants from './constants';
@@ -33,7 +34,7 @@ export function updateShippingInfo(orderId, data) {
     dispatch({
       type: constants.UPDATE_SHIPPING_INFO,
       meta: {
-        orderId,
+        order: _.assign({}, { orderId }, data),
         onSuccess: () => {
           dispatch(fetchOrderDetail(orderId));
         }

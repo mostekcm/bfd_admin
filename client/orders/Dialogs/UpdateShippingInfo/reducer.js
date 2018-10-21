@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import moment from 'moment';
 
 import * as constants from './constants';
 import createReducer from '../../../utils/createReducer';
@@ -9,35 +10,35 @@ const initialState = {
   error: null,
   loading: false,
   requesting: false,
-  orderId: null,
-  nextShippedDate: null,
-  nextShippingCost: null,
-  nextDueDate: null,
-  originalShippedDate: null,
-  originalShippingCost: null,
-  originalDueDate: null
+  record: {},
+  paymentTerms: null,
+  autoUpdateDueDate: false
 };
 
 export default createReducer(fromJS(initialState), {
   [constants.REQUEST_UPDATE_SHIPPING_INFO]: (state, action) =>
     state.merge({
       ...initialState,
-      orderId: action.order.id,
-      nextShippedDate: action.order.shippedDate,
-      nextShippingCost: action.order.shipping,
-      nextDueDate: action.order.dueDate,
-      originalShippedDate: action.order.shippedDate,
-      originalShippingCost: action.order.shipping || getEstimatedShipping(action.order.totals.product),
-      originalDueDate: action.order.dueDate,
-      requesting: true
+      record: {
+        orderId: action.order.id,
+        shippedDate: action.order.shippedDate,
+        dueDate: action.order.dueDate,
+        shipping: action.order.shipping || getEstimatedShipping(action.order.totals.product)
+      },
+      autoUpdateDueDate: !action.order.shippedDate,
+      paymentTerms: action.order.store.paymentTerms,
+      requesting: true,
+      error: !action.order.store.paymentTerms ? 'You must update the store before you can mark as shipped to get' +
+        ' payment terms' : null
     }),
   [constants.CANCEL_UPDATE_SHIPPING_INFO]: (state) =>
     state.merge({
       ...initialState
     }),
-  [constants.UPDATE_SHIPPING_INFO_PENDING]: (state) =>
+  [constants.UPDATE_SHIPPING_INFO_PENDING]: (state, action) =>
     state.merge({
-      loading: true
+      loading: true,
+      record: action.meta.order
     }),
   [constants.UPDATE_SHIPPING_INFO_REJECTED]: (state, action) =>
     state.merge({
