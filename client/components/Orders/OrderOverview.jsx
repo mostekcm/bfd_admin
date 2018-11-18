@@ -68,11 +68,13 @@ export default class OrderOverview extends React.Component {
     const opts = { format: '%s%v', symbol: '$' };
 
     let totalAccountsReceivable = {};
+    let totalPaid = 0.0;
 
     orders.forEach(order => {
       if (!totalAccountsReceivable[order.dealStage])
         totalAccountsReceivable[order.dealStage] = 0;
       totalAccountsReceivable[order.dealStage] += order.totals.owed;
+      totalPaid += order.totals.totalPaid;
     });
 
     const dealPercent = {
@@ -143,7 +145,8 @@ export default class OrderOverview extends React.Component {
             <div className="col-xs-12">
               {Object.keys(totalAccountsReceivable).map((stage, index) => <div key={index}>Total Accounts Receivable
                 ({stage}): {formatCurrency(totalAccountsReceivable[stage], opts)}<br/></div>)}
-              Total Estimated Accounts Receivable: {formatCurrency(overallEstimatedAR, opts)}
+              Total Estimated Accounts Receivable: {formatCurrency(overallEstimatedAR, opts)}<br/>
+              Total Paid: {formatCurrency(totalPaid, opts)}
             </div>
           </div>
         </div>
