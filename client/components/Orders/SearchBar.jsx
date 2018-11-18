@@ -43,7 +43,7 @@ export default class SearchBar extends Component {
         <div className="col-xs-12">
           <div className="help-block">
             To perform your search, press <span className="keyboard-button">enter</span>.
-            You can also search for specific fields, eg: <strong>invoiceNumber:"BFD0001394"</strong>.
+            You can also search for specific fields, eg: <strong>invoiceNumber:"BFD0001394"</strong> or <strong>store.name:Hy-Vee*</strong>
           </div>
         </div>
       </div>
