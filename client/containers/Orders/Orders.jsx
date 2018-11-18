@@ -40,7 +40,7 @@ class Orders extends Component {
   }
 
   componentWillMount = () => {
-    this.props.fetchOrders();
+    this.props.fetchOrders('', true, 0, 30);
   };
 
   onSearch = (query) => {
@@ -48,7 +48,7 @@ class Orders extends Component {
   };
 
   onReset = () => {
-    this.props.fetchOrders('', true);
+    this.props.fetchOrders('', true, 0, 30);
   };
 
   createOrder = () => {
@@ -85,6 +85,7 @@ class Orders extends Component {
           total={total}
           loading={loading}
           push={this.props.router.push}
+          age={this.props.age}
         />
       </div>
     );
@@ -108,6 +109,7 @@ function mapStateToProps(state) {
     displays: state.displays.get('records').toJS(),
     packages: state.packages.get('records').toJS(),
     query: state.orders.get('query'),
+    age: state.orders.get('age'),
     total: state.orders.get('total'),
     nextPage: state.orders.get('nextPage')
   };

@@ -10,7 +10,8 @@ const initialState = {
   query: '',
   stores: [],
   records: [],
-  total: 0
+  total: 0,
+  age: null
 };
 
 export default createReducer(fromJS(initialState), {
@@ -18,6 +19,7 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState,
       loading: true,
+      age: action.meta.age,
       query: action.meta.search,
       records: action.meta.page === 0 ? [] : state.get('records')
     }),

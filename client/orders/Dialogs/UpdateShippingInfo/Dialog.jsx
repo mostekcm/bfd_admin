@@ -72,7 +72,7 @@ export default connectContainer(class UpdateShippingInfoDialog extends Component
 
     const selector = formValueSelector('updateShippingInfo'); // <-- same as form name
 
-    const ConnectedOrderForm = connect(
+    const ConnectedShippingForm = connect(
       state => {
         const dueDate = selector(state, 'dueDate');
         const shippedDate = selector(state, 'shippedDate');
@@ -91,7 +91,7 @@ export default connectContainer(class UpdateShippingInfoDialog extends Component
         <p>
           Change the Shipping Info for <strong>{initialValues.orderId}</strong>?
         </p>
-        <ConnectedOrderForm
+        <ConnectedShippingForm
           ref={formInstance => this.form = formInstance && formInstance.getWrappedInstance()}
           autoUpdateDueDate={autoUpdateDueDate}
           paymentTerms={paymentTerms}

@@ -10,7 +10,7 @@ const baseUrl = window.config.BASE_API_URL;
 /*
  * Search for orders.
  */
-export function fetchOrders(search = '', reset = false, page = 0, actionType) {
+export function fetchOrders(search = '', reset = false, page = 0, age, actionType) {
   return (dispatch) => {
     dispatch({
       type: actionType || constants.FETCH_ORDERS,
@@ -18,14 +18,16 @@ export function fetchOrders(search = '', reset = false, page = 0, actionType) {
         promise: axios.get(`${baseUrl}/api/orders`, {
           params: {
             search,
-            page
+            page,
+            age
           },
           responseType: 'json'
         })
       },
       meta: {
         search,
-        page
+        page,
+        age
       }
     });
   };
