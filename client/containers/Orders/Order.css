@@ -104,3 +104,7 @@
   position: relative;
   bottom: 5px;
 }
+
+.amount-due {
+  background-color: #faed8c;
+}

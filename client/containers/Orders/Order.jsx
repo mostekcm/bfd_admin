@@ -198,7 +198,7 @@ TAX ID: ___________________________________________
           <div className={"row"}>
             <div className="col-xs-12 col-md-12 wrapper">
               <h3
-                className={"pull-left strong"}>{this.renderAmountDue(order.shippedDate, owed, amountDue)}
+                className={"pull-left strong amount-due"}>{this.renderAmountDue(order.shippedDate, owed, amountDue)}
               </h3>
             </div>
           </div>
@@ -252,13 +252,13 @@ TAX ID: ___________________________________________
             </div> : ''}
           <div className="row">
             <div className="col-xs-12 wrapper totals">
-              TOTAL PRODUCT COST: {formatCurrency(order.totals.product, opts)}
+              ALL ITEM SUB-TOTAL: {formatCurrency(order.totals.product, opts)}
             </div>
           </div>
           {order.totals.shippingAndHandling > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                TOTAL SHIPPING &amp; HANDLING: {formatCurrency(order.totals.shippingAndHandling, opts)}
+                SHIPPING &amp; HANDLING: {formatCurrency(order.totals.shippingAndHandling, opts)}
               </div>
             </div> : ''}
           {order.totals.shippingAndHandling <= 0 ?
@@ -270,20 +270,20 @@ TAX ID: ___________________________________________
           {order.totals.discount > 0 ?
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                TOTAL DISCOUNT: {formatCurrency(order.totals.discount, opts)}
+                DISCOUNT: {formatCurrency(order.totals.discount, opts)}
               </div>
             </div> : ''}
           {order.totals.totalPaid > 0 ?
             order.payments.map((payment, index) =>
               <div className="row" key={index}>
                 <div className="col-xs-12 wrapper totals">
-                  PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): {formatCurrency(payment.amount, opts)}
+                  AMOUNT PAID ({moment.unix(payment.date).format('MM/DD/YYYY')}): {formatCurrency(payment.amount, opts)}
                 </div>
               </div>
             ) : ''}
             <div className="row">
               <div className="col-xs-12 wrapper totals">
-                {order.totals.shippingAndHandling <= 0 ? "ESTIMATED" : "" } AMOUNT OWED: {amountDue}
+                <span className={"amount-due"}>{order.totals.shippingAndHandling <= 0 ? "ESTIMATED" : "" } AMOUNT DUE: {amountDue}</span>
               </div>
             </div>
           <div className="row">
