@@ -213,6 +213,7 @@ TAX ID: ___________________________________________
                 <div>TARGET SHIP DATE: {order.shipAsap ? 'ASAP' : ''} {moment.unix(order.targetShipDate).format('MM/DD/YYYY')}</div> : ''}
               {order.shippedDate ? <div>SHIPPED DATE: {moment.unix(order.shippedDate).format('MM/DD/YYYY')}</div> : ''}
               {order.show && order.show.name !== 'House Account' ? <div>SHOW: {order.show.name}</div> : ''}
+              PAYMENT METHOD: {order.store.paymentTerms && order.store.paymentTerms.method ? order.store.paymentTerms.method : 'any' }
               <br/>
               <OrderStoreInfo store={order.store}/>
             </div>
