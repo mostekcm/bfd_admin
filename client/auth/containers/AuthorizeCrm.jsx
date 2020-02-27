@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { authorizeHubSpot, exchangeHubSpotCode } from '../actions';
+import { authorizeHubSpot } from '../actions';
 import { LoadingPanel, Error } from '../../components/Dashboard';
 
 class AuthorizeCrm extends Component {
@@ -16,12 +16,8 @@ class AuthorizeCrm extends Component {
   }
 
   componentWillMount() {
-    if (this.props.location.query && this.props.location.query.code && this.props.location.query.state) {
-      /* we have a code and state, let's exchange the token */
-      return this.props.exchangeHubSpotCode(this.props.location.query);
-    }
-
-    this.props.authorizeHubSpot('/orders');
+    const returnTo = this.props.location.query && this.props.location.query.returnTo ? this.props.location.query.returnTo : '/orders';
+    this.props.authorizeHubSpot(returnTo);
   }
 
   render() {
@@ -52,4 +48,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { authorizeHubSpot, exchangeHubSpotCode })(AuthorizeCrm);
+export default connect(mapStateToProps, { authorizeHubSpot })(AuthorizeCrm);

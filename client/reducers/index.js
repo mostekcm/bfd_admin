@@ -12,13 +12,14 @@ import orderDelete from './orderDelete';
 import orders from './orders';
 import ordersForShow from './ordersForShow';
 import commissionDueReport from './commissionDueReport';
-import showReport from './showReport';
 import manageShowAndSalesRep from '../orders/ManageShowAndSalesRep/reducer';
 import monthReport from './monthReport';
 import packages from './packages';
 import paymentsReport from './paymentsReport';
 import sendOrderEmail from '../orders/Dialogs/SendOrderEmail/reducer';
+import salesReport from './salesReport';
 import shipmentsReport from './shipmentsReport';
+import showReport from './showReport';
 import updateCompany from './updateCompany';
 import updateDates from '../orders/Dialogs/UpdateDatesAndNotes/reducer';
 import updateDiscount from './updateDiscount';
@@ -49,6 +50,7 @@ export default combineReducers({
   orderDelete,
   orders,
   ordersForShow,
+  salesReport,
   showReport,
   monthReport,
   packages,

@@ -131,8 +131,9 @@ export default class OrdersTable extends Component {
         <TableBody>
           {tableRowOrders.map((order, index) => {
             return <TableRow key={index}>
-              <TableTextCell><input type={'checkbox'}
-                                    onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableTextCell>
+              <TableCell><input id={`row_${index}`}
+                                    type={'checkbox'}
+                                    onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableCell>
               <TableRouteCell
                 route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
               <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>

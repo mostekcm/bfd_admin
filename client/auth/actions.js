@@ -210,41 +210,16 @@ export function getAppSettings(onSuccess) {
 }
 
 export function authorizeHubSpot() {
-  const state = uuid.v4();
-  window.sessionStorage.setItem(constants.AUTHORIZE_HUB_SPOT_STATE, state);
-
-  window.location = `https://app.hubspot.com/oauth/authorize?${queryString.stringify({
-    client_id: window.config.HUBSPOT_CLIENT_ID,
-    redirect_uri: `${window.config.BASE_URL}/authorizeCrm?state=${state}`,
-    scope: 'contacts files'
-  })}`;
-}
-
-export function exchangeHubSpotCode(query) {
   const baseUrl = window.config.BASE_API_URL;
+  axios.defaults.withCredentials = true;
 
-  const oldState = window.sessionStorage.getItem(constants.AUTHORIZE_HUB_SPOT_STATE);
-  window.sessionStorage.removeItem(constants.AUTHORIZE_HUB_SPOT_STATE);
-
-  if (oldState && oldState !== query.state) {
-    return {
-      type: constants.AUTHORIZE_HUB_SPOT,
-      payload: {
-        promise: Promise.reject(new Error('state mismatch'))
-      }
-    }
-  }
-
-  return dispatch => ({
+  return {
     type: constants.AUTHORIZE_HUB_SPOT,
+    meta: {
+    },
     payload: {
-      promise: axios.post(`${baseUrl}/api/crm/callback`, {
-        code: query.code,
-        state: query.state
-      }, {
-        responseType: 'json'
-      })
-        .then(() => dispatch(routeActions.push('/orders')))
+      promise: axios.post(`${baseUrl}/crm/authorize`)
+        .then(response => (window.location = response.data.url))
     }
-  });
+  };
 }

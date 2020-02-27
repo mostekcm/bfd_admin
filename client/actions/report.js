@@ -9,6 +9,26 @@ import { getPaidCommissionData } from '../orders/utils';
 const baseUrl = window.config.BASE_API_URL;
 
 /*
+ * Get Sales Report.
+ */
+export function fetchSalesReport(options) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_SALES_REPORT,
+      payload: {
+        promise: axios.get(`${baseUrl}/api/reports/sales`, {
+          params: options,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        options
+      }
+    });
+  };
+}
+
+/*
  * Get Show Report.
  */
 export function fetchShowReport(showName) {
@@ -26,6 +46,7 @@ export function fetchShowReport(showName) {
     });
   };
 }
+
 
 /*
  * Get Month Report.
