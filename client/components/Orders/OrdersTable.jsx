@@ -12,7 +12,7 @@ import {
   TableTextCell,
   TableHeader,
   TableColumn,
-  TableRow
+  TableRow, LoadingPanel
 } from '../Dashboard';
 
 export default class OrdersTable extends Component {
@@ -41,6 +41,7 @@ export default class OrdersTable extends Component {
   }
 
   render() {
+    const { loading } = this.props;
     let orders = this.props.orders || [];
     const opts = { format: '%s%v', symbol: '$' };
 
@@ -116,37 +117,39 @@ export default class OrdersTable extends Component {
     ]);
 
     return (
-      <Table>
-        <TableHeader>
-          <TableColumn width="2%">&nbsp;</TableColumn>
-          <TableColumn width="11%">Invoice #</TableColumn>
-          <TableColumn width="4%">Stg</TableColumn>
-          <TableColumn width="8%">Order Date</TableColumn>
-          <TableColumn width="10%">Ship(ped) Date</TableColumn>
-          <TableColumn width="10%">Pay Date</TableColumn>
-          <TableColumn width="25%">Store</TableColumn>
-          <TableColumn width="9%">Order Total</TableColumn>
-          <TableColumn width="9%">Total Due</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {tableRowOrders.map((order, index) => {
-            return <TableRow key={index}>
-              <TableCell><input id={`row_${index}`}
-                                    type={'checkbox'}
-                                    onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableCell>
-              <TableRouteCell
-                route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
-              <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>
-              <TableTextCell>{moment.unix(order.date).format('YYYY-MM-DD')}</TableTextCell>
-              <TableTextCell className={order.shippedStatus}>{order.displayShippedDate}</TableTextCell>
-              <TableTextCell className={order.paidStatus}>{order.dueDateDisplay}</TableTextCell>
-              <TableTextCell>{order.store.name}</TableTextCell>
-              <TableTextCell>{formatCurrency(order.totals.total, opts)}</TableTextCell>
-              <TableTextCell>{formatCurrency(order.totals.owed, opts)}</TableTextCell>
-            </TableRow>;
-          })}
-        </TableBody>
-      </Table>
+      <LoadingPanel show={loading}>
+        <Table>
+          <TableHeader>
+            <TableColumn width="2%">&nbsp;</TableColumn>
+            <TableColumn width="11%">Invoice #</TableColumn>
+            <TableColumn width="4%">Stg</TableColumn>
+            <TableColumn width="8%">Order Date</TableColumn>
+            <TableColumn width="10%">Ship(ped) Date</TableColumn>
+            <TableColumn width="10%">Pay Date</TableColumn>
+            <TableColumn width="25%">Store</TableColumn>
+            <TableColumn width="9%">Order Total</TableColumn>
+            <TableColumn width="9%">Total Due</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {tableRowOrders.map((order, index) => {
+              return <TableRow key={index}>
+                <TableCell><input id={`row_${index}`}
+                                      type={'checkbox'}
+                                      onChange={(event) => this.props.onRowSelect(order, event.target.checked)}/></TableCell>
+                <TableRouteCell
+                  route={`/orders/${order.id}`}>{order.invoiceNumber}</TableRouteCell>
+                <TableTextCell>{order.dealStage ? (order.dealStage === 'Closed Lost' ? 'L' : order.dealStage[0]) : '?'}</TableTextCell>
+                <TableTextCell>{moment.unix(order.date).format('YYYY-MM-DD')}</TableTextCell>
+                <TableTextCell className={order.shippedStatus}>{order.displayShippedDate}</TableTextCell>
+                <TableTextCell className={order.paidStatus}>{order.dueDateDisplay}</TableTextCell>
+                <TableTextCell>{order.store.name}</TableTextCell>
+                <TableTextCell>{formatCurrency(order.totals.total, opts)}</TableTextCell>
+                <TableTextCell>{formatCurrency(order.totals.owed, opts)}</TableTextCell>
+              </TableRow>;
+            })}
+          </TableBody>
+        </Table>
+      </LoadingPanel>
     );
   }
 }
