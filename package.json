@@ -48,7 +48,7 @@
   "devDependencies": {
     "addressit": "^1.4.0",
     "auth0-extension-ui": "^1.1.6",
-    "auth0-js": "^8.8.0",
+    "auth0-js": "^9.13.2",
     "autoprefixer": "^6.7.6",
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.1.1",
