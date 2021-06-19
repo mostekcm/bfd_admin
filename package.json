@@ -41,7 +41,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "image-webpack-loader": "^4.3.1",
     "json-loader": "^0.5.7",
-    "jspdf": "^1.4.1",
+    "jspdf": "^2.3.1",
     "nconf": "^0.11.2",
     "pdfkit": "^0.8.3",
     "transform-loader": "^0.2.4",
