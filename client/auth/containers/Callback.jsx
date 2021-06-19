@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { redirectForLogin } from '../actions';
+import { handleRedirect } from '../actions';
 import { LoadingPanel, Error } from '../../components/Dashboard';
 
-class LoginContainer extends Component {
+class CallbackContainer extends Component {
   static propTypes = {
-    redirectForLogin: PropTypes.func.isRequired,
+    handleRedirect: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired
   };
 
@@ -17,7 +16,7 @@ class LoginContainer extends Component {
   }
 
   componentWillMount() {
-    this.props.redirectForLogin(this.props.location);
+    this.props.handleRedirect();
   }
 
   render() {
@@ -48,4 +47,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { redirectForLogin })(LoginContainer);
+export default connect(mapStateToProps, { handleRedirect })(CallbackContainer);

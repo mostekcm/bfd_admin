@@ -3,6 +3,7 @@ import { Router, Route, IndexRedirect } from 'react-router';
 
 import RequireAuthentication from './auth/containers/RequireAuthentication';
 import Login from './auth/containers/Login';
+import Callback from './auth/containers/Callback';
 import AuthorizeCrm from './auth/containers/AuthorizeCrm';
 import * as containers from './containers';
 import OrderPackingSlip from './containers/Orders/PackingSlip';
@@ -35,4 +36,5 @@ export default (history) =>
       <Route path="authorizeCrm" component={AuthorizeCrm} />
     </Route>
     <Route path="/login" component={Login} />
+    <Route path="/callback" component={Callback} />
   </Router>;

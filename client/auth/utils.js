@@ -1,34 +1,22 @@
-import auth0Js from 'auth0-js';
+import { Auth0Client } from '@auth0/auth0-spa-js';
 import Promise from 'bluebird';
-import crypto from 'crypto';
-import base64url from 'base64url';
-
-const NONCE_SESSION_NAME = 'AUTH0_LAST_NONCE';
-
-/** Sync */
-const getNonce = (returnTo) => {
-  const nonce = base64url(crypto.randomBytes(64));
-  sessionStorage.setItem(NONCE_SESSION_NAME, JSON.stringify({
-    nonce,
-    returnTo
-  }));
-  return nonce;
-};
-
-const checkNonce = (nonce) => {
-  const storedNonceObj = JSON.parse(sessionStorage.getItem(NONCE_SESSION_NAME));
-  const success = nonce === storedNonceObj.nonce;
-  sessionStorage.setItem(NONCE_SESSION_NAME, '');
-  return success && storedNonceObj.returnTo;
-};
+const RETURN_TO = 'AUTH0_RETURN_TO';
 
 let auth0Instance = null;
 
 const getAuth0 = () => {
   if (window.config.AUTH0_CLIENT_ID && !auth0Instance) {
-    auth0Instance = new auth0Js.WebAuth({
+    auth0Instance = new Auth0Client({
+      connection: 'google-oauth2',
+      scope: 'openid profile picture name nickname email read:reports read:displays update:orders delete:orders' +
+        ' create:orders read:orders' +
+        ' read:cases sync:crm read:companies',
+      redirect_uri: `${window.config.BASE_URL}/callback`,
+      audience: window.config.BFD_AUDIENCE,
       domain: window.config.AUTH0_DOMAIN,
-      clientID: window.config.AUTH0_CLIENT_ID
+      client_id: window.config.AUTH0_CLIENT_ID,
+      useRefreshTokens: true,
+      cacheLocation: 'localstorage'
     });
   }
 
@@ -41,94 +29,52 @@ export const getBaseUrl = (location) => {
   return fullUrl.substr(0, index);
 };
 
-const processAuthResult = (authResult) => {
-  const webAuth = getAuth0();
-  const getUserInfo = (tokens) => {
-    if (tokens.idTokenPayload) return Promise.resolve(tokens.idTokenPayload);
-
-    return Promise.promisify(webAuth.client.userInfo, { context: webAuth.client })(tokens.accessToken);
-  };
-
-  return new Promise((resolve, reject) => {
-    /* Validate state */
-    if (!authResult) return reject(new Error('Got a null authResult'));
-    const state = authResult.state;
-    const returnTo = checkNonce(state);
-    if (!returnTo) {
-      return reject(new Error('The state is not a valid state, please re-initiate login'));
-    }
-
-    /* TODO: Validate ID token */
-    return resolve({
-      accessToken: authResult.accessToken,
-      idToken: authResult.idToken,
-      returnTo,
-      expiresIn: authResult.expiresIn,
-      idTokenPayload: authResult.idTokenPayload
-    });
-  })
-    .then(tokens => getUserInfo(tokens)
-      .then((user) => {
-        // Now you have the user's information
-        sessionStorage.setItem('profile', JSON.stringify(user));
-        return tokens;
-      }));
-};
-
-export const parseHash = (hash) => {
-  // initialize auth0
-  const webAuth = getAuth0();
-  const parseHashPromise = Promise.promisify(webAuth.parseHash, { context: webAuth });
-
-  return parseHashPromise(hash)
-    .then(authResult => processAuthResult(authResult));
-};
-
 export const a0Logout = (location) => {
   const webAuth = getAuth0();
-  return webAuth.logout({ returnTo: getBaseUrl(location) });
+  return webAuth.logout({ returnTo: window.config.BASE_URL });
 };
 
-export const redirect = (location, state, prompt) => {
+const getReturnToFromLocation = location => (location && location.query && location.query.returnUrl);
+
+export const getUser = async (location) => {
   const webAuth = getAuth0();
   if (!webAuth) {
     throw new Error('Unable to create webAuth.');
   }
 
-  let returnTo = (location && location.query && location.query.returnUrl) || '/';
-  if (state) {
-    returnTo = checkNonce(state);
+  return {
+    user: await webAuth.getUser(),
+    returnTo: getReturnToFromLocation(location) || sessionStorage.getItem(RETURN_TO)
+  }
+};
+
+export const handleRedirectCallback = async () => {
+  const webAuth = getAuth0();
+  if (!webAuth) {
+    throw new Error('Unable to create webAuth.');
   }
 
-  const nonce = getNonce(returnTo);
+  await webAuth.handleRedirectCallback();
 
-  /* Get base URL */
+  return getUser();
+};
 
-  const options = {
-    redirectUri: `${window.config.BASE_URL}/login`,
-    responseType: 'token id_token',
-    audience: window.config.BFD_AUDIENCE,
-    connection: 'google-oauth2',
-    state: nonce,
-    scope: 'openid profile picture name nickname email read:reports read:displays update:orders delete:orders' +
-    ' create:orders read:orders' +
-    ' read:cases sync:crm read:companies',
-    nonce,
-    access_type: 'offline'
-  };
-
-  if (prompt === 'none') {
-    options.redirectUri = `${window.config.BASE_URL}`;
-
-    const checkSession = Promise.promisify(webAuth.checkSession, { context: webAuth });
-
-    return checkSession(options)
-      .then(authResult => processAuthResult(authResult));
+export const redirectLogin = async (location) => {
+  const webAuth = getAuth0();
+  if (!webAuth) {
+    throw new Error('Unable to create webAuth.');
   }
 
-  return new Promise((resolve, reject) =>
-    webAuth.authorize(options, (err, result) => {
-      if (err) return reject(err);
-      return resolve(result);
-    }));
+  sessionStorage.setItem(RETURN_TO, getReturnToFromLocation(location) || '/');
+
+  await webAuth.loginWithRedirect();
+};
+
+export const getTokenSilently = async () => {
+  const webAuth = getAuth0();
+  if (!webAuth) {
+    throw new Error('Unable to create webAuth.');
+  }
+
+  return webAuth.getTokenSilently();
 };

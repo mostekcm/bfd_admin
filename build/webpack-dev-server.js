@@ -4,6 +4,7 @@ const WebpackDevServer = require('webpack-dev-server');
 
 const config = require('./webpack.client.config');
 const logger = require('../server/lib/logger');
+const serverConfig = require('../server/config.json');
 
 config.mode = 'development';
 config.entry = path.join(__dirname, '../client/app.jsx');
@@ -13,7 +14,7 @@ config.output = {
 };
 
 const options = {
- publicPath: 'https://bfd-admin.appliance-trial.com/app/',
+ publicPath: `${serverConfig.BASE_URL}/app/`,
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -39,7 +40,7 @@ new WebpackDevServer(webpack(config), options)
       if (err) {
         logger.error(err);
       } else {
-        logger.info('Webpack proxy listening on: https://bfd-admin.appliance-trial.com');
+        logger.info(`Webpack proxy listening on: ${serverConfig.BASE_URL}`);
 
         // Start the actual webserver.
         require('../index.dev');

@@ -36,15 +36,7 @@ export const auth = createReducer(fromJS(initialState), {
       isAuthenticated: true,
       isAuthenticating: false,
       user: action.payload.user,
-      idToken: action.payload.idToken,
-      accessToken: action.payload.accessToken,
-      expiresAt: action.payload.expiresAt,
-      issuer: url.parse(action.payload.decodedToken.iss).hostname,
       returnTo: action.payload.returnTo
-    }),
-  [constants.REFRESH_PENDING]: state =>
-    state.merge({
-      isRefreshing: true
     }),
   [constants.LOGOUT_PENDING]: state =>
     state.merge({
